@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.data.category.DefaultCategoryDataset;
 import quanlyktx.model.Day;
 import quanlyktx.model.HopDong;
 import quanlyktx.model.LoaiPhong;
@@ -246,6 +247,10 @@ public class DAO {
 
         return list;
     }
+    
+    
+    
+    
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public boolean addRoom(Phong p) {
@@ -473,8 +478,26 @@ public class DAO {
         }
         return hd;
     }
+    
+    ///////////////////////////////////////////Thống kê////////////////////////////////////////////
+    
+    public DefaultCategoryDataset getTotalStudentWithYear() {
+        DefaultCategoryDataset datas = new DefaultCategoryDataset();
+        String sql = "SELECT YEAR(NgayDangKy) AS 'Nam', COUNT(MSSV) AS 'SoLuong' FROM HopDong GROUP BY YEAR(NgayDangKy) ORDER BY Nam";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                datas.setValue((int)rs.getInt("SoLuong"), rs.getString("Nam"), rs.getString("Nam"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return datas;
+    }
 
     public static void main(String[] args) {
-        new DAO().getListHopDong();
+        new DAO().getTotalStudentWithYear();
     }
+
 }

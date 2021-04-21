@@ -5,7 +5,15 @@
  */
 package quanlyktx.view.Admin;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Toolkit;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import quanlyktx.DAO.DAO;
 import quanlyktx.view.DangNhap.DangNhapView;
 
 /**
@@ -13,12 +21,14 @@ import quanlyktx.view.DangNhap.DangNhapView;
  * @author luong
  */
 public class ThongKeView extends javax.swing.JFrame {
-     public static AdminView adminView;
+
+    static String id;
+    private DAO controller = new DAO();
     /**
      * Creates new form ThongKeView
      */
-    public ThongKeView(AdminView adminView) {
-        this.adminView = adminView;
+    public ThongKeView(String user) {
+        id = user;
         setIcon();
         initComponents();
         setting_view.setVisible(false);
@@ -36,18 +46,23 @@ public class ThongKeView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
         btn_logout = new javax.swing.JLabel();
         btn_help = new javax.swing.JLabel();
         btn_user = new javax.swing.JLabel();
         setting_view = new javax.swing.JLabel();
         btn_setting = new javax.swing.JLabel();
+        panel_chart_sv = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        panel_demo = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+
+        jLabel3.setText("jLabel3");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -65,69 +80,6 @@ public class ThongKeView extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 10, 20, -1));
-
-        jTabbedPane1.setBackground(new java.awt.Color(255, 102, 102));
-        jTabbedPane1.setBorder(new javax.swing.border.MatteBorder(null));
-        jTabbedPane1.setForeground(new java.awt.Color(0, 0, 255));
-        jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
-
-        jPanel1.setBackground(new java.awt.Color(153, 255, 153));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 683, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 458, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Sinh viên", jPanel1);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 683, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 458, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Phòng", jPanel2);
-
-        jPanel4.setBackground(new java.awt.Color(153, 255, 255));
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 683, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 458, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Theo năm", jPanel4);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 683, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 458, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Doanh thu", jPanel3);
-
-        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 690, 490));
 
         btn_logout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_logout.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -164,6 +116,84 @@ public class ThongKeView extends javax.swing.JFrame {
         });
         getContentPane().add(btn_setting, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 192, 50));
 
+        panel_chart_sv.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                panel_chart_svStateChanged(evt);
+            }
+        });
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        javax.swing.GroupLayout panel_demoLayout = new javax.swing.GroupLayout(panel_demo);
+        panel_demo.setLayout(panel_demoLayout);
+        panel_demoLayout.setHorizontalGroup(
+            panel_demoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panel_demoLayout.setVerticalGroup(
+            panel_demoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 432, Short.MAX_VALUE)
+        );
+
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 255));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("SỐ LƯỢNG SINH VIÊN ĐĂNG KÍ KÍ TÚC XÁ");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panel_demo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(69, 69, 69)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(191, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panel_demo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        panel_demo.getAccessibleContext().setAccessibleParent(panel_demo);
+
+        panel_chart_sv.addTab("Sinh Viên", jPanel1);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 705, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 470, Short.MAX_VALUE)
+        );
+
+        panel_chart_sv.addTab("tab2", jPanel2);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 705, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 470, Short.MAX_VALUE)
+        );
+
+        panel_chart_sv.addTab("tab3", jPanel3);
+
+        getContentPane().add(panel_chart_sv, new org.netbeans.lib.awtextra.AbsoluteConstraints(193, 50, 710, 500));
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/ThongKeView.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
 
@@ -186,10 +216,11 @@ public class ThongKeView extends javax.swing.JFrame {
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         this.dispose();
+        new AdminView(id).setVisible(true);
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void btn_userMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_userMouseClicked
-setting_view.setVisible(false);
+        setting_view.setVisible(false);
         btn_user.setVisible(false);
         btn_help.setVisible(false);
         btn_logout.setVisible(false);
@@ -230,11 +261,25 @@ setting_view.setVisible(false);
         btn_help.setVisible(false);
         btn_logout.setVisible(false);
         flag = true;
-        System.out.println("click logout"); 
+        System.out.println("click logout");
         this.dispose();
         new DangNhapView().setVisible(true);
-        adminView.dispose();
     }//GEN-LAST:event_btn_logoutMouseClicked
+
+    private void panel_chart_svStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_panel_chart_svStateChanged
+        DefaultCategoryDataset datas;
+        
+        datas = controller.getTotalStudentWithYear();
+        
+        JFreeChart chart = ChartFactory.createBarChart3D("Đăng ký", "Năm", "Số lượng sinh viên", datas, PlotOrientation.VERTICAL, true, false, false);
+
+        ChartPanel panel = new ChartPanel(chart);
+        panel.setMouseZoomable(true);
+        panel.setPreferredSize(new Dimension(400,400));
+        panel_demo.setLayout(new BorderLayout());
+        panel_demo.add(panel, BorderLayout.NORTH);
+
+    }//GEN-LAST:event_panel_chart_svStateChanged
 
     /**
      * @param args the command line arguments
@@ -266,7 +311,7 @@ setting_view.setVisible(false);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ThongKeView(adminView).setVisible(true);
+                new ThongKeView(id).setVisible(true);
             }
         });
     }
@@ -280,13 +325,16 @@ setting_view.setVisible(false);
     private javax.swing.JLabel btn_logout;
     private javax.swing.JLabel btn_setting;
     private javax.swing.JLabel btn_user;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane panel_chart_sv;
+    private javax.swing.JPanel panel_demo;
     private javax.swing.JLabel setting_view;
     // End of variables declaration//GEN-END:variables
 }

@@ -240,7 +240,7 @@ public class AdminView extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void btn_thong_keMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_thong_keMouseClicked
-        new ThongKeView(this).setVisible(true);
+        new ThongKeView(user).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_thong_keMouseClicked
 

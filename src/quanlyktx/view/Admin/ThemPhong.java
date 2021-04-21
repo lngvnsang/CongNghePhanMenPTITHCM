@@ -5,11 +5,19 @@
  */
 package quanlyktx.view.Admin;
 
+import java.util.List;
+import quanlyktx.DAO.DAO;
+import quanlyktx.model.Day;
+import quanlyktx.model.Phong;
+
 /**
  *
  * @author luong
  */
 public class ThemPhong extends javax.swing.JDialog {
+
+    private List<Day> ranges;
+    private DAO controller;
 
     /**
      * Creates new form ThemPhong
@@ -17,6 +25,9 @@ public class ThemPhong extends javax.swing.JDialog {
     public ThemPhong(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        controller = new DAO();
+        ranges = controller.getListRange();
+        
     }
 
     /**
@@ -52,6 +63,11 @@ public class ThemPhong extends javax.swing.JDialog {
         cb_ma_day.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dịch vụ 1", "Dịch vụ 2", "Thường" }));
         cb_ma_day.setBorder(new javax.swing.border.MatteBorder(null));
         cb_ma_day.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cb_ma_day.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_ma_dayActionPerformed(evt);
+            }
+        });
         getContentPane().add(cb_ma_day, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, 260, -1));
 
         cb_loai_phong.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dịch vụ 1", "Dịch vụ 2", "Thường" }));
@@ -95,16 +111,23 @@ public class ThemPhong extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_saveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_saveMouseClicked
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_btn_saveMouseClicked
 
     private void btn_cancleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cancleMouseClicked
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btn_cancleMouseClicked
 
+    private void cb_ma_dayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_ma_dayActionPerformed
+        String maDay = cb_ma_day.getSelectedItem().toString().trim();
+        for (Day day : ranges) {
+            cb_ma_day.addItem(day.getTenDay());
+        }
+    }//GEN-LAST:event_cb_ma_dayActionPerformed
+
     /**
-     * @param args the command line arguments
-     */
+         * @param args the command line arguments
+         */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -158,6 +181,6 @@ public class ThemPhong extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     void setEditData(String d) {
-        
+
     }
 }

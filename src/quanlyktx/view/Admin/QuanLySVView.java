@@ -401,7 +401,12 @@ public class QuanLySVView extends javax.swing.JFrame {
             String ngaySinh = format.format(t.getNgaySinh());
 
             HopDong hd = controller.getHopDongWithId(t.getMSSV().trim());
-            System.out.println(t.getMSSV().trim() + "____" + hd.getNgayDangKy());
+            //System.out.println(t.getMSSV().trim() + "____" + hd.getNgayDangKy());
+            if (checkThoiHan(hd.getNgayDangKy(), hd.getNgayKetThuc())) {
+                controller.updateThoiHan(hd.getMSSV(),1);
+            }else {
+                controller.updateThoiHan(hd.getMSSV(),0);
+            }
             model.addRow(new Object[]{
                 i++,
                 t.getMSSV().trim(),
@@ -415,6 +420,9 @@ public class QuanLySVView extends javax.swing.JFrame {
                 checkThoiHan(hd.getNgayDangKy(), hd.getNgayKetThuc()) ? "Còn hạn" : "Hết hạn"
             });
         }
+       
+                
+
     }
 
     boolean checkThoiHan(Date ngayDangKy, Date ngayKetThuc) {

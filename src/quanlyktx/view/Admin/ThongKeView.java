@@ -8,12 +8,16 @@ package quanlyktx.view.Admin;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.text.DecimalFormat;
+import java.util.List;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import quanlyktx.DAO.DAO;
+import quanlyktx.model.LoaiPhong;
+import quanlyktx.model.Phong;
 import quanlyktx.view.DangNhap.DangNhapView;
 
 /**
@@ -24,6 +28,8 @@ public class ThongKeView extends javax.swing.JFrame {
 
     static String id;
     private DAO controller = new DAO();
+    private List<Phong> rooms;
+
     /**
      * Creates new form ThongKeView
      */
@@ -35,6 +41,7 @@ public class ThongKeView extends javax.swing.JFrame {
         btn_user.setVisible(false);
         btn_help.setVisible(false);
         btn_logout.setVisible(false);
+
     }
 
     /**
@@ -55,10 +62,12 @@ public class ThongKeView extends javax.swing.JFrame {
         btn_setting = new javax.swing.JLabel();
         panel_chart_sv = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
         panel_demo = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        panel_tk = new javax.swing.JPanel();
+        cb_thong_ke_day = new javax.swing.JComboBox<>();
+        cb_thong_ke_phong = new javax.swing.JComboBox<>();
+        panel_phong = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -116,13 +125,14 @@ public class ThongKeView extends javax.swing.JFrame {
         });
         getContentPane().add(btn_setting, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 192, 50));
 
+        panel_chart_sv.setBackground(new java.awt.Color(102, 153, 255));
+        panel_chart_sv.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        panel_chart_sv.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         panel_chart_sv.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 panel_chart_svStateChanged(evt);
             }
         });
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout panel_demoLayout = new javax.swing.GroupLayout(panel_demo);
         panel_demo.setLayout(panel_demoLayout);
@@ -132,7 +142,7 @@ public class ThongKeView extends javax.swing.JFrame {
         );
         panel_demoLayout.setVerticalGroup(
             panel_demoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 432, Short.MAX_VALUE)
+            .addGap(0, 457, Short.MAX_VALUE)
         );
 
         jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -146,18 +156,14 @@ public class ThongKeView extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panel_demo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(69, 69, 69)
+                .addGap(174, 174, 174)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(191, Short.MAX_VALUE))
+                .addContainerGap(103, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panel_demo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -166,28 +172,70 @@ public class ThongKeView extends javax.swing.JFrame {
 
         panel_chart_sv.addTab("Sinh Viên", jPanel1);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 705, Short.MAX_VALUE)
+        cb_thong_ke_day.setFont(new java.awt.Font("Times New Roman", 0, 13)); // NOI18N
+        cb_thong_ke_day.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default", "I", "J", "H", "Q", "M", "N", "K", "P" }));
+        cb_thong_ke_day.setBorder(null);
+        cb_thong_ke_day.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cb_thong_ke_day.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_thong_ke_dayActionPerformed(evt);
+            }
+        });
+
+        cb_thong_ke_phong.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default" }));
+        cb_thong_ke_phong.setBorder(null);
+        cb_thong_ke_phong.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cb_thong_ke_phong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_thong_ke_phongActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panel_phongLayout = new javax.swing.GroupLayout(panel_phong);
+        panel_phong.setLayout(panel_phongLayout);
+        panel_phongLayout.setHorizontalGroup(
+            panel_phongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 470, Short.MAX_VALUE)
+        panel_phongLayout.setVerticalGroup(
+            panel_phongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 364, Short.MAX_VALUE)
         );
 
-        panel_chart_sv.addTab("tab2", jPanel2);
+        javax.swing.GroupLayout panel_tkLayout = new javax.swing.GroupLayout(panel_tk);
+        panel_tk.setLayout(panel_tkLayout);
+        panel_tkLayout.setHorizontalGroup(
+            panel_tkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panel_phong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(panel_tkLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel_tkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cb_thong_ke_day, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cb_thong_ke_phong, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(501, Short.MAX_VALUE))
+        );
+        panel_tkLayout.setVerticalGroup(
+            panel_tkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_tkLayout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addComponent(cb_thong_ke_day, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(cb_thong_ke_phong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addComponent(panel_phong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        panel_chart_sv.addTab("Phòng kí túc", panel_tk);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 705, Short.MAX_VALUE)
+            .addGap(0, 617, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 470, Short.MAX_VALUE)
+            .addGap(0, 495, Short.MAX_VALUE)
         );
 
         panel_chart_sv.addTab("tab3", jPanel3);
@@ -268,18 +316,70 @@ public class ThongKeView extends javax.swing.JFrame {
 
     private void panel_chart_svStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_panel_chart_svStateChanged
         DefaultCategoryDataset datas;
-        
+
         datas = controller.getTotalStudentWithYear();
-        
-        JFreeChart chart = ChartFactory.createBarChart3D("Đăng ký", "Năm", "Số lượng sinh viên", datas, PlotOrientation.VERTICAL, true, false, false);
+
+        JFreeChart chart = ChartFactory.createBarChart3D("", "Năm", "Số lượng sinh viên", datas, PlotOrientation.VERTICAL, true, false, false);
 
         ChartPanel panel = new ChartPanel(chart);
         panel.setMouseZoomable(true);
-        panel.setPreferredSize(new Dimension(400,400));
+        panel.setPreferredSize(new Dimension(400, 400));
         panel_demo.setLayout(new BorderLayout());
         panel_demo.add(panel, BorderLayout.NORTH);
 
+
     }//GEN-LAST:event_panel_chart_svStateChanged
+
+    private void cb_thong_ke_dayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_thong_ke_dayActionPerformed
+        String maDay = cb_thong_ke_day.getSelectedItem().toString().trim();
+        //System.out.println(maDay + " _+++  " + !maDay.equals("Default"));
+        if (!maDay.equals("Default")) {
+            cb_thong_ke_phong.setEnabled(true);
+            rooms = controller.getListRoomByIDRange(maDay);
+            cb_thong_ke_phong.removeAllItems();
+
+            for (Phong room : rooms) {
+                cb_thong_ke_phong.addItem(room.getMaPhong());
+            }
+        } else {
+            cb_thong_ke_phong.setEnabled(false);
+        }
+        //System.out.println(cb_thong_ke_phong.getSelectedItem().toString());
+
+
+    }//GEN-LAST:event_cb_thong_ke_dayActionPerformed
+
+    private void cb_thong_ke_phongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_thong_ke_phongActionPerformed
+        //if (jComboBox1.getSelectedItem() != null) {
+//            String phong = "I03";//jComboBox1.getSelectedItem().toString();
+//            for (Phong room : rooms) {
+//                if (phong.equals(room.getMaPhong().trim())) {
+
+//        if((String) cb_thong_ke_phong.getSelectedItem() != )
+       // panel_tk.removeAll();
+
+
+        DefaultCategoryDataset datas;
+        datas = controller.getTotalStudentInRoom((String) cb_thong_ke_phong.getSelectedItem());
+        JFreeChart chart = ChartFactory.createBarChart3D("Thống kê số lượng sinh viên từng phòng "+((String) cb_thong_ke_phong.getSelectedItem()).trim() +" theo năm", "Năm", "Số lượng sinh viên", datas, PlotOrientation.VERTICAL, true, false, false);
+        ChartPanel panel = new ChartPanel(chart);
+        panel_phong.removeAll();
+        panel.setMouseZoomable(true);
+        panel.setPreferredSize(new Dimension(400, 400));
+
+        panel_phong.setLayout(new BorderLayout());
+        panel_phong.add(panel, BorderLayout.NORTH);
+        panel_phong.revalidate();
+        panel_phong.repaint();
+//                } else {
+//                    panel_phong.setLayout(new BorderLayout());
+//                    panel_phong.removeAll();
+//                }
+////            }
+////        } else {
+////            System.out.println("vadvad");
+//        }
+    }//GEN-LAST:event_cb_thong_ke_phongActionPerformed
 
     /**
      * @param args the command line arguments
@@ -325,16 +425,18 @@ public class ThongKeView extends javax.swing.JFrame {
     private javax.swing.JLabel btn_logout;
     private javax.swing.JLabel btn_setting;
     private javax.swing.JLabel btn_user;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> cb_thong_ke_day;
+    private javax.swing.JComboBox<String> cb_thong_ke_phong;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTabbedPane panel_chart_sv;
     private javax.swing.JPanel panel_demo;
+    private javax.swing.JPanel panel_phong;
+    private javax.swing.JPanel panel_tk;
     private javax.swing.JLabel setting_view;
     // End of variables declaration//GEN-END:variables
 }

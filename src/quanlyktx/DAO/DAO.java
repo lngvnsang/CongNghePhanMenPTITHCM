@@ -247,12 +247,21 @@ public class DAO {
 
         return list;
     }
-    
-    
-    
-    
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public boolean updateThoiHan(String mssv, int thoiHan) {
+        String sql = "UPDATE HopDong SET "
+                + "TinhTrang  = " + thoiHan + ""
+                + " WHERE MSSV = '" + mssv.trim() + "'";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
     public boolean addRoom(Phong p) {
         String sql = "INSERT INTO Phong(MaPhong,MaDay,ToiThieu,ToiDa,TinhTrang,MaLoaiPhong) VALUES(?,?,?,?,?,?)";
         try {
@@ -343,21 +352,21 @@ public class DAO {
     }
 
     public void showDataDetailPhong(DefaultTableModel model, String id) {
-        String sql = "SELECT SinhVien.Ten, SinhVien.MSSV, SinhVien.QueQuan, HopDong.NgayDangKy, HopDong.NgayKetThuc FROM Phong, HopDong, SinhVien WHERE Phong.MaPhong = HopDong.MaPhong AND HopDong.MSSV = SinhVien.MSSV AND Phong.MaPhong ='"+id.trim()+"'";
+        String sql = "SELECT SinhVien.Ten, SinhVien.MSSV, SinhVien.QueQuan, HopDong.NgayDangKy, HopDong.NgayKetThuc FROM Phong, HopDong, SinhVien WHERE Phong.MaPhong = HopDong.MaPhong AND HopDong.MSSV = SinhVien.MSSV AND Phong.MaPhong ='" + id.trim() + "'";
         int i = 1;
-         try {
+        try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 model.addRow(new Object[]{
-                i++,
-                rs.getString("Ten"),
-                rs.getString("MSSV"),
-                rs.getString("QueQuan"),
-                rs.getDate("NgayDangKy"),
-                rs.getDate("NgayKetThuc")
-            });
-                        }
+                    i++,
+                    rs.getString("Ten"),
+                    rs.getString("MSSV"),
+                    rs.getString("QueQuan"),
+                    rs.getDate("NgayDangKy"),
+                    rs.getDate("NgayKetThuc")
+                });
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -478,9 +487,8 @@ public class DAO {
         }
         return hd;
     }
-    
+
     ///////////////////////////////////////////Thống kê////////////////////////////////////////////
-    
     public DefaultCategoryDataset getTotalStudentWithYear() {
         DefaultCategoryDataset datas = new DefaultCategoryDataset();
         String sql = "SELECT YEAR(NgayDangKy) AS 'Nam', COUNT(MSSV) AS 'SoLuong' FROM HopDong GROUP BY YEAR(NgayDangKy) ORDER BY Nam";
@@ -488,7 +496,24 @@ public class DAO {
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                datas.setValue((int)rs.getInt("SoLuong"), rs.getString("Nam"), rs.getString("Nam"));
+                datas.setValue((int) rs.getInt("SoLuong"), rs.getString("Nam"), rs.getString("Nam"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return datas;
+    }
+
+    public DefaultCategoryDataset getTotalStudentInRoom(String phong) {
+        DefaultCategoryDataset datas = new DefaultCategoryDataset();
+        //System.out.println("." + phong + ".");
+        String sql = "SELECT YEAR(NgayDangKy) AS 'Nam', COUNT(MSSV) AS 'SoLuong' FROM HopDong WHERE MaPhong = '" + phong + "' GROUP BY YEAR(NgayDangKy)";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                System.out.println( rs.getString("Nam"));
+                datas.setValue(rs.getInt("SoLuong"), rs.getString("Nam"), rs.getString("Nam"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -497,7 +522,7 @@ public class DAO {
     }
 
     public static void main(String[] args) {
-        new DAO().getTotalStudentWithYear();
+        new DAO();
     }
 
 }

@@ -6,7 +6,12 @@
 package quanlyktx.view.DangKy;
 
 import java.awt.Toolkit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import quanlyktx.DAO.DAO;
+import quanlyktx.model.TaiKhoan;
 import quanlyktx.view.Admin.AdminView;
 import quanlyktx.view.DangNhap.DangNhapView;
 import quanlyktx.view.User.SinhVienView;
@@ -26,6 +31,77 @@ public class DangKyView extends javax.swing.JFrame {
         ImageIcon A = new ImageIcon(getClass().getResource("hide.png"));
         show_hide_pass.setIcon(A);
         
+        controller = new DAO();
+    }
+    
+    public boolean checkEmpty(String key, String notify) {
+        if (key.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, notify);
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean CheckCorrect(String username, String email, String password) {
+        String pattUname = "^[Nn]+[\\d]{2}+[A-Za-z]{4}+[\\d]{3}$";
+        String pattEmail = "^[Nn]+[\\d]{2}+[A-Za-z]{4}+[\\d]{3}+@student.ptithcm.edu.vn$";
+        String pattPwrd = "^.[\\w\\S]{5,}$";
+        
+        boolean ret;
+        
+        if(username.trim().matches(pattUname)
+                && email.trim().matches(pattEmail)
+                && password.trim().matches(pattPwrd))
+        {
+            ret = true;
+        }
+        else
+        {
+            ret = false;
+        }
+        return ret;
+    }
+    
+    private void kiemTraNhap()
+    {
+        try {
+            
+            String username = txtTaiKhoan.getText();
+            String email = txtEmail.getText();
+            String password = String.valueOf(txtPassWord.getPassword());
+
+            if(checkEmpty(username, "Nhập tên tài khoản!")
+                    && checkEmpty(email, "Nhập email!")
+                    && checkEmpty(password, "Nhập password!"))
+            {
+                if(CheckCorrect(username, email, password))
+                {
+                    TaiKhoan taiKhoan = new TaiKhoan(username, password, email, 1);
+//                    System.out.println(username + " | " + email + " | " + password);
+//                    String name = taiKhoan.getTenTK();
+//                    String mail = taiKhoan.getEmail();
+//                    String pass = taiKhoan.getMatKhau();
+//                    System.out.println(name + " | " + mail + " | " + pass);
+
+                    if(controller.addAccountStudent(taiKhoan))
+                    {
+                        JOptionPane.showMessageDialog(rootPane, "Đăng kí tài khoản thành công!");
+                        new DangNhapView().setVisible(true);
+                        this.dispose();
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(rootPane, "Đăng ký thất bại!");
+                    }
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(rootPane, "Thông tin nhập sai, hãy nhập lại!");
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DangKyView.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
 
     /**
@@ -126,8 +202,9 @@ public class DangKyView extends javax.swing.JFrame {
     }//GEN-LAST:event_show_hide_passMouseClicked
 
     private void btn_DangKyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_DangKyMouseClicked
-        this.dispose();
-        new DangNhapView().setVisible(true);
+//        this.dispose();
+//        new DangNhapView().setVisible(true);
+        kiemTraNhap();
     }//GEN-LAST:event_btn_DangKyMouseClicked
 
     private void btn_DangNhapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_DangNhapMouseClicked
@@ -189,6 +266,8 @@ public class DangKyView extends javax.swing.JFrame {
     private void setIcon() {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("logo.png")));
     }
+    
+    private DAO controller;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_DangKy;

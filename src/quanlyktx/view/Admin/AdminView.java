@@ -251,7 +251,7 @@ public class AdminView extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_dang_kiMouseClicked
 
     private void btn_thu_phiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_thu_phiMouseClicked
-        new ThuPhiView(this).setVisible(true);
+        new ThuPhiView(user).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_thu_phiMouseClicked
 

@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.text.DecimalFormat;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -29,6 +30,7 @@ public class ThongKeView extends javax.swing.JFrame {
     static String id;
     private DAO controller = new DAO();
     private List<Phong> rooms;
+    private DefaultTableModel model;
 
     /**
      * Creates new form ThongKeView
@@ -41,6 +43,7 @@ public class ThongKeView extends javax.swing.JFrame {
         btn_user.setVisible(false);
         btn_help.setVisible(false);
         btn_logout.setVisible(false);
+        model = (DefaultTableModel) tb_thong_ke_day.getModel();
 
     }
 
@@ -64,11 +67,20 @@ public class ThongKeView extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         panel_demo = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        cb_day = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        panel_phong_theo_day = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tb_thong_ke_day = new javax.swing.JTable();
+        cb_nam = new javax.swing.JComboBox<>();
         panel_tk = new javax.swing.JPanel();
         cb_thong_ke_day = new javax.swing.JComboBox<>();
         cb_thong_ke_phong = new javax.swing.JComboBox<>();
         panel_phong = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        cb_thu_phi_theo_nam = new javax.swing.JComboBox<>();
+        panel_thu_phi = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
         jLabel3.setText("jLabel3");
@@ -158,7 +170,7 @@ public class ThongKeView extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(174, 174, 174)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(103, Short.MAX_VALUE))
+                .addContainerGap(99, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,6 +183,77 @@ public class ThongKeView extends javax.swing.JFrame {
         panel_demo.getAccessibleContext().setAccessibleParent(panel_demo);
 
         panel_chart_sv.addTab("Sinh Viên", jPanel1);
+
+        cb_day.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default", "I", "J", "H", "Q", "M", "N", "K", "P" }));
+        cb_day.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_dayActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 51, 255));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Thống kê số lượng sinh viên theo dãy phòng");
+
+        javax.swing.GroupLayout panel_phong_theo_dayLayout = new javax.swing.GroupLayout(panel_phong_theo_day);
+        panel_phong_theo_day.setLayout(panel_phong_theo_dayLayout);
+        panel_phong_theo_dayLayout.setHorizontalGroup(
+            panel_phong_theo_dayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panel_phong_theo_dayLayout.setVerticalGroup(
+            panel_phong_theo_dayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 295, Short.MAX_VALUE)
+        );
+
+        tb_thong_ke_day.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "STT", "Phòng", "Số lượng sinh viên"
+            }
+        ));
+        jScrollPane1.setViewportView(tb_thong_ke_day);
+
+        cb_nam.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default" }));
+        cb_nam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_namActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(cb_nam, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cb_day, javax.swing.GroupLayout.Alignment.LEADING, 0, 125, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel5)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(panel_phong_theo_day, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(cb_day, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cb_nam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel_phong_theo_day, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        panel_chart_sv.addTab("Dãy", jPanel3);
 
         cb_thong_ke_day.setFont(new java.awt.Font("Times New Roman", 0, 13)); // NOI18N
         cb_thong_ke_day.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default", "I", "J", "H", "Q", "M", "N", "K", "P" }));
@@ -212,7 +295,7 @@ public class ThongKeView extends javax.swing.JFrame {
                 .addGroup(panel_tkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cb_thong_ke_day, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cb_thong_ke_phong, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(501, Short.MAX_VALUE))
+                .addContainerGap(497, Short.MAX_VALUE))
         );
         panel_tkLayout.setVerticalGroup(
             panel_tkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -227,18 +310,44 @@ public class ThongKeView extends javax.swing.JFrame {
 
         panel_chart_sv.addTab("Phòng kí túc", panel_tk);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 617, Short.MAX_VALUE)
+        cb_thu_phi_theo_nam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_thu_phi_theo_namActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panel_thu_phiLayout = new javax.swing.GroupLayout(panel_thu_phi);
+        panel_thu_phi.setLayout(panel_thu_phiLayout);
+        panel_thu_phiLayout.setHorizontalGroup(
+            panel_thu_phiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 495, Short.MAX_VALUE)
+        panel_thu_phiLayout.setVerticalGroup(
+            panel_thu_phiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 389, Short.MAX_VALUE)
         );
 
-        panel_chart_sv.addTab("tab3", jPanel3);
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panel_thu_phi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cb_thu_phi_theo_nam, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(467, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cb_thu_phi_theo_nam, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(62, 62, 62)
+                .addComponent(panel_thu_phi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        panel_chart_sv.addTab("Thu phí KTX", jPanel2);
 
         getContentPane().add(panel_chart_sv, new org.netbeans.lib.awtextra.AbsoluteConstraints(193, 50, 710, 500));
 
@@ -326,6 +435,14 @@ public class ThongKeView extends javax.swing.JFrame {
         panel.setPreferredSize(new Dimension(400, 400));
         panel_demo.setLayout(new BorderLayout());
         panel_demo.add(panel, BorderLayout.NORTH);
+        
+        List<Integer> years = controller.getYear();
+
+            cb_thu_phi_theo_nam.removeAllItems();
+
+            for (int year : years) {
+                cb_thu_phi_theo_nam.addItem(year + "");
+            }
 
 
     }//GEN-LAST:event_panel_chart_svStateChanged
@@ -350,36 +467,82 @@ public class ThongKeView extends javax.swing.JFrame {
     }//GEN-LAST:event_cb_thong_ke_dayActionPerformed
 
     private void cb_thong_ke_phongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_thong_ke_phongActionPerformed
-        //if (jComboBox1.getSelectedItem() != null) {
-//            String phong = "I03";//jComboBox1.getSelectedItem().toString();
-//            for (Phong room : rooms) {
-//                if (phong.equals(room.getMaPhong().trim())) {
+        if ((String) cb_thong_ke_phong.getSelectedItem() != null) {
+            DefaultCategoryDataset datas;
+            datas = controller.getTotalStudentInRoom((String) cb_thong_ke_phong.getSelectedItem());
+            JFreeChart chart = ChartFactory.createBarChart3D("Thống kê số lượng sinh viên từng phòng " + ((String) cb_thong_ke_phong.getSelectedItem()).trim() + " theo năm", "Năm", "Số lượng sinh viên", datas, PlotOrientation.VERTICAL, true, false, false);
+            ChartPanel panel = new ChartPanel(chart);
+            panel_phong.removeAll();
+            panel.setMouseZoomable(true);
+            panel.setPreferredSize(new Dimension(400, 400));
 
-//        if((String) cb_thong_ke_phong.getSelectedItem() != )
-       // panel_tk.removeAll();
-
-
-        DefaultCategoryDataset datas;
-        datas = controller.getTotalStudentInRoom((String) cb_thong_ke_phong.getSelectedItem());
-        JFreeChart chart = ChartFactory.createBarChart3D("Thống kê số lượng sinh viên từng phòng "+((String) cb_thong_ke_phong.getSelectedItem()).trim() +" theo năm", "Năm", "Số lượng sinh viên", datas, PlotOrientation.VERTICAL, true, false, false);
-        ChartPanel panel = new ChartPanel(chart);
-        panel_phong.removeAll();
-        panel.setMouseZoomable(true);
-        panel.setPreferredSize(new Dimension(400, 400));
-
-        panel_phong.setLayout(new BorderLayout());
-        panel_phong.add(panel, BorderLayout.NORTH);
-        panel_phong.revalidate();
-        panel_phong.repaint();
-//                } else {
-//                    panel_phong.setLayout(new BorderLayout());
-//                    panel_phong.removeAll();
-//                }
-////            }
-////        } else {
-////            System.out.println("vadvad");
-//        }
+            panel_phong.setLayout(new BorderLayout());
+            panel_phong.add(panel, BorderLayout.NORTH);
+            panel_phong.revalidate();
+            panel_phong.repaint();
+        } else {
+            System.out.println("vadvad");
+        }
     }//GEN-LAST:event_cb_thong_ke_phongActionPerformed
+
+    private void cb_dayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_dayActionPerformed
+        String maDay = cb_day.getSelectedItem().toString().trim();
+        if (!maDay.equals("Default")) {
+            List<Integer> years = controller.getYear();
+
+            cb_nam.removeAllItems();
+
+            for (int year : years) {
+                cb_nam.addItem(year + "");
+            }
+        } else {
+            cb_nam.setEnabled(false);
+        }
+    }//GEN-LAST:event_cb_dayActionPerformed
+
+    private void cb_namActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_namActionPerformed
+        
+        if (cb_nam.getSelectedItem() != null && (String) cb_day.getSelectedItem() != null) {
+            int nam = Integer.parseInt((String) cb_nam.getSelectedItem());
+            String maDay = cb_day.getSelectedItem().toString().trim();
+            model.setRowCount(0);
+            DefaultCategoryDataset datas;
+            datas = controller.getListRoomwithNumberStudentByIDRange(nam, maDay, model);
+            
+            JFreeChart chart = ChartFactory.createBarChart3D("Thống kê số lượng sinh viên từng phòng " + ((String) cb_thong_ke_phong.getSelectedItem()).trim() + " theo năm", "Năm", "Số lượng sinh viên", datas, PlotOrientation.VERTICAL, true, false, false);
+            ChartPanel panel = new ChartPanel(chart);
+            panel_phong_theo_day.removeAll();
+            panel.setMouseZoomable(true);
+            panel.setPreferredSize(new Dimension(300, 250));
+
+            panel_phong_theo_day.setLayout(new BorderLayout());
+            panel_phong_theo_day.add(panel, BorderLayout.NORTH);
+            panel_phong_theo_day.revalidate();
+            panel_phong_theo_day.repaint();
+        } else {
+            System.out.println("vadvad");
+        }
+    }//GEN-LAST:event_cb_namActionPerformed
+
+    private void cb_thu_phi_theo_namActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_thu_phi_theo_namActionPerformed
+        if ((String) cb_thu_phi_theo_nam.getSelectedItem() != null) {
+            DefaultCategoryDataset datas;
+            int nam = Integer.parseInt((String) cb_thu_phi_theo_nam.getSelectedItem());
+            datas = controller.getTotalCostStudentWithEveryYear();
+            JFreeChart chart = ChartFactory.createBarChart3D("Thống kê số lượng sinh viên từng phòng " + ((String) cb_thong_ke_phong.getSelectedItem()).trim() + " theo năm", "Năm", "Số lượng sinh viên", datas, PlotOrientation.VERTICAL, true, false, false);
+            ChartPanel panel = new ChartPanel(chart);
+            panel_phong.removeAll();
+            panel.setMouseZoomable(true);
+            panel.setPreferredSize(new Dimension(400, 400));
+
+            panel_phong.setLayout(new BorderLayout());
+            panel_phong.add(panel, BorderLayout.NORTH);
+            panel_phong.revalidate();
+            panel_phong.repaint();
+        } else {
+            System.out.println("vadvad");
+        }
+    }//GEN-LAST:event_cb_thu_phi_theo_namActionPerformed
 
     /**
      * @param args the command line arguments
@@ -425,18 +588,27 @@ public class ThongKeView extends javax.swing.JFrame {
     private javax.swing.JLabel btn_logout;
     private javax.swing.JLabel btn_setting;
     private javax.swing.JLabel btn_user;
+    private javax.swing.JComboBox<String> cb_day;
+    private javax.swing.JComboBox<String> cb_nam;
     private javax.swing.JComboBox<String> cb_thong_ke_day;
     private javax.swing.JComboBox<String> cb_thong_ke_phong;
+    private javax.swing.JComboBox<String> cb_thu_phi_theo_nam;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane panel_chart_sv;
     private javax.swing.JPanel panel_demo;
     private javax.swing.JPanel panel_phong;
+    private javax.swing.JPanel panel_phong_theo_day;
+    private javax.swing.JPanel panel_thu_phi;
     private javax.swing.JPanel panel_tk;
     private javax.swing.JLabel setting_view;
+    private javax.swing.JTable tb_thong_ke_day;
     // End of variables declaration//GEN-END:variables
 }

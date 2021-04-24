@@ -6,6 +6,16 @@
 package quanlyktx.view.Admin;
 
 import java.awt.Toolkit;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import quanlyktx.DAO.DAO;
+import quanlyktx.model.HoaDon;
+import quanlyktx.model.HopDong;
+import quanlyktx.model.PS_Phong;
+import quanlyktx.model.PhatSinh;
+import quanlyktx.model.SinhVien;
 import quanlyktx.view.DangNhap.DangNhapView;
 
 /**
@@ -13,20 +23,34 @@ import quanlyktx.view.DangNhap.DangNhapView;
  * @author luong
  */
 public class ThuPhiView extends javax.swing.JFrame {
-
-    public static AdminView adminView;
+    
+    static String user;
+    private DAO controller = new DAO();
+    List<PhatSinh> services;
+    List<HoaDon> bills;
+    List<PS_Phong> roomServices;
+    private DefaultTableModel modelServices;
+    private DefaultTableModel modelBills;
 
     /**
      * Creates new form ThuPhiView
      */
-    public ThuPhiView(AdminView adminView) {
-        this.adminView = adminView;
+    public ThuPhiView(String id) {
+        user = id;
         setIcon();
         initComponents();
         setting_view.setVisible(false);
         btn_user.setVisible(false);
         btn_help.setVisible(false);
         btn_logout.setVisible(false);
+        modelServices = (DefaultTableModel) table_phat_sinh.getModel();
+        modelBills = (DefaultTableModel) table_phi_phat_sinh.getModel();
+        services = controller.getListServices();
+        
+        controller.getListBills(modelBills);
+        
+        showServices();
+        //showBills();
     }
 
     /**
@@ -44,6 +68,18 @@ public class ThuPhiView extends javax.swing.JFrame {
         setting_view = new javax.swing.JLabel();
         btn_setting = new javax.swing.JLabel();
         btn_close = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        table_phi_phat_sinh = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table_phat_sinh = new javax.swing.JTable();
+        btn_add = new javax.swing.JLabel();
+        btn_edit = new javax.swing.JLabel();
+        btn_remove = new javax.swing.JLabel();
+        btn_add_ps = new javax.swing.JLabel();
+        btn_edit_ps = new javax.swing.JLabel();
+        btn_remove_ps = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -92,6 +128,73 @@ public class ThuPhiView extends javax.swing.JFrame {
         });
         getContentPane().add(btn_close, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 10, 25, 20));
 
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(51, 51, 255));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Phát sinh:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 30, -1, -1));
+
+        table_phi_phat_sinh.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        table_phi_phat_sinh.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "STT", "Mã hóa đơn", "Mã phòng", "Ngày phát sinh", "Tổng tiền"
+            }
+        ));
+        jScrollPane2.setViewportView(table_phi_phat_sinh);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 240, 580, 240));
+
+        table_phat_sinh.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        table_phat_sinh.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "STT", "Tên phát sinh", "Giá tiền", "Đơn vị tính"
+            }
+        ));
+        jScrollPane1.setViewportView(table_phat_sinh);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 50, 580, 110));
+
+        btn_add.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        btn_add.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/add.png"))); // NOI18N
+        btn_add.setText("Thêm");
+        getContentPane().add(btn_add, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 170, -1, 20));
+
+        btn_edit.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        btn_edit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/edit.png"))); // NOI18N
+        btn_edit.setText("Sửa");
+        getContentPane().add(btn_edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 170, 60, 20));
+
+        btn_remove.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        btn_remove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/remove.png"))); // NOI18N
+        btn_remove.setText("Xóa");
+        getContentPane().add(btn_remove, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 170, 60, 20));
+
+        btn_add_ps.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        btn_add_ps.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/add.png"))); // NOI18N
+        btn_add_ps.setText("Thêm");
+        getContentPane().add(btn_add_ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 510, -1, 20));
+
+        btn_edit_ps.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        btn_edit_ps.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/edit.png"))); // NOI18N
+        btn_edit_ps.setText("Sửa");
+        getContentPane().add(btn_edit_ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 510, 60, 20));
+
+        btn_remove_ps.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        btn_remove_ps.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/remove.png"))); // NOI18N
+        btn_remove_ps.setText("Xóa");
+        getContentPane().add(btn_remove_ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 510, 60, 20));
+
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(51, 51, 255));
+        jLabel3.setText("Phí dịch vụ: ");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 210, -1, -1));
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/ThuPhi.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
 
@@ -101,6 +204,7 @@ public class ThuPhiView extends javax.swing.JFrame {
 
     private void btn_closeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_closeMouseClicked
         this.dispose();
+        new AdminView(user).setVisible(true);
     }//GEN-LAST:event_btn_closeMouseClicked
     private boolean flag = true;
     private void btn_settingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_settingMouseClicked
@@ -146,9 +250,8 @@ public class ThuPhiView extends javax.swing.JFrame {
         btn_help.setVisible(false);
         btn_logout.setVisible(false);
         flag = true;
-        System.out.println("click logout"); 
+        System.out.println("click logout");
         this.dispose();
-        adminView.dispose();
         new DangNhapView().setVisible(true);
     }//GEN-LAST:event_btn_logoutMouseClicked
 
@@ -182,22 +285,49 @@ public class ThuPhiView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ThuPhiView(adminView).setVisible(true);
+                new ThuPhiView(user).setVisible(true);
             }
         });
     }
-
+    
     private void setIcon() {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("logo.png")));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel btn_add;
+    private javax.swing.JLabel btn_add_ps;
     private javax.swing.JLabel btn_close;
+    private javax.swing.JLabel btn_edit;
+    private javax.swing.JLabel btn_edit_ps;
     private javax.swing.JLabel btn_help;
     private javax.swing.JLabel btn_logout;
+    private javax.swing.JLabel btn_remove;
+    private javax.swing.JLabel btn_remove_ps;
     private javax.swing.JLabel btn_setting;
     private javax.swing.JLabel btn_user;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel setting_view;
+    private javax.swing.JTable table_phat_sinh;
+    private javax.swing.JTable table_phi_phat_sinh;
     // End of variables declaration//GEN-END:variables
+
+    private void showServices() {
+        int i = 1;
+        DecimalFormat formatter = new DecimalFormat("###,###,###");
+        modelServices.setRowCount(0);
+        for (PhatSinh t : services) {
+            
+            modelServices.addRow(new Object[]{
+                i++,
+                t.getMaPS().trim(),
+                t.getTenPS().trim(),
+                formatter.format(t.getGiaTienPS()) + " vnđ",
+                t.getDonViTinh(),});
+        }
+    }
 }

@@ -643,6 +643,51 @@ public class DAO {
 
     }
 
+    public boolean addServices(PhatSinh p) {
+        String sql = "INSERT INTO PhatSinh(MaPS,TenPS,GiaTienPS,DonViTinh) VALUES(?,?,?,?)";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setString(1, p.getMaPS());
+            ps.setString(2, p.getTenPS());
+
+            ps.setInt(3, p.getGiaTienPS());
+            ps.setString(4, p.getDonViTinh());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updatePhatSinh(PhatSinh ps) {
+        String sql = "UPDATE PhatSinh SET "
+                + "TenPS = N'" + ps.getTenPS() + "',"
+                + "DonViTinh = N'" + ps.getDonViTinh() + "',"
+                + "GiaTienPS = " + ps.getGiaTienPS()
+                + " WHERE MaPS = '" + ps.getMaPS() + "'";
+        try {
+            PreparedStatement p = conn.prepareStatement(sql);
+            return p.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deletePhatSinh(String maPS) {
+        String sql = "DELETE FROM PhatSinh WHERE MaPS = '" + maPS + "'";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         new DAO();
     }

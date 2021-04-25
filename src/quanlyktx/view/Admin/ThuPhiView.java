@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import quanlyktx.DAO.DAO;
 import quanlyktx.model.HoaDon;
@@ -23,7 +24,7 @@ import quanlyktx.view.DangNhap.DangNhapView;
  * @author luong
  */
 public class ThuPhiView extends javax.swing.JFrame {
-    
+
     static String user;
     private DAO controller = new DAO();
     List<PhatSinh> services;
@@ -45,10 +46,9 @@ public class ThuPhiView extends javax.swing.JFrame {
         btn_logout.setVisible(false);
         modelServices = (DefaultTableModel) table_phat_sinh.getModel();
         modelBills = (DefaultTableModel) table_phi_phat_sinh.getModel();
-        services = controller.getListServices();
-        
+
         controller.getListBills(modelBills);
-        
+
         showServices();
         //showBills();
     }
@@ -163,31 +163,55 @@ public class ThuPhiView extends javax.swing.JFrame {
         btn_add.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btn_add.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/add.png"))); // NOI18N
         btn_add.setText("Thêm");
+        btn_add.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_add.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_addMouseClicked(evt);
+            }
+        });
         getContentPane().add(btn_add, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 170, -1, 20));
 
         btn_edit.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btn_edit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/edit.png"))); // NOI18N
         btn_edit.setText("Sửa");
+        btn_edit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_edit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_editMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btn_editMouseEntered(evt);
+            }
+        });
         getContentPane().add(btn_edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 170, 60, 20));
 
         btn_remove.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btn_remove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/remove.png"))); // NOI18N
         btn_remove.setText("Xóa");
+        btn_remove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_remove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_removeMouseClicked(evt);
+            }
+        });
         getContentPane().add(btn_remove, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 170, 60, 20));
 
         btn_add_ps.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btn_add_ps.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/add.png"))); // NOI18N
         btn_add_ps.setText("Thêm");
+        btn_add_ps.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().add(btn_add_ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 510, -1, 20));
 
         btn_edit_ps.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btn_edit_ps.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/edit.png"))); // NOI18N
         btn_edit_ps.setText("Sửa");
+        btn_edit_ps.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().add(btn_edit_ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 510, 60, 20));
 
         btn_remove_ps.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btn_remove_ps.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/remove.png"))); // NOI18N
         btn_remove_ps.setText("Xóa");
+        btn_remove_ps.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().add(btn_remove_ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 510, 60, 20));
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -255,6 +279,46 @@ public class ThuPhiView extends javax.swing.JFrame {
         new DangNhapView().setVisible(true);
     }//GEN-LAST:event_btn_logoutMouseClicked
 
+    private void btn_addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_addMouseClicked
+        ThemPhatSinh themPhatSinh = new ThemPhatSinh(this, rootPaneCheckingEnabled);
+        themPhatSinh.setVisible(true);
+    }//GEN-LAST:event_btn_addMouseClicked
+
+    private void btn_editMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_editMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_editMouseEntered
+
+    private void btn_editMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_editMouseClicked
+        int selectedPhatSinh = table_phat_sinh.getSelectedRow();
+        services = controller.getListServices();
+        if (services.size() == 0) {
+            JOptionPane.showMessageDialog(rootPane, "Danh sách trống!");
+        } else if (selectedPhatSinh == -1) {
+            JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần sửa!");
+        } else {
+            SuaPhatSinh edit = new SuaPhatSinh(this, rootPaneCheckingEnabled);
+            edit.setEditData(services.get(selectedPhatSinh));
+            edit.setVisible(true);
+        }
+    }//GEN-LAST:event_btn_editMouseClicked
+
+    private void btn_removeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_removeMouseClicked
+         int selectedPhatSinh = table_phat_sinh.getSelectedRow();
+        services = controller.getListServices();
+        if (services.size() == 0) {
+            JOptionPane.showMessageDialog(rootPane, "Danh sách trống!");
+        } else if (selectedPhatSinh == -1) {
+            JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần sửa!");
+        } else {
+             if (controller.deletePhatSinh(services.get(selectedPhatSinh).getMaPS())) {
+                JOptionPane.showMessageDialog(rootPane, "Xóa thông tin thành công!");
+                showServices();
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Không thể xóa sinh viên này\n vì có liên kết nhiều dữ liệu!");
+            }
+        }
+    }//GEN-LAST:event_btn_removeMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -289,7 +353,7 @@ public class ThuPhiView extends javax.swing.JFrame {
             }
         });
     }
-    
+
     private void setIcon() {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("logo.png")));
     }
@@ -316,12 +380,14 @@ public class ThuPhiView extends javax.swing.JFrame {
     private javax.swing.JTable table_phi_phat_sinh;
     // End of variables declaration//GEN-END:variables
 
-    private void showServices() {
+    void showServices() {
+        services = controller.getListServices();
+
         int i = 1;
         DecimalFormat formatter = new DecimalFormat("###,###,###");
         modelServices.setRowCount(0);
         for (PhatSinh t : services) {
-            
+
             modelServices.addRow(new Object[]{
                 i++,
                 t.getMaPS().trim(),
@@ -330,4 +396,14 @@ public class ThuPhiView extends javax.swing.JFrame {
                 t.getDonViTinh(),});
         }
     }
+
+    void updatePhatSinh(PhatSinh ps) {
+       if (controller.updatePhatSinh(ps)) {
+            JOptionPane.showMessageDialog(rootPane, "Sửa thông tin thành công!");
+            
+            showServices();
+        }
+    }
+
+
 }

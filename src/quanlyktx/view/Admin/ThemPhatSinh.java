@@ -28,6 +28,8 @@ public class ThemPhatSinh extends javax.swing.JDialog {
         initComponents();
         home = (ThuPhiView) parent;
         services = controller.getListServices();
+        
+        
     }
 
     /**

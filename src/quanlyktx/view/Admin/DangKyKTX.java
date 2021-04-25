@@ -6,6 +6,8 @@
 package quanlyktx.view.Admin;
 
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -58,6 +60,29 @@ public class DangKyKTX extends javax.swing.JFrame {
         jRadioButtonNam.setSelected(true);
         cb_phong.setEnabled(false);
         cb_loai_phong.setEnabled(true);
+        
+        txtSoDienThoai.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!((c >= '0') && (c <= '9')
+                        || (c == KeyEvent.VK_BACK_SPACE)
+                        || (c == KeyEvent.VK_DELETE))) {
+                    getToolkit().beep();
+                    e.consume();
+                }
+            }
+        });
+        txtSoDienThoaiNguoiThan.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!((c >= '0') && (c <= '9')
+                        || (c == KeyEvent.VK_BACK_SPACE)
+                        || (c == KeyEvent.VK_DELETE))) {
+                    getToolkit().beep();
+                    e.consume();
+                }
+            }
+        });
 
         //rooms = controller.getListRoom();
         //ranges = controller.getListRange();

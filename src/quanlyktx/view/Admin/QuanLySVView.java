@@ -212,6 +212,9 @@ public class QuanLySVView extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txt_searchKeyPressed(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_searchKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txt_searchKeyTyped(evt);
             }
@@ -346,11 +349,21 @@ public class QuanLySVView extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_searchKeyPressed
 
     private void txt_searchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_searchKeyTyped
+//        String keySearch = txt_search.getText().trim();
+//        if (!keySearch.isEmpty()) {
+//            searchSinhVien(keySearch);
+//        }
+    }//GEN-LAST:event_txt_searchKeyTyped
+
+    private void txt_searchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_searchKeyReleased
         String keySearch = txt_search.getText().trim();
         if (!keySearch.isEmpty()) {
             searchSinhVien(keySearch);
+        } else {
+            txt_search.setText("");
+            showSinhVien();
         }
-    }//GEN-LAST:event_txt_searchKeyTyped
+    }//GEN-LAST:event_txt_searchKeyReleased
     private boolean flag = true;
 
     /**
@@ -403,9 +416,9 @@ public class QuanLySVView extends javax.swing.JFrame {
             HopDong hd = controller.getHopDongWithId(t.getMSSV().trim());
             //System.out.println(t.getMSSV().trim() + "____" + hd.getNgayDangKy());
             if (checkThoiHan(hd.getNgayDangKy(), hd.getNgayKetThuc())) {
-                controller.updateThoiHan(hd.getMSSV(),1);
-            }else {
-                controller.updateThoiHan(hd.getMSSV(),0);
+                controller.updateThoiHan(hd.getMSSV(), 1);
+            } else {
+                controller.updateThoiHan(hd.getMSSV(), 0);
             }
             model.addRow(new Object[]{
                 i++,
@@ -420,8 +433,6 @@ public class QuanLySVView extends javax.swing.JFrame {
                 checkThoiHan(hd.getNgayDangKy(), hd.getNgayKetThuc()) ? "Còn hạn" : "Hết hạn"
             });
         }
-       
-                
 
     }
 

@@ -200,6 +200,11 @@ public class ThuPhiView extends javax.swing.JFrame {
         btn_add_ps.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/add.png"))); // NOI18N
         btn_add_ps.setText("Thêm");
         btn_add_ps.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_add_ps.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_add_psMouseClicked(evt);
+            }
+        });
         getContentPane().add(btn_add_ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 510, -1, 20));
 
         btn_edit_ps.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -318,6 +323,11 @@ public class ThuPhiView extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btn_removeMouseClicked
+
+    private void btn_add_psMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_add_psMouseClicked
+         ThemPhatSinhPhong themPhatSinhPhong = new ThemPhatSinhPhong(this, rootPaneCheckingEnabled);
+        themPhatSinhPhong.setVisible(true);
+    }//GEN-LAST:event_btn_add_psMouseClicked
 
     /**
      * @param args the command line arguments

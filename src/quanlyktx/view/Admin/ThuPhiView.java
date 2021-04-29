@@ -140,10 +140,13 @@ public class ThuPhiView extends javax.swing.JFrame {
 
             },
             new String [] {
-                "STT", "Mã hóa đơn", "Mã phòng", "Ngày phát sinh", "Tổng tiền"
+                "STT", "Mã hóa đơn", "Mã phòng", "Ngày tạo", "Ngày phát sinh", "Tổng tiền"
             }
         ));
         jScrollPane2.setViewportView(table_phi_phat_sinh);
+        if (table_phi_phat_sinh.getColumnModel().getColumnCount() > 0) {
+            table_phi_phat_sinh.getColumnModel().getColumn(0).setMaxWidth(50);
+        }
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 240, 580, 240));
 
@@ -157,6 +160,9 @@ public class ThuPhiView extends javax.swing.JFrame {
             }
         ));
         jScrollPane1.setViewportView(table_phat_sinh);
+        if (table_phat_sinh.getColumnModel().getColumnCount() > 0) {
+            table_phat_sinh.getColumnModel().getColumn(0).setMaxWidth(50);
+        }
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 50, 580, 110));
 
@@ -415,5 +421,7 @@ public class ThuPhiView extends javax.swing.JFrame {
         }
     }
 
-
+    void updateTableBills() {
+        controller.getListBills(modelBills);
+    }
 }

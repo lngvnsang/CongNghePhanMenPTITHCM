@@ -41,7 +41,7 @@ public class ThemPhatSinh extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btn_cancel1 = new javax.swing.JLabel();
+        btn_save = new javax.swing.JLabel();
         btn_cancel = new javax.swing.JLabel();
         lb_Ten = new javax.swing.JLabel();
         lb_gia = new javax.swing.JLabel();
@@ -55,13 +55,13 @@ public class ThemPhatSinh extends javax.swing.JDialog {
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btn_cancel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btn_cancel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btn_save.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_save.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_cancel1MouseClicked(evt);
+                btn_saveMouseClicked(evt);
             }
         });
-        getContentPane().add(btn_cancel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 540, 82, 35));
+        getContentPane().add(btn_save, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 540, 82, 35));
 
         btn_cancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_cancel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -108,7 +108,7 @@ public class ThemPhatSinh extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_btn_cancelMouseClicked
 
-    private void btn_cancel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cancel1MouseClicked
+    private void btn_saveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_saveMouseClicked
         if (checkEmpty(txt_ten.getText(), "Tên phat sinh?")
                 && checkEmpty(txt_dv_tinh.getText(), "Đơn vị tính?")
                 && checkEmpty(txt_gia.getText(), "Giá phát sinh?")) {
@@ -127,9 +127,7 @@ public class ThemPhatSinh extends javax.swing.JDialog {
             }
 
         }
-
-        PhatSinh phatSinh = new PhatSinh();
-    }//GEN-LAST:event_btn_cancel1MouseClicked
+    }//GEN-LAST:event_btn_saveMouseClicked
 
     private void txt_dv_tinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_dv_tinhActionPerformed
         // TODO add your handling code here:
@@ -187,7 +185,7 @@ public class ThemPhatSinh extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_cancel;
-    private javax.swing.JLabel btn_cancel1;
+    private javax.swing.JLabel btn_save;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lb_Ten;
     private javax.swing.JLabel lb_dv_tinh;

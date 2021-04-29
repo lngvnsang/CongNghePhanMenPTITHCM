@@ -440,7 +440,6 @@ public class QuanLyPhongView extends javax.swing.JFrame {
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeRoom.getLastSelectedPathComponent();
 
         String d = (String) selectedNode.getUserObject();
-        // System.out.println(d + "_" + range.getTenDay().trim());
         if (d.trim().length() > 3) {
             model.setColumnCount(0);
             model.setRowCount(0);
@@ -454,14 +453,14 @@ public class QuanLyPhongView extends javax.swing.JFrame {
                     temp.add(phong);
                 }
             }
-            
+
             if (temp.size() > 0) {
                 tbl_quan_ly.setVisible(true);
             }
 
             showDataPhong(temp, model);
-        } else if(d.trim().length() == 3){
-            
+        } else if (d.trim().length() == 3) {
+
             model.setColumnCount(0);
             model.setRowCount(0);
             model.setColumnIdentifiers(new Object[]{
@@ -474,25 +473,50 @@ public class QuanLyPhongView extends javax.swing.JFrame {
 
     private void btn_themMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_themMouseClicked
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeRoom.getLastSelectedPathComponent();
+        if (selectedNode != null) {
+            String d = (String) selectedNode.getUserObject();
+            System.out.println(d);
+            Phong p = controller.getRoom(d);
+            if (d == null) {
+                JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần thêm!");
+            } else {
+                ThemPhong edit = new ThemPhong(this, rootPaneCheckingEnabled);
+                edit.setVisible(true);
 
-        String d = (String) selectedNode.getUserObject();
-        Phong p = controller.getRoom(d);
-        if (d == null) {
-            JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần sửa!");
-        } else {
-            ThemPhong edit = new ThemPhong(this, rootPaneCheckingEnabled);
-            edit.setEditData(d);
-            edit.setVisible(true);
-
+            }
         }
     }//GEN-LAST:event_btn_themMouseClicked
 
     private void btn_suaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_suaMouseClicked
-        // TODO add your handling code here:
+        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeRoom.getLastSelectedPathComponent();
+
+        String d = (String) selectedNode.getUserObject();
+        if (d.trim().length() > 3) {
+        } else if (d.trim().length() == 3) {
+            Phong p = controller.getRoom(d);
+            SuaThongTinPhong edit = new SuaThongTinPhong(this, rootPaneCheckingEnabled);
+            edit.setEditData(p);
+            edit.setVisible(true);
+
+            controller.showDataDetailPhong(model, d);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần sửa!");
+        }
     }//GEN-LAST:event_btn_suaMouseClicked
 
     private void btn_xoaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_xoaMouseClicked
-        // TODO add your handling code here:
+        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeRoom.getLastSelectedPathComponent();
+        String d = (String) selectedNode.getUserObject();
+        if (d.trim().length() > 3) {
+        } else if (d.trim().length() == 3) {
+            if (controller.deletePhong(d)) {
+                JOptionPane.showMessageDialog(rootPane, "Xóa phòng thành công!");
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Xóa phòng thất bại!\n Phòng có liên kết với nhiều dữ liệu khác");
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần xóa!");
+        }
     }//GEN-LAST:event_btn_xoaMouseClicked
 
     /**
@@ -548,16 +572,18 @@ public class QuanLyPhongView extends javax.swing.JFrame {
         int i = 1;
         model.setRowCount(0);
         for (Phong p : data) {
+            String tt = p.getTinhTrang() == 1 ? "Đóng" : "Mở";
             model.addRow(new Object[]{
                 i++,
                 p.getMaPhong(),
                 p.getMaDay().trim(),
                 p.getToiThieu(),
                 p.getToiDa(),
-                p.getMaLoaiPhong(),});
+                p.getMaLoaiPhong(),
+                tt
+            });
         }
     }
-    
 
     private void setIcon() {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("logo.png")));
@@ -579,4 +605,42 @@ public class QuanLyPhongView extends javax.swing.JFrame {
     private javax.swing.JTable tbl_quan_ly;
     private javax.swing.JTree treeRoom;
     // End of variables declaration//GEN-END:variables
+
+    void updateEdit() {
+        treeRoom.removeAll();
+        ranges = controller.getListRange();
+        rooms = controller.getListRoom();
+        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeRoom.getLastSelectedPathComponent();
+
+        String d = (String) selectedNode.getUserObject();
+        if (d.trim().length() > 3) {
+            model.setColumnCount(0);
+            model.setRowCount(0);
+            model.setColumnIdentifiers(new Object[]{
+                "STT", "Mã phòng", "Mã dãy", "Tối thiểu", "Tối đa", "Mã loại phòng", "Tình trạng"
+            });
+            List<Phong> temp = new ArrayList<>();
+            for (Phong phong : rooms) {
+                System.out.println(d.trim() + "_" + ("Dãy " + phong.getMaDay()).trim());
+                if (("Dãy " + phong.getMaDay()).trim().equals(d.trim())) {
+                    temp.add(phong);
+                }
+            }
+
+            if (temp.size() > 0) {
+                tbl_quan_ly.setVisible(true);
+            }
+
+            showDataPhong(temp, model);
+        } else if (d.trim().length() == 3) {
+
+            model.setColumnCount(0);
+            model.setRowCount(0);
+            model.setColumnIdentifiers(new Object[]{
+                "STT", "Họ và tên", "Mã SV", "Quê quán", "Ngày đăng kí", "Ngày hết hạn", ""
+            });
+            controller.showDataDetailPhong(model, d);
+        }
+        treeRoom.repaint();
+    }
 }

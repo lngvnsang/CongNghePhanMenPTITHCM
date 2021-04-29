@@ -5,19 +5,18 @@
  */
 package quanlyktx.view.Admin;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import quanlyktx.DAO.DAO;
 import quanlyktx.model.Day;
+import quanlyktx.model.LoaiPhong;
 import quanlyktx.model.Phong;
 
 /**
  *
  * @author luong
  */
-public class ThemPhong extends javax.swing.JDialog {
+public class SuaThongTinPhong extends javax.swing.JDialog {
 
     private List<Day> ranges;
     private DAO controller;
@@ -26,39 +25,12 @@ public class ThemPhong extends javax.swing.JDialog {
     /**
      * Creates new form ThemPhong
      */
-    public ThemPhong(java.awt.Frame parent, boolean modal) {
+    public SuaThongTinPhong(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         controller = new DAO();
-        home = (QuanLyPhongView) parent;
-
         ranges = controller.getListRange();
-        cb_day.removeAllItems();
-        for (Day range : ranges) {
-            cb_day.addItem(range.getTenDay());
-        }
-        txtToiDa.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if (!((c >= '0') && (c <= '9')
-                        || (c == KeyEvent.VK_BACK_SPACE)
-                        || (c == KeyEvent.VK_DELETE))) {
-                    getToolkit().beep();
-                    e.consume();
-                }
-            }
-        });
-        txtToiThieu.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if (!((c >= '0') && (c <= '9')
-                        || (c == KeyEvent.VK_BACK_SPACE)
-                        || (c == KeyEvent.VK_DELETE))) {
-                    getToolkit().beep();
-                    e.consume();
-                }
-            }
-        });
+        home = (QuanLyPhongView) parent;
 
     }
 
@@ -72,8 +44,8 @@ public class ThemPhong extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel2 = new javax.swing.JLabel();
-        cb_day = new javax.swing.JComboBox<>();
-        cb_thinh_trang = new javax.swing.JComboBox<>();
+        cb_tinh_trang = new javax.swing.JComboBox<>();
+        cb_ma_day = new javax.swing.JComboBox<>();
         cb_loai_phong = new javax.swing.JComboBox<>();
         txtToiThieu = new javax.swing.JTextField();
         txtToiDa = new javax.swing.JTextField();
@@ -88,19 +60,20 @@ public class ThemPhong extends javax.swing.JDialog {
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        cb_day.setFont(new java.awt.Font("Times New Roman", 0, 13)); // NOI18N
-        cb_day.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default" }));
-        cb_day.addActionListener(new java.awt.event.ActionListener() {
+        cb_tinh_trang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Đóng", "Mở" }));
+        cb_tinh_trang.setBorder(new javax.swing.border.MatteBorder(null));
+        cb_tinh_trang.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(cb_tinh_trang, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 380, 260, -1));
+
+        cb_ma_day.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dịch vụ 1", "Dịch vụ 2", "Thường" }));
+        cb_ma_day.setBorder(new javax.swing.border.MatteBorder(null));
+        cb_ma_day.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cb_ma_day.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_dayActionPerformed(evt);
+                cb_ma_dayActionPerformed(evt);
             }
         });
-        getContentPane().add(cb_day, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, 260, -1));
-
-        cb_thinh_trang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Đóng", "Mở" }));
-        cb_thinh_trang.setBorder(new javax.swing.border.MatteBorder(null));
-        cb_thinh_trang.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(cb_thinh_trang, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 380, 260, -1));
+        getContentPane().add(cb_ma_day, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, 260, -1));
 
         cb_loai_phong.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dịch vụ 1", "Dịch vụ 2", "Thường" }));
         cb_loai_phong.setBorder(new javax.swing.border.MatteBorder(null));
@@ -135,7 +108,7 @@ public class ThemPhong extends javax.swing.JDialog {
         });
         getContentPane().add(btn_save, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 540, 82, 38));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/Them_thong_tin_PHONG.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/Sua_thong_tin_PHONG.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         setSize(new java.awt.Dimension(500, 600));
@@ -143,46 +116,44 @@ public class ThemPhong extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_saveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_saveMouseClicked
-        if (checkEmpty(txtMaPhong.getText().trim(), "Mã dãy?")
-                && checkEmpty(txtToiThieu.getText().trim(), "Phòng tối thiểu?")
-                && checkEmpty(txtToiDa.getText().trim(), "Phòng tối đa?")
-                && !cb_day.getSelectedItem().equals("Default")) {
-            Phong phong = new Phong();
-
-            phong.setMaPhong(txtMaPhong.getText().trim().toUpperCase());
-            phong.setMaDay(ranges.get(cb_day.getSelectedIndex()).getMaDay().trim());
-            String loaiP = "";
-            if (cb_loai_phong.getSelectedIndex() == 0) {
-                loaiP = "L1";
-            } else if (cb_loai_phong.getSelectedIndex() == 1) {
-                loaiP = "L2";
-            } else if (cb_loai_phong.getSelectedIndex() == 2) {
-                loaiP = "L3";
-            }
-
-            phong.setMaLoaiPhong(loaiP);
-            phong.setToiDa(Integer.parseInt(txtToiDa.getText().trim()));
-            phong.setToiThieu(Integer.parseInt(txtToiThieu.getText().trim()));
-            int tt = cb_thinh_trang.getSelectedItem().toString().trim() == "Đóng" ? 0 : 1;
-            phong.setTinhTrang(tt);
-
-            if (controller.addRoom(phong)) {
-                JOptionPane.showMessageDialog(rootPane, "Thêm phòng thành công!");
-                home.updateEdit();
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(rootPane, "Thêm phòng thất bại!");
-            }
+        Phong p = new Phong();
+        String loaiP = "";
+        if (cb_loai_phong.getSelectedIndex() == 0) {
+            loaiP = "L1";
+        } else if (cb_loai_phong.getSelectedIndex() == 1) {
+            loaiP = "L2";
+        } else if (cb_loai_phong.getSelectedIndex() == 2) {
+            loaiP = "L3";
         }
+        p.setMaPhong(txtMaPhong.getText().trim());
+        p.setMaLoaiPhong(loaiP);
+        p.setMaDay(cb_ma_day.getSelectedItem().toString().trim());
+        p.setToiDa(Integer.parseInt(txtToiDa.getText().toString().trim()));
+        p.setToiThieu(Integer.parseInt(txtToiThieu.getText().toString().trim()));
+        int tt = cb_tinh_trang.getSelectedItem().toString().trim() == "Đóng" ? 0 : 1;
+        System.out.println(tt + "");
+        p.setTinhTrang(tt);
+
+        if (controller.updateRoom(p)) {
+            JOptionPane.showMessageDialog(rootPane, "Sửa thành công");
+            home.updateEdit();
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Sửa thất bại");
+        }
+
     }//GEN-LAST:event_btn_saveMouseClicked
 
     private void btn_cancleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cancleMouseClicked
         this.dispose();
     }//GEN-LAST:event_btn_cancleMouseClicked
 
-    private void cb_dayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_dayActionPerformed
-
-    }//GEN-LAST:event_cb_dayActionPerformed
+    private void cb_ma_dayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_ma_dayActionPerformed
+        String maDay = cb_ma_day.getSelectedItem().toString().trim();
+        for (Day day : ranges) {
+            cb_ma_day.addItem(day.getTenDay());
+        }
+    }//GEN-LAST:event_cb_ma_dayActionPerformed
 
     /**
      * @param args the command line arguments
@@ -201,20 +172,21 @@ public class ThemPhong extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ThemPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SuaThongTinPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ThemPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SuaThongTinPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ThemPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SuaThongTinPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ThemPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SuaThongTinPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ThemPhong dialog = new ThemPhong(new javax.swing.JFrame(), true);
+                SuaThongTinPhong dialog = new SuaThongTinPhong(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -226,20 +198,12 @@ public class ThemPhong extends javax.swing.JDialog {
         });
     }
 
-    public boolean checkEmpty(String key, String notify) {
-        if (key.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, notify);
-            return false;
-        }
-        return true;
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_cancle;
     private javax.swing.JLabel btn_save;
-    private javax.swing.JComboBox<String> cb_day;
     private javax.swing.JComboBox<String> cb_loai_phong;
-    private javax.swing.JComboBox<String> cb_thinh_trang;
+    private javax.swing.JComboBox<String> cb_ma_day;
+    private javax.swing.JComboBox<String> cb_tinh_trang;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField txtMaPhong;
@@ -247,4 +211,17 @@ public class ThemPhong extends javax.swing.JDialog {
     private javax.swing.JTextField txtToiThieu;
     // End of variables declaration//GEN-END:variables
 
+    void setEditData(Phong p) {
+
+        LoaiPhong loaiP = controller.getCategoryRoomByIDCategoryRoom(p.getMaPhong().trim());
+        txtMaPhong.setText(p.getMaPhong());
+        txtMaPhong.setEnabled(false);
+        cb_ma_day.addItem(p.getMaDay());
+        cb_ma_day.setSelectedItem(p.getMaDay());
+        cb_ma_day.setEnabled(false);
+        txtToiThieu.setText(p.getToiThieu() + "");
+        txtToiDa.setText(p.getToiDa() + "");
+        String temp = p.getTinhTrang() == 1 ? "Mở" : "Đóng";
+        cb_tinh_trang.setSelectedItem(temp);
+    }
 }

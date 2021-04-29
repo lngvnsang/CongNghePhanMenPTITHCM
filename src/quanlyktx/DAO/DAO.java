@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,6 +22,7 @@ import quanlyktx.model.Day;
 import quanlyktx.model.HoaDon;
 import quanlyktx.model.HopDong;
 import quanlyktx.model.LoaiPhong;
+import quanlyktx.model.PS_Phong;
 import quanlyktx.model.PhatSinh;
 import quanlyktx.model.Phong;
 import quanlyktx.model.SinhVien;
@@ -266,7 +268,7 @@ public class DAO {
         return false;
     }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////Phòng//////////////////////////////////////////////
     public boolean addRoom(Phong p) {
         String sql = "INSERT INTO Phong(MaPhong,MaDay,ToiThieu,ToiDa,TinhTrang,MaLoaiPhong) VALUES(?,?,?,?,?,?)";
         try {
@@ -308,6 +310,37 @@ public class DAO {
 
         return list;
     }
+
+    public boolean updateRoom(Phong p) {
+        System.out.println(p.getMaLoaiPhong().trim() + "_____");
+        String sql = "UPDATE Phong SET "
+                + "MaDay  = '" + p.getMaDay().trim() + "', "
+                + "ToiThieu = " + p.getToiThieu() + ", "
+                + "ToiDa = " + p.getToiDa() + ", "
+                + "TinhTrang = " + p.getTinhTrang() + ", "
+                + "MaLoaiPhong = '" + p.getMaLoaiPhong().trim() + "' "
+                + " WHERE MaPhong = '" + p.getMaPhong().trim() + "'";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean deletePhong(String d) {
+        System.out.println(d +"++++++");
+          String sql = "DELETE FROM Phong WHERE MaPhong = '" + d.trim() + "'";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
     public Phong getRoom(String id) {
         String sql = "SELECT * FROM Phong WHERE MaPhong = '" + id.trim() + "'";
@@ -417,7 +450,7 @@ public class DAO {
 
         return list;
     }
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////Hợp đồng////////////////////////////////////////////////////////
 
     public boolean addHopDong(HopDong s) {
         String sql = "INSERT INTO HopDong(ID_HopDong,IDQuanLy,MSSV,MaPhong,SoTienTra,HanTra,TinhTrang,NgayDangKy,NgayKetThuc) VALUES(?,?,?,?,?,?,?,?,?)";
@@ -493,6 +526,23 @@ public class DAO {
         return hd;
     }
 
+//     public boolean editInfoRoom(String d) {
+//          String sql = "UPDATE Phong SET "
+//                + "Ten = N'" + s.getTen() + "',"
+//                + "NgaySinh = '" + (java.sql.Date) new java.sql.Date(s.getNgaySinh().getTime()) + "',"
+//                + "GioiTinh = N'" + s.getGioiTinh() + "',"
+//                + "QueQuan = N'" + s.getQueQuan() + "',"
+//                + "SDT = '" + s.getSDT() + "',"
+//                + "DiaChi = N'" + s.getDiaChi() + "'"
+//                + " WHERE MaPhong = '" + d.trim() + "'";
+//        try {
+//            PreparedStatement ps = conn.prepareStatement(sql);
+//            return ps.executeUpdate() > 0;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//     }
     ///////////////////////////////////////////Thống kê////////////////////////////////////////////
     public DefaultCategoryDataset getTotalStudentWithYear() {
         DefaultCategoryDataset datas = new DefaultCategoryDataset();
@@ -614,33 +664,75 @@ public class DAO {
         return list;
     }
 
-    public void getListBills(DefaultTableModel modelBills) {
+    public List<HoaDon> getListBill() {
+        ArrayList<HoaDon> list = new ArrayList<>();
+        String sql = "SELECT * FROM HoaDon ";
 
-        String sql = "SELECT HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, SUM(GiaTienPS* SL) AS TongTien "
-                + "FROM HoaDon, PhatSinh, PS_Phong "
-                + "WHERE "
-                + "HoaDon.MaHD = PS_Phong.MaHD "
-                + "AND PS_Phong.MaPS = PhatSinh.MaPS "
-                + "GROUP BY HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong ";
-        int i = 1;
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
+                HoaDon hd = new HoaDon();
+                hd.setMaHD(rs.getString("MaHD"));
+                hd.setMaPhong(rs.getString("MaPhong"));
+                hd.setTongTien(rs.getInt("TongTien"));
+                hd.setNgayTaoHD(rs.getDate("NgayTaoHD"));
+
+                list.add(hd);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public void getListBills(DefaultTableModel modelBills) {
+
+        String sql = "SELECT HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, SUM(GiaTienPS* SL) AS TongTien "
+                + "FROM HoaDon, PhatSinh, PS_Phong "
+                + "WHERE "
+                + "HoaDon.MaHD = PS_Phong.MaHD "
+                + "AND PS_Phong.MaPS = PhatSinh.MaPS "
+                + "GROUP BY HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS "
+                + "ORDER BY  PS_Phong.NgayPS DESC";
+        int i = 1;
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        DecimalFormat formatter = new DecimalFormat("###,###,###");
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            modelBills.setRowCount(0);
+            while (rs.next()) {
+                updateTongTienToBill(rs.getString("MaHD").trim(), Integer.parseInt(rs.getString("TongTien")));
 
                 modelBills.addRow(new Object[]{
                     i++,
-                    rs.getString("MaHD"),
-                    rs.getString("MaPhong"),
+                    rs.getString("MaHD").trim(),
+                    rs.getString("MaPhong").trim(),
+                    rs.getString("TenPS").trim(),
                     format.format(rs.getDate("NgayPS")),
-                    rs.getString("TongTien"),});
+                    formatter.format(Integer.parseInt(rs.getString("TongTien"))),});
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    public boolean updateTongTienToBill(String maHD, int tongTien) {
+        String sql = "UPDATE HoaDon "
+                + "SET TongTien = " + tongTien + " "
+                + "WHERE MaHD = '" + maHD + "'";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public boolean addServices(PhatSinh p) {
@@ -688,8 +780,72 @@ public class DAO {
         return false;
     }
 
+    public boolean addBill(HoaDon hd) {
+        String sql = "INSERT INTO HoaDon(MaHD,MaPhong,TongTien,NgayTaoHD) VALUES(?,?,?,?)";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setString(1, hd.getMaHD());
+            ps.setString(2, hd.getMaPhong());
+
+            ps.setInt(3, hd.getTongTien());
+            ps.setDate(4, (java.sql.Date) new java.sql.Date(hd.getNgayTaoHD().getTime()));
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean addPSPhong(PS_Phong pS_Phong) {
+        String sql = "INSERT INTO PS_Phong(MaPS_Phong,MaHD,MaPS,NgayPS,SL) VALUES(?,?,?,?,?)";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setString(1, pS_Phong.getMaPS_Phong().trim());
+            ps.setString(2, pS_Phong.getMaHD().trim());
+
+            ps.setString(3, pS_Phong.getMaPS().trim());
+            ps.setDate(4, (java.sql.Date) new java.sql.Date(pS_Phong.getNgayPS().getTime()));
+            ps.setInt(5, pS_Phong.getSL());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<PS_Phong> getListRoomServices() {
+        ArrayList<PS_Phong> list = new ArrayList<>();
+        String sql = "SELECT * FROM PS_Phong ";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                PS_Phong pS_Phong = new PS_Phong();
+                pS_Phong.setMaHD(rs.getString("MaHD"));
+                pS_Phong.setMaPS_Phong(rs.getString("MaPS_Phong"));
+                pS_Phong.setMaPS(rs.getString("MaPS"));
+                pS_Phong.setNgayPS(rs.getDate("NgayPS"));
+                pS_Phong.setSL(rs.getInt("SL"));
+
+                list.add(pS_Phong);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
     public static void main(String[] args) {
         new DAO();
     }
 
+    
 }

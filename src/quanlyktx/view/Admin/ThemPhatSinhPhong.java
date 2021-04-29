@@ -8,10 +8,17 @@ package quanlyktx.view.Admin;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import quanlyktx.DAO.DAO;
+import quanlyktx.model.HoaDon;
+import quanlyktx.model.PS_Phong;
 import quanlyktx.model.PhatSinh;
 import quanlyktx.model.Phong;
 
@@ -28,26 +35,31 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
     private DAO controller = new DAO();
     List<Phong> rooms;
     List<PhatSinh> services;
-    
+    List<HoaDon> bills;
+    List<PS_Phong> roomServices;
+
     public ThemPhatSinhPhong(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         home = (ThuPhiView) parent;
         services = controller.getListServices();
+        bills = controller.getListBill();
+        roomServices = controller.getListRoomServices();
+
         txt_so_luong.setEnabled(false);
-        
+
         cb_phat_sinh.removeAllItems();
-        
+
         for (PhatSinh service : services) {
             cb_phat_sinh.addItem(service.getTenPS().trim());
         }
-        
+
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        
+
         Date currentDate = java.util.Calendar.getInstance().getTime();
-        
+
         txt_ngay_phat_sinh.setText(format.format(currentDate));
-        
+
         txt_so_luong.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
@@ -59,7 +71,7 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
                 }
             }
         });
-        
+
     }
 
     /**
@@ -208,17 +220,89 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
     }//GEN-LAST:event_btn_cancelMouseClicked
 
     private void btn_saveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_saveMouseClicked
+        System.out.println("0");
+        if (checkEmpty(cb_day.getSelectedItem().toString(), "Tên phat sinh?")
+                && !cb_day.getSelectedItem().toString().trim().equals("Default")
+                && checkEmpty(cb_phong.getSelectedItem().toString(), "Phòng?")
+                && checkEmpty(cb_phat_sinh.getSelectedItem().toString(), "Phát sinh?")
+                && !cb_phat_sinh.getSelectedItem().toString().trim().equals("Default")) {
+            System.out.println("1");
+            try {
 
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                String kt = checkHoaDonExit(cb_phong.getSelectedItem().toString().trim(), txt_ngay_phat_sinh.getText().toString().trim(), cb_phat_sinh.getSelectedItem().toString().trim());
+                System.out.println(kt);
+                if (kt != null) {
+                    String maHD = checkHoaDonExit(cb_phong.getSelectedItem().toString().trim(), txt_ngay_phat_sinh.getText().toString().trim(), cb_phat_sinh.getSelectedItem().toString().trim());
+                    roomServices = controller.getListRoomServices();
+                    System.out.println("2");
+                    int t = roomServices.size() + 1;
+                    String maPSPhong = (roomServices.size() < 10 ? "PSP0" : "PSP") + t;
+                    String maps = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().trim();
+                    PS_Phong pS_Phong = new PS_Phong(
+                            maPSPhong,
+                            maHD,
+                            maps,
+                            format.parse(txt_ngay_phat_sinh.getText().toString().trim()),
+                            Integer.parseInt(txt_so_luong.getText().trim())
+                    );
+
+                    if (controller.addPSPhong(pS_Phong)) {
+                        System.out.println("3");
+                        JOptionPane.showMessageDialog(rootPane, "Thêm phát sinh thành công.");
+                        home.updateTableBills();
+                        this.dispose();
+                    }
+//                }else if (kt == "not alow") {
+//                    JOptionPane.showMessageDialog(rootPane, "Thêm phát sinh thất bại.");
+//                    this.dispose();
+                } else {
+                    HoaDon hd = new HoaDon();
+                    int k = bills.size() + 1;
+
+                    String maHD = (bills.size() < 10 ? "HD0" : "HD") + k;
+                    System.out.println(maHD + "            " + bills.size());
+                    hd.setMaHD(maHD);
+                    hd.setMaPhong(cb_phong.getSelectedItem().toString().trim());
+                    hd.setTongTien(0);
+                    hd.setNgayTaoHD(format.parse(txt_ngay_phat_sinh.getText().toString().trim()));
+                    if (controller.addBill(hd)) {
+                        System.out.println("2");
+                        int t = roomServices.size() + 1;
+                        String maPSPhong = (roomServices.size() < 10 ? "PSP0" : "PSP") + t;
+                        String maps = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().trim();
+                        PS_Phong pS_Phong = new PS_Phong(
+                                maPSPhong,
+                                maHD,
+                                maps,
+                                format.parse(txt_ngay_phat_sinh.getText().toString().trim()),
+                                Integer.parseInt(txt_so_luong.getText().trim())
+                        );
+
+                        if (controller.addPSPhong(pS_Phong)) {
+                            System.out.println("3");
+                            JOptionPane.showMessageDialog(rootPane, "Thêm phát sinh thành công.");
+                            home.updateTableBills();
+                            this.dispose();
+                        }
+                    }
+                }
+
+            } catch (ParseException ex) {
+                Logger.getLogger(ThemPhatSinhPhong.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
     }//GEN-LAST:event_btn_saveMouseClicked
 
     private void cb_dayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_dayActionPerformed
         String maDay = cb_day.getSelectedItem().toString().trim();
-        
+
         if (!maDay.equals("Default")) {
             cb_phong.setEnabled(true);
             rooms = controller.getListRoomByIDRange(maDay);
             cb_phong.removeAllItems();
-            
+
             for (Phong room : rooms) {
                 cb_phong.addItem(room.getMaPhong());
             }
@@ -232,6 +316,15 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
         int index = cb_phat_sinh.getSelectedIndex();
         if (index != -1) {
             lb_don_vi_tinh.setText(services.get(index).getDonViTinh().trim());
+        }
+
+        if (!txt_so_luong.getText().trim().isEmpty()) {
+            DecimalFormat formatter = new DecimalFormat("###,###,###");
+            int gia = services.get(cb_phat_sinh.getSelectedIndex()).getGiaTienPS() * Integer.parseInt(txt_so_luong.getText().trim());
+            lb_tong.setText("");
+            lb_tong.setText(formatter.format(gia) + " vnđ");
+        } else {
+            lb_tong.setText("");
         }
     }//GEN-LAST:event_cb_phat_sinhActionPerformed
 
@@ -252,10 +345,13 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
     }//GEN-LAST:event_txt_so_luongActionPerformed
 
     private void txt_so_luongKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_so_luongKeyReleased
-       if (!txt_so_luong.getText().trim().isEmpty()) {
+        if (!txt_so_luong.getText().trim().isEmpty()) {
             DecimalFormat formatter = new DecimalFormat("###,###,###");
             int gia = services.get(cb_phat_sinh.getSelectedIndex()).getGiaTienPS() * Integer.parseInt(txt_so_luong.getText().trim());
+            lb_tong.setText("");
             lb_tong.setText(formatter.format(gia) + " vnđ");
+        } else {
+            lb_tong.setText("");
         }
     }//GEN-LAST:event_txt_so_luongKeyReleased
 
@@ -300,6 +396,74 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
             }
         });
     }
+
+    public String checkHoaDonExit(String maPhong, String ngayTao, String tenSP) {
+        bills = controller.getListBill();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        String maPS = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().toString().trim();
+        for (HoaDon bill : bills) {
+
+            try {
+                System.out.println(maPhong.equals(bill.getMaPhong().trim()) + "___" + checkThoiHan(bill.getNgayTaoHD(), addDays(bill.getNgayTaoHD(), 30), format.parse(ngayTao)));
+                if (maPhong.equals(bill.getMaPhong().trim())) {
+                    //System.out.println(checkMaPsPhong(maPS) + " fwfw   "+maPS);
+                    if (checkThoiHan(bill.getNgayTaoHD(), addDays(bill.getNgayTaoHD(), 30), format.parse(ngayTao)) || checkMaPsPhong(maPS, bill.getMaHD())) {
+                        System.out.println(checkMaPsPhong(maPS, bill.getMaHD())+"  rrgt5");
+                        if (checkMaPsPhong(maPS, bill.getMaHD())) {
+                            return bill.getMaHD();
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(rootPane, "Phát sinh đã được thêm trong tháng này!");
+                        return "not alow";
+                    }
+                }
+            } catch (ParseException ex) {
+                Logger.getLogger(ThemPhatSinhPhong.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        return null;
+    }
+
+    public boolean checkMaPsPhong(String maPs, String maHD) {
+        roomServices = controller.getListRoomServices();
+        for (PS_Phong roomService : roomServices) {
+            System.out.println(maHD.equals(roomService.getMaHD().trim())+ " _____ safv");
+            if (maHD.equals(roomService.getMaHD().trim())) {
+                if (maPs.equals(roomService.getMaPS())) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public static Date addDays(Date date, int days) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, days); //minus number would decrement the days
+        return cal.getTime();
+    }
+
+    boolean checkThoiHan(Date ngayDangKy, Date ngayKetThuc, Date dayCheck) {
+
+        Date todayDate = dayCheck;
+        if (!ngayDangKy.after(todayDate) && !ngayKetThuc.before(todayDate)) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkEmpty(String key, String notify) {
+        if (key.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, notify);
+            return false;
+        }
+        return true;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_cancel;

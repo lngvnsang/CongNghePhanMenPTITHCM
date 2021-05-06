@@ -6,6 +6,10 @@
 package quanlyktx.view.User;
 
 import java.awt.Toolkit;
+import java.util.List;
+import quanlyktx.DAO.DAO;
+import quanlyktx.model.HopDong;
+import quanlyktx.model.SinhVien;
 import quanlyktx.view.Admin.HelpView;
 import quanlyktx.view.Admin.UserView;
 import quanlyktx.view.DangNhap.DangNhapView;
@@ -26,6 +30,74 @@ public class ThongTinView extends javax.swing.JFrame {
         btn_user.setVisible(false);
         btn_help.setVisible(false);
         btn_logout.setVisible(false);
+        setLocationRelativeTo(null);
+        
+        controller = new DAO();
+        showHopDong();
+    }
+    
+    public ThongTinView(String id)
+    {
+        user = id;
+        setIcon();
+        initComponents();
+        setting_view.setVisible(false);
+        btn_user.setVisible(false);
+        btn_help.setVisible(false);
+        btn_logout.setVisible(false);
+        setLocationRelativeTo(null);
+        
+        controller = new DAO();
+        showHopDong();
+    }
+    
+    public void showHopDong()
+    {
+        try {
+            sinhVien = controller.getStudent(user);
+            hopDong = controller.getHopDongWithId(sinhVien.getMSSV());
+            if(hopDong != null)
+            {
+                txt_HopDong.setText("");
+                String tinhTrang;
+                String ngayRoiDi;
+                
+                if(hopDong.getTinhTrang() == 0)
+                {
+                    tinhTrang = "Chưa đóng";
+                }
+                else
+                {
+                    tinhTrang = "Đã đóng";
+                }
+                if(hopDong.getNgayRoiDi() == null)
+                {
+                    ngayRoiDi = "null";
+                }
+                else
+                {
+                    ngayRoiDi = hopDong.getNgayRoiDi().toString();
+                }
+                
+                txt_HopDong.setText(
+                                    "Mã hợp đồng: " + hopDong.getID_HopDong() + "\n\n"
+                                + "ID Quản lý: " + hopDong.getIDQuanLy() + "\n\n"
+                                + "Mã số sinh viên: " + hopDong.getMSSV() + "\n\n"
+                                + "Mã phòng: " + hopDong.getMaPhong() + "\n\n"
+                                + "Tiền phòng: " + hopDong.getSoTienTra() + "\n\n"
+                                + "Hạn trả: " + hopDong.getHanTra() + "\n\n"
+                                + "Tình trạng: " + tinhTrang + "\n\n"
+                                + "Ngày đăng ký: " + hopDong.getNgayDangKy() + "\n\n"
+                                + "Ngày kết thúc: " + hopDong.getNgayKetThuc() + "\n\n"
+                                + "Ngày rời đi: " + ngayRoiDi + "\n");
+            }
+        } catch (Exception e) {
+        }
+    }
+    
+    public void showPhatSinh()
+    {
+        
     }
 
     /**
@@ -43,7 +115,12 @@ public class ThongTinView extends javax.swing.JFrame {
         btn_help = new javax.swing.JLabel();
         btn_setting = new javax.swing.JLabel();
         setting_view = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        TabbedPane = new javax.swing.JTabbedPane();
+        sp_HopDong = new javax.swing.JScrollPane();
+        txt_HopDong = new javax.swing.JTextPane();
+        sp_PhatSinh = new javax.swing.JScrollPane();
+        txt_PhatSinh = new javax.swing.JTextPane();
+        bg_ThongTinKTX = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -90,13 +167,31 @@ public class ThongTinView extends javax.swing.JFrame {
         setting_view.setText("jLabel2");
         getContentPane().add(setting_view, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 190, 220));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/ThongTinView.jpg"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
+        TabbedPane.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+
+        txt_HopDong.setEditable(false);
+        txt_HopDong.setFont(new java.awt.Font("Times New Roman", 3, 16)); // NOI18N
+        txt_HopDong.setText("Mã hợp đồng:\n\nID quản lý:\n\nMã số sinh viên:\n\nMã phòng:\n\nTiền phòng:\n\nHạn trả:\n\nTình trạng:\n\nNgày đăng ký:\n\nNgày kết thúc:\n\nNgày rời đi:");
+        sp_HopDong.setViewportView(txt_HopDong);
+
+        TabbedPane.addTab("Hợp đồng", sp_HopDong);
+
+        txt_PhatSinh.setEditable(false);
+        txt_PhatSinh.setFont(new java.awt.Font("Times New Roman", 3, 16)); // NOI18N
+        txt_PhatSinh.setText("Mã hợp đồng:\n\nMã Phòng:\n\nMã Phát sinh:\n\nNgày phát sinh:\n\nSố lượng:\n\nTổng tiền:");
+        sp_PhatSinh.setViewportView(txt_PhatSinh);
+
+        TabbedPane.addTab("Phát sinh", sp_PhatSinh);
+
+        getContentPane().add(TabbedPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 80, 630, 440));
+
+        bg_ThongTinKTX.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/ThongTinView.jpg"))); // NOI18N
+        getContentPane().add(bg_ThongTinKTX, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
 
         setSize(new java.awt.Dimension(900, 550));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-    private boolean flag = true;
+
     private void btn_settingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_settingMouseClicked
         if (flag) {
             setting_view.setVisible(true);
@@ -185,14 +280,28 @@ public class ThongTinView extends javax.swing.JFrame {
     private void setIcon() {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("logo.png")));
     }
+    
+//    VARIABLES DECLARATION
+    static String user = "";
+    private DAO controller;
+    private boolean flag = true;
+    SinhVien sinhVien;
+    HopDong hopDong;
+    List<SinhVien> students;
+//    END OF VARIABLES DECLARATION
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTabbedPane TabbedPane;
+    private javax.swing.JLabel bg_ThongTinKTX;
     private javax.swing.JLabel btn_close;
     private javax.swing.JLabel btn_help;
     private javax.swing.JLabel btn_logout;
     private javax.swing.JLabel btn_setting;
     private javax.swing.JLabel btn_user;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel setting_view;
+    private javax.swing.JScrollPane sp_HopDong;
+    private javax.swing.JScrollPane sp_PhatSinh;
+    private javax.swing.JTextPane txt_HopDong;
+    private javax.swing.JTextPane txt_PhatSinh;
     // End of variables declaration//GEN-END:variables
 }

@@ -935,7 +935,30 @@ public class DAO {
 
         return list;
     }
-
+    
+    public PS_Phong getPSPhongWithID(String maHD, String maPhong)
+    {
+        PS_Phong psp = new PS_Phong();
+        String sql = "SELECT * FROM PS_Phong WHERE MaHD = '" + maHD + "' AND MaPhong = '" + maPhong + "'";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next())
+            {
+                psp.setMaHD(rs.getString("MaHD"));
+                psp.setMaPS_Phong(rs.getString("MaPS_Phong"));
+                psp.setMaPS(rs.getString("MaPS"));
+                psp.setNgayPS(rs.getDate("NgayPS"));
+                psp.setSL(rs.getInt("SL"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return psp;
+    }
+    
 //>>>>>>> 5f0ff9ff387a965095caf454e79d0d0e0c68c264
     public static void main(String[] args) {
         new DAO();

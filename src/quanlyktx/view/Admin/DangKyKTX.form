@@ -328,8 +328,8 @@
             <StringItem index="0" value="1 ( d&#x1ecb;ch v&#x1ee5; 1 )"/>
             <StringItem index="1" value="2 ( d&#x1ecb;ch v&#x1ee5; 2 )"/>
             <StringItem index="2" value="3 ( th&#x1b0;&#x1edd;ng )"/>
-            <StringItem index="3" value=" "/>
-            <StringItem index="4" value=" "/>
+            <StringItem index="3" value=""/>
+            <StringItem index="4" value=""/>
           </StringArray>
         </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -339,9 +339,6 @@
         </Property>
         <Property name="opaque" type="boolean" value="false"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cb_loai_phongActionPerformed"/>
-      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>

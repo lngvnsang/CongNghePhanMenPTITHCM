@@ -42,6 +42,39 @@ public class DangKyView extends javax.swing.JFrame {
         return true;
     }
     
+    public boolean checkTaiKhoan(String taiKhoan, String notify)
+    {
+        String pattUname = "^[Nn]+[\\d]{2}+[A-Za-z]{4}+[\\d]{3}$";
+        if(!taiKhoan.trim().matches(pattUname))
+        {
+            JOptionPane.showMessageDialog(rootPane, notify);
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean checkEmail(String email, String notify)
+    {
+        String pattEmail = "^[Nn]+[\\d]{2}+[A-Za-z]{4}+[\\d]{3}+@student.ptithcm.edu.vn$";
+        if(!email.trim().matches(pattEmail))
+        {
+            JOptionPane.showMessageDialog(rootPane, notify);
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean checkPwrd(String pwrd, String notify)
+    {
+        String pattPwrd = "^.[\\w\\S]{5,}$";
+        if(!pwrd.trim().matches(pattPwrd))
+        {
+            JOptionPane.showMessageDialog(rootPane, notify);
+            return false;
+        }
+        return true;
+    }
+    
     public boolean CheckCorrect(String username, String email, String password) {
         String pattUname = "^[Nn]+[\\d]{2}+[A-Za-z]{4}+[\\d]{3}$";
         String pattEmail = "^[Nn]+[\\d]{2}+[A-Za-z]{4}+[\\d]{3}+@student.ptithcm.edu.vn$";
@@ -66,39 +99,34 @@ public class DangKyView extends javax.swing.JFrame {
     {
         try {
             
-            String username = txtTaiKhoan.getText();
-            String email = txtEmail.getText();
+            String username = txtTaiKhoan.getText().toLowerCase();
+            String email = txtEmail.getText().toLowerCase();
             String password = String.valueOf(txtPassWord.getPassword());
 
-            if(checkEmpty(username, "Nhập tên tài khoản!")
-                    && checkEmpty(email, "Nhập email!")
-                    && checkEmpty(password, "Nhập password!"))
+            if(checkEmpty(username, "Nhập tên tài khoản!") && checkTaiKhoan(username, "Tài khoản bắt buộc phải là mã sinh viên!")
+                    && checkEmpty(email, "Nhập email!") && checkEmail(email, "Hãy sử dụng email đã cấp của học viện!")
+                    && checkEmpty(password, "Nhập password!") && checkPwrd(password, "Mật khẩu phải trên 6 ký tự hoặc hơn!"))
             {
-                if(CheckCorrect(username, email, password))
-                {
-                    TaiKhoan taiKhoan = new TaiKhoan(username, password, email, 1);
+                TaiKhoan taiKhoan = new TaiKhoan(username, password, email, 1);
 //                    System.out.println(username + " | " + email + " | " + password);
 //                    String name = taiKhoan.getTenTK();
 //                    String mail = taiKhoan.getEmail();
 //                    String pass = taiKhoan.getMatKhau();
 //                    System.out.println(name + " | " + mail + " | " + pass);
 
-                    if(controller.addAccountStudent(taiKhoan))
-                    {
-                        JOptionPane.showMessageDialog(rootPane, "Đăng kí tài khoản thành công!");
-                        new DangNhapView().setVisible(true);
-                        this.dispose();
-                    }
-                    else
-                    {
-                        JOptionPane.showMessageDialog(rootPane, "Đăng ký thất bại!");
-                    }
+                if(controller.addAccountStudent(taiKhoan))
+                {
+                    JOptionPane.showMessageDialog(rootPane, "Đăng kí tài khoản thành công!");
+                    System.out.println("Register success, back to Login Form...");
+                    new DangNhapView().setVisible(true);
+                    this.dispose();
                 }
                 else
                 {
-                    JOptionPane.showMessageDialog(rootPane, "Thông tin nhập sai, hãy nhập lại!");
+                    JOptionPane.showMessageDialog(rootPane, "Đăng ký thất bại!");
                 }
             }
+
         } catch (Exception e) {
             Logger.getLogger(DangKyView.class.getName()).log(Level.SEVERE, null, e);
         }

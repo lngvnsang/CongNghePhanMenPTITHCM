@@ -235,14 +235,9 @@ public class DangKyKTX extends javax.swing.JFrame {
         });
         getContentPane().add(cb_phong, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 410, 80, 30));
 
-        cb_loai_phong.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1 ( dịch vụ 1 )", "2 ( dịch vụ 2 )", "3 ( thường )", " ", " " }));
+        cb_loai_phong.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1 ( dịch vụ 1 )", "2 ( dịch vụ 2 )", "3 ( thường )", "", "" }));
         cb_loai_phong.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         cb_loai_phong.setOpaque(false);
-        cb_loai_phong.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_loai_phongActionPerformed(evt);
-            }
-        });
         getContentPane().add(cb_loai_phong, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 410, 110, -1));
 
         btn_logout.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -388,10 +383,6 @@ public class DangKyKTX extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_cb_phongActionPerformed
-
-    private void cb_loai_phongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_loai_phongActionPerformed
-
-    }//GEN-LAST:event_cb_loai_phongActionPerformed
 
     private void btn_dang_kiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_dang_kiMouseClicked
 

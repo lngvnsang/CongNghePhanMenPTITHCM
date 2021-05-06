@@ -495,7 +495,29 @@ public class DAO {
         }
         return datas;
     }
+    
+    public ArrayList<Day> getDayByGioiTinh(String gioiTinh) {
+        ArrayList<Day> list = new ArrayList<>();
+        String sql = "SELECT * FROM Day WHERE GioiTinh = N'" + gioiTinh + "'";
 
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Day d = new Day();
+                d.setMaDay(rs.getString("MaDay"));
+                d.setTenDay(rs.getString("TenDay"));
+                d.setGioiTinh(rs.getString("GioiTinh"));
+                d.setTinhTrang(rs.getString("TinhTrang"));
+                list.add(d);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return list;
+    }
+    
     public static void main(String[] args) {
         new DAO().getTotalStudentWithYear();
     }

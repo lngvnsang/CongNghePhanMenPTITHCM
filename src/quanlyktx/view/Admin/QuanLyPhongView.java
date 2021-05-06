@@ -25,7 +25,7 @@ import quanlyktx.view.DangNhap.DangNhapView;
  */
 public class QuanLyPhongView extends javax.swing.JFrame {
 
-    public static AdminView adminView;
+    public static String user;
     List<Day> ranges;
     List<Phong> rooms;
     DAO controller;
@@ -34,8 +34,8 @@ public class QuanLyPhongView extends javax.swing.JFrame {
     /**
      * Creates new form QuanLyPhong
      */
-    public QuanLyPhongView(AdminView adminView) {
-        this.adminView = adminView;
+    public QuanLyPhongView(String id) {
+        this.user = id;
         setIcon();
         initComponents();
         setting_view.setVisible(false);
@@ -432,7 +432,6 @@ public class QuanLyPhongView extends javax.swing.JFrame {
         flag = true;
         System.out.println("click logout");
         this.dispose();
-        adminView.dispose();
         new DangNhapView().setVisible(true);
     }//GEN-LAST:event_btn_logoutMouseClicked
 
@@ -550,7 +549,7 @@ public class QuanLyPhongView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new QuanLyPhongView(adminView).setVisible(true);
+                new QuanLyPhongView(user).setVisible(true);
             }
         });
     }

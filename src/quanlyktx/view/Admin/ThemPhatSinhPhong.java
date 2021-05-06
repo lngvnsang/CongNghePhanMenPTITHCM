@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -228,14 +229,86 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
                 && !cb_phat_sinh.getSelectedItem().toString().trim().equals("Default")) {
             System.out.println("1");
             try {
-
+                String maPhong = cb_phong.getSelectedItem().toString().trim();
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                 String kt = checkHoaDonExit(cb_phong.getSelectedItem().toString().trim(), txt_ngay_phat_sinh.getText().toString().trim(), cb_phat_sinh.getSelectedItem().toString().trim());
                 System.out.println(kt);
-                if (kt != null) {
-                    String maHD = checkHoaDonExit(cb_phong.getSelectedItem().toString().trim(), txt_ngay_phat_sinh.getText().toString().trim(), cb_phat_sinh.getSelectedItem().toString().trim());
-                    roomServices = controller.getListRoomServices();
-                    System.out.println("2");
+                bills = controller.getListBill();
+                String maPS = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().toString().trim();
+                for (HoaDon bill : bills) {
+                    System.out.println(maPhong + "&" + bill.getMaPhong().trim() + "++++++" + maPhong.equals(bill.getMaPhong().trim()) + "+++++++++" + kt);
+                    if (maPhong.trim().equals(bill.getMaPhong().trim()) && kt != null) {
+                        if (kt != null) {
+                            String maHD = checkHoaDonExit(cb_phong.getSelectedItem().toString().trim(), txt_ngay_phat_sinh.getText().toString().trim(), cb_phat_sinh.getSelectedItem().toString().trim());
+                            roomServices = controller.getListRoomServices();
+                            System.out.println("2");
+                            int t = roomServices.size() + 1;
+                            String maPSPhong = (roomServices.size() < 10 ? "PSP0" : "PSP") + t;
+                            String maps = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().trim();
+                            PS_Phong pS_Phong = new PS_Phong(
+                                    maPSPhong,
+                                    maHD,
+                                    maps,
+                                    format.parse(txt_ngay_phat_sinh.getText().toString().trim()),
+                                    Integer.parseInt(txt_so_luong.getText().trim())
+                            );
+
+                            if (controller.addPSPhong(pS_Phong)) {
+                                System.out.println("3");
+                                JOptionPane.showMessageDialog(rootPane, "Thêm phát sinh thành công.");
+                                home.updateTableBills();
+                                this.dispose();
+                                return;
+                            }
+                        } else {
+                            HoaDon hd = new HoaDon();
+                            int k = bills.size() + 1;
+                            System.out.println("1.2");
+
+                            String maHD = (bills.size() < 10 ? "HD0" : "HD") + k;
+                            System.out.println(maHD + "            " + bills.size());
+                            hd.setMaHD(maHD);
+                            hd.setMaPhong(cb_phong.getSelectedItem().toString().trim());
+                            //hd.setTongTien(0);
+                            hd.setNgayTaoHD(format.parse(txt_ngay_phat_sinh.getText().toString().trim()));
+                            if (controller.addBill(hd)) {
+                                System.out.println("2hi");
+                                int t = roomServices.size() + 1;
+                                String maPSPhong = (roomServices.size() < 10 ? "PSP0" : "PSP") + t;
+                                String maps = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().trim();
+                                PS_Phong pS_Phong = new PS_Phong(
+                                        maPSPhong,
+                                        maHD,
+                                        maps,
+                                        format.parse(txt_ngay_phat_sinh.getText().toString().trim()),
+                                        Integer.parseInt(txt_so_luong.getText().trim())
+                                );
+
+                                if (controller.addPSPhong(pS_Phong)) {
+                                    System.out.println("3hi");
+                                    JOptionPane.showMessageDialog(rootPane, "Thêm phát sinh thành công.");
+                                    home.updateTableBills();
+                                    this.dispose();
+                                    return;
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+                HoaDon hd = new HoaDon();
+                int k = bills.size() + 1;
+                System.out.println("1.2");
+
+                String maHD = (bills.size() < 10 ? "HD0" : "HD") + k;
+                System.out.println(maHD + "            " + bills.size());
+                hd.setMaHD(maHD);
+                hd.setMaPhong(cb_phong.getSelectedItem().toString().trim());
+                //hd.setTongTien(0);
+                hd.setNgayTaoHD(format.parse(txt_ngay_phat_sinh.getText().toString().trim()));
+                if (controller.addBill(hd)) {
+                    System.out.println("2hi");
                     int t = roomServices.size() + 1;
                     String maPSPhong = (roomServices.size() < 10 ? "PSP0" : "PSP") + t;
                     String maps = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().trim();
@@ -248,43 +321,11 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
                     );
 
                     if (controller.addPSPhong(pS_Phong)) {
-                        System.out.println("3");
+                        System.out.println("3hi");
                         JOptionPane.showMessageDialog(rootPane, "Thêm phát sinh thành công.");
                         home.updateTableBills();
                         this.dispose();
-                    }
-//                }else if (kt == "not alow") {
-//                    JOptionPane.showMessageDialog(rootPane, "Thêm phát sinh thất bại.");
-//                    this.dispose();
-                } else {
-                    HoaDon hd = new HoaDon();
-                    int k = bills.size() + 1;
-
-                    String maHD = (bills.size() < 10 ? "HD0" : "HD") + k;
-                    System.out.println(maHD + "            " + bills.size());
-                    hd.setMaHD(maHD);
-                    hd.setMaPhong(cb_phong.getSelectedItem().toString().trim());
-                    hd.setTongTien(0);
-                    hd.setNgayTaoHD(format.parse(txt_ngay_phat_sinh.getText().toString().trim()));
-                    if (controller.addBill(hd)) {
-                        System.out.println("2");
-                        int t = roomServices.size() + 1;
-                        String maPSPhong = (roomServices.size() < 10 ? "PSP0" : "PSP") + t;
-                        String maps = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().trim();
-                        PS_Phong pS_Phong = new PS_Phong(
-                                maPSPhong,
-                                maHD,
-                                maps,
-                                format.parse(txt_ngay_phat_sinh.getText().toString().trim()),
-                                Integer.parseInt(txt_so_luong.getText().trim())
-                        );
-
-                        if (controller.addPSPhong(pS_Phong)) {
-                            System.out.println("3");
-                            JOptionPane.showMessageDialog(rootPane, "Thêm phát sinh thành công.");
-                            home.updateTableBills();
-                            this.dispose();
-                        }
+                        return;
                     }
                 }
 
@@ -404,18 +445,19 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
         for (HoaDon bill : bills) {
 
             try {
-                System.out.println(maPhong.equals(bill.getMaPhong().trim()) + "___" + checkThoiHan(bill.getNgayTaoHD(), addDays(bill.getNgayTaoHD(), 30), format.parse(ngayTao)));
+                //System.out.println(maPhong.equals(bill.getMaPhong().trim()) + "___" + checkThoiHan(bill.getNgayTaoHD(), addDays(bill.getNgayTaoHD(), 30), format.parse(ngayTao)));
                 if (maPhong.equals(bill.getMaPhong().trim())) {
-                    //System.out.println(checkMaPsPhong(maPS) + " fwfw   "+maPS);
-                    if (checkThoiHan(bill.getNgayTaoHD(), addDays(bill.getNgayTaoHD(), 30), format.parse(ngayTao)) || checkMaPsPhong(maPS, bill.getMaHD())) {
-                        System.out.println(checkMaPsPhong(maPS, bill.getMaHD())+"  rrgt5");
+                    System.out.println(checkMaPsPhong(maPS, bill.getMaHD()) + " fwfw   " + maPS);
+                    if (checkThoiHan(format.parse(ngayTao)) && checkMaPsPhong(maPS, bill.getMaHD())) {
+                        System.out.println(checkMaPsPhong(maPS, bill.getMaHD()) + "  rrgt5");
                         if (checkMaPsPhong(maPS, bill.getMaHD())) {
                             return bill.getMaHD();
                         }
-                    } else {
+                    } 
+                        //else {
                         JOptionPane.showMessageDialog(rootPane, "Phát sinh đã được thêm trong tháng này!");
-                        return "not alow";
-                    }
+//                        break;
+//                    }
                 }
             } catch (ParseException ex) {
                 Logger.getLogger(ThemPhatSinhPhong.class.getName()).log(Level.SEVERE, null, ex);
@@ -429,7 +471,7 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
     public boolean checkMaPsPhong(String maPs, String maHD) {
         roomServices = controller.getListRoomServices();
         for (PS_Phong roomService : roomServices) {
-            System.out.println(maHD.equals(roomService.getMaHD().trim())+ " _____ safv");
+            System.out.println(maHD.equals(roomService.getMaHD().trim()) + " _____ safv");
             if (maHD.equals(roomService.getMaHD().trim())) {
                 if (maPs.equals(roomService.getMaPS())) {
                     return false;
@@ -447,13 +489,23 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
         return cal.getTime();
     }
 
-    boolean checkThoiHan(Date ngayDangKy, Date ngayKetThuc, Date dayCheck) {
+    boolean checkThoiHan(Date dayCheck) {
+        SimpleDateFormat formatM = new SimpleDateFormat("MM");
+        int i = Integer.parseInt(formatM.format(dayCheck)) - 1;
 
-        Date todayDate = dayCheck;
-        if (!ngayDangKy.after(todayDate) && !ngayKetThuc.before(todayDate)) {
-            return false;
+        Calendar gc = new GregorianCalendar();
+        gc.set(Calendar.MONTH, i);// thang can check
+        gc.set(Calendar.DAY_OF_MONTH, 1);
+        Date monthStart = gc.getTime();
+        gc.add(Calendar.MONTH, 1);
+        gc.add(Calendar.DAY_OF_MONTH, -1);
+        Date monthEnd = gc.getTime();
+
+        Date todayDate = gc.getTime();
+        if (!monthStart.after(todayDate) && !monthEnd.before(todayDate)) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     public boolean checkEmpty(String key, String notify) {

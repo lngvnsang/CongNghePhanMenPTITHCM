@@ -14,8 +14,10 @@ import javax.swing.table.DefaultTableModel;
 import quanlyktx.DAO.DAO;
 import quanlyktx.model.HoaDon;
 import quanlyktx.model.HopDong;
+import quanlyktx.model.LoaiPhong;
 import quanlyktx.model.PS_Phong;
 import quanlyktx.model.PhatSinh;
+import quanlyktx.model.Phong;
 import quanlyktx.model.SinhVien;
 import quanlyktx.view.DangNhap.DangNhapView;
 
@@ -30,6 +32,7 @@ public class ThuPhiView extends javax.swing.JFrame {
     List<PhatSinh> services;
     List<HoaDon> bills;
     List<PS_Phong> roomServices;
+    List<Phong> rooms;
     private DefaultTableModel modelServices;
     private DefaultTableModel modelBills;
 
@@ -48,6 +51,7 @@ public class ThuPhiView extends javax.swing.JFrame {
         modelBills = (DefaultTableModel) table_phi_phat_sinh.getModel();
 
         controller.getListBills(modelBills);
+        rooms = controller.getListRoom();
 
         showServices();
         //showBills();
@@ -80,6 +84,11 @@ public class ThuPhiView extends javax.swing.JFrame {
         btn_edit_ps = new javax.swing.JLabel();
         btn_remove_ps = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        cb_day = new javax.swing.JComboBox<>();
+        cb_hoa_don_thang = new javax.swing.JComboBox<>();
+        cb_hoa_don_phong = new javax.swing.JComboBox<>();
+        txtTongTien = new javax.swing.JLabel();
+        lb_TongTien = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -148,7 +157,7 @@ public class ThuPhiView extends javax.swing.JFrame {
             table_phi_phat_sinh.getColumnModel().getColumn(0).setMaxWidth(50);
         }
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 240, 580, 240));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 220, 580, 220));
 
         table_phat_sinh.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         table_phat_sinh.setModel(new javax.swing.table.DefaultTableModel(
@@ -228,7 +237,48 @@ public class ThuPhiView extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(51, 51, 255));
         jLabel3.setText("Phí dịch vụ: ");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 210, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 200, -1, -1));
+
+        cb_day.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        cb_day.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default", "I", "J", "H", "Q", "M", "N", "K", "P" }));
+        cb_day.setBorder(null);
+        cb_day.setOpaque(false);
+        cb_day.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_dayActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cb_day, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 460, 80, 30));
+
+        cb_hoa_don_thang.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        cb_hoa_don_thang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+        cb_hoa_don_thang.setBorder(null);
+        cb_hoa_don_thang.setOpaque(false);
+        cb_hoa_don_thang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_hoa_don_thangActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cb_hoa_don_thang, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 460, 80, 30));
+
+        cb_hoa_don_phong.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        cb_hoa_don_phong.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default" }));
+        cb_hoa_don_phong.setBorder(null);
+        cb_hoa_don_phong.setOpaque(false);
+        cb_hoa_don_phong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_hoa_don_phongActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cb_hoa_don_phong, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 460, 80, 30));
+
+        txtTongTien.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        txtTongTien.setForeground(new java.awt.Color(255, 0, 0));
+        getContentPane().add(txtTongTien, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 460, 170, 30));
+
+        lb_TongTien.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        lb_TongTien.setForeground(new java.awt.Color(255, 0, 0));
+        getContentPane().add(lb_TongTien, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 460, 130, 30));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/ThuPhi.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
@@ -335,6 +385,47 @@ public class ThuPhiView extends javax.swing.JFrame {
         themPhatSinhPhong.setVisible(true);
     }//GEN-LAST:event_btn_add_psMouseClicked
 
+    private void cb_dayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_dayActionPerformed
+        String maDay = cb_day.getSelectedItem().toString().trim();
+
+        if (!maDay.equals("Default")) {
+            cb_hoa_don_phong.setEnabled(true);
+            rooms = controller.getListRoomByIDRange(maDay);
+            cb_hoa_don_phong.removeAllItems();
+
+            for (Phong room : rooms) {
+                cb_hoa_don_phong.addItem(room.getMaPhong());
+            }
+        } else {
+            controller.getListBills(modelBills);
+            cb_hoa_don_phong.setEnabled(false);
+        }
+    }//GEN-LAST:event_cb_dayActionPerformed
+
+    private void cb_hoa_don_phongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_hoa_don_phongActionPerformed
+
+        if (cb_hoa_don_phong.getSelectedItem() != null) {
+            String phong = cb_hoa_don_phong.getSelectedItem().toString().trim();
+            controller.getListBillsByIdRoom(modelBills, phong);
+        }
+    }//GEN-LAST:event_cb_hoa_don_phongActionPerformed
+
+    private void cb_hoa_don_thangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_hoa_don_thangActionPerformed
+        if (cb_hoa_don_thang.getSelectedItem() != null && !cb_hoa_don_thang.getSelectedItem().toString().trim().equals("Default") ) {
+            String phong = cb_hoa_don_phong.getSelectedItem().toString().trim();
+            String thang = cb_hoa_don_thang.getSelectedItem().toString().trim();
+            lb_TongTien.setText("Tông tiền tháng "+thang + ": ");
+            controller.getListBillsByIdRoomWithMouth(modelBills, phong, thang, txtTongTien);
+        } else if (cb_hoa_don_thang.getSelectedItem().toString().trim().equals("Default")){
+            String phong = cb_hoa_don_phong.getSelectedItem().toString().trim();
+            controller.getListBillsByIdRoom(modelBills, phong);
+            txtTongTien.setText("");
+            lb_TongTien.setText("");
+        }
+        
+        
+    }//GEN-LAST:event_cb_hoa_don_thangActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -386,14 +477,19 @@ public class ThuPhiView extends javax.swing.JFrame {
     private javax.swing.JLabel btn_remove_ps;
     private javax.swing.JLabel btn_setting;
     private javax.swing.JLabel btn_user;
+    private javax.swing.JComboBox<String> cb_day;
+    private javax.swing.JComboBox<String> cb_hoa_don_phong;
+    private javax.swing.JComboBox<String> cb_hoa_don_thang;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lb_TongTien;
     private javax.swing.JLabel setting_view;
     private javax.swing.JTable table_phat_sinh;
     private javax.swing.JTable table_phi_phat_sinh;
+    private javax.swing.JLabel txtTongTien;
     // End of variables declaration//GEN-END:variables
 
     void showServices() {

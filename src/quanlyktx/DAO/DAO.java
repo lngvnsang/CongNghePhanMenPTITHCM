@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.data.category.DefaultCategoryDataset;
 import quanlyktx.model.Day;
@@ -328,10 +329,10 @@ public class DAO {
         }
         return false;
     }
-    
+
     public boolean deletePhong(String d) {
-        System.out.println(d +"++++++");
-          String sql = "DELETE FROM Phong WHERE MaPhong = '" + d.trim() + "'";
+        System.out.println(d + "++++++");
+        String sql = "DELETE FROM Phong WHERE MaPhong = '" + d.trim() + "'";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             return ps.executeUpdate() > 0;
@@ -340,7 +341,6 @@ public class DAO {
         }
         return false;
     }
-
 
     public Phong getRoom(String id) {
         String sql = "SELECT * FROM Phong WHERE MaPhong = '" + id.trim() + "'";
@@ -675,7 +675,6 @@ public class DAO {
                 HoaDon hd = new HoaDon();
                 hd.setMaHD(rs.getString("MaHD"));
                 hd.setMaPhong(rs.getString("MaPhong"));
-                hd.setTongTien(rs.getInt("TongTien"));
                 hd.setNgayTaoHD(rs.getDate("NgayTaoHD"));
 
                 list.add(hd);
@@ -704,7 +703,7 @@ public class DAO {
             ResultSet rs = ps.executeQuery();
             modelBills.setRowCount(0);
             while (rs.next()) {
-                updateTongTienToBill(rs.getString("MaHD").trim(), Integer.parseInt(rs.getString("TongTien")));
+                //updateTongTienToBill(rs.getString("MaHD").trim(), Integer.parseInt(rs.getString("TongTien")));
 
                 modelBills.addRow(new Object[]{
                     i++,
@@ -721,20 +720,88 @@ public class DAO {
 
     }
 
-    public boolean updateTongTienToBill(String maHD, int tongTien) {
-        String sql = "UPDATE HoaDon "
-                + "SET TongTien = " + tongTien + " "
-                + "WHERE MaHD = '" + maHD + "'";
+    public void getListBillsByIdRoom(DefaultTableModel modelBills, String phong) {
+        String sql = "SELECT HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, SUM(GiaTienPS* SL) AS TongTien "
+                + "FROM HoaDon, PhatSinh, PS_Phong "
+                + "WHERE "
+                + "HoaDon.MaPhong ='" + phong.trim() + "' "
+                + "AND HoaDon.MaHD = PS_Phong.MaHD "
+                + "AND PS_Phong.MaPS = PhatSinh.MaPS "
+                + "GROUP BY HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS "
+                + "ORDER BY  PS_Phong.NgayPS DESC";
+        int i = 1;
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        DecimalFormat formatter = new DecimalFormat("###,###,###");
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            modelBills.setRowCount(0);
+            while (rs.next()) {
+                //updateTongTienToBill(rs.getString("MaHD").trim(), Integer.parseInt(rs.getString("TongTien")));
 
-            return ps.executeUpdate() > 0;
+                modelBills.addRow(new Object[]{
+                    i++,
+                    rs.getString("MaHD").trim(),
+                    rs.getString("MaPhong").trim(),
+                    rs.getString("TenPS").trim(),
+                    format.format(rs.getDate("NgayPS")),
+                    formatter.format(Integer.parseInt(rs.getString("TongTien"))),});
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
     }
 
+    public void getListBillsByIdRoomWithMouth(DefaultTableModel modelBills, String phong, String thang, JLabel txtTongTien) {
+        String sql = "SELECT HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, SUM(GiaTienPS* SL) AS TongTien "
+                + "FROM HoaDon, PhatSinh, PS_Phong "
+                + "WHERE "
+                + "MONTH(PS_Phong.NgayPS) ='" + thang.trim() + "' "
+                + "AND HoaDon.MaPhong ='" + phong.trim() + "' "
+                + "AND HoaDon.MaHD = PS_Phong.MaHD "
+                + "AND PS_Phong.MaPS = PhatSinh.MaPS "
+                + "GROUP BY HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS "
+                + "ORDER BY  PS_Phong.NgayPS DESC";
+        int i = 1;
+        int tongTien = 0;
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        DecimalFormat formatter = new DecimalFormat("###,###,###");
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            modelBills.setRowCount(0);
+            while (rs.next()) {
+                //updateTongTienToBill(rs.getString("MaHD").trim(), Integer.parseInt(rs.getString("TongTien")));
+                tongTien += Integer.parseInt(rs.getString("TongTien"));
+                modelBills.addRow(new Object[]{
+                    i++,
+                    rs.getString("MaHD").trim(),
+                    rs.getString("MaPhong").trim(),
+                    rs.getString("TenPS").trim(),
+                    format.format(rs.getDate("NgayPS")),
+                    formatter.format(Integer.parseInt(rs.getString("TongTien"))),});
+            }
+            txtTongTien.setText(formatter.format(tongTien) + " vnđ");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+//    public boolean updateTongTienToBill(String maHD, int tongTien) {
+//        String sql = "UPDATE HoaDon "
+//                + "SET TongTien = " + tongTien + " "
+//                + "WHERE MaHD = '" + maHD + "'";
+//        try {
+//            PreparedStatement ps = conn.prepareStatement(sql);
+//
+//            return ps.executeUpdate() > 0;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
     public boolean addServices(PhatSinh p) {
         String sql = "INSERT INTO PhatSinh(MaPS,TenPS,GiaTienPS,DonViTinh) VALUES(?,?,?,?)";
         try {
@@ -781,15 +848,14 @@ public class DAO {
     }
 
     public boolean addBill(HoaDon hd) {
-        String sql = "INSERT INTO HoaDon(MaHD,MaPhong,TongTien,NgayTaoHD) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO HoaDon(MaHD,MaPhong,NgayTaoHD) VALUES(?,?,?)";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
 
             ps.setString(1, hd.getMaHD());
             ps.setString(2, hd.getMaPhong());
 
-            ps.setInt(3, hd.getTongTien());
-            ps.setDate(4, (java.sql.Date) new java.sql.Date(hd.getNgayTaoHD().getTime()));
+            ps.setDate(3, (java.sql.Date) new java.sql.Date(hd.getNgayTaoHD().getTime()));
 
             return ps.executeUpdate() > 0;
 
@@ -847,5 +913,4 @@ public class DAO {
         new DAO();
     }
 
-    
 }

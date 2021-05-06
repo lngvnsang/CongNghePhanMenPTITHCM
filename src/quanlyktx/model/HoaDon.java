@@ -15,7 +15,6 @@ public class HoaDon {
 
     String maHD;
     String maPhong;
-    int tongTien;
     Date ngayTaoHD;
 
     public HoaDon() {
@@ -24,7 +23,6 @@ public class HoaDon {
     public HoaDon(String maHD, String maPhong, int tongTien, Date ngayTaoHD) {
         this.maHD = maHD;
         this.maPhong = maPhong;
-        this.tongTien = tongTien;
         this.ngayTaoHD = ngayTaoHD;
     }
 
@@ -44,13 +42,6 @@ public class HoaDon {
         this.maPhong = maPhong;
     }
 
-    public int getTongTien() {
-        return tongTien;
-    }
-
-    public void setTongTien(int tongTien) {
-        this.tongTien = tongTien;
-    }
 
     public Date getNgayTaoHD() {
         return ngayTaoHD;

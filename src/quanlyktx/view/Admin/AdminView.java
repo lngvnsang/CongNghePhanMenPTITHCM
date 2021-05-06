@@ -256,12 +256,12 @@ public class AdminView extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_thu_phiMouseClicked
 
     private void btn_quan_ly_phongMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_quan_ly_phongMouseClicked
-        new QuanLyPhongView(this).setVisible(true);
+        new QuanLyPhongView(user).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_quan_ly_phongMouseClicked
 
     private void btn_ql_csvcMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ql_csvcMouseClicked
-        new QuanLyCSVCView(this).setVisible(true);
+        new QuanLyCSVCView(user).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_ql_csvcMouseClicked
 

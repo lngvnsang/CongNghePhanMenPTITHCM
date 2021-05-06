@@ -12,12 +12,12 @@ import java.awt.Toolkit;
  * @author luong
  */
 public class QuanLyCSVCView extends javax.swing.JFrame {
-    public static AdminView adminView;
+    public static String user;
     /**
      * Creates new form QuanLyCSVCView
      */
-    public QuanLyCSVCView(AdminView adminView) {
-        this.adminView = adminView;
+    public QuanLyCSVCView(String id) {
+        this.user = id;
         setIcon();
         initComponents();
     }
@@ -75,6 +75,7 @@ public class QuanLyCSVCView extends javax.swing.JFrame {
 
     private void btn_closeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_closeMouseClicked
         this.dispose();
+        new AdminView(user).setVisible(true);
     }//GEN-LAST:event_btn_closeMouseClicked
 
     /**
@@ -107,7 +108,7 @@ public class QuanLyCSVCView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new QuanLyCSVCView(adminView).setVisible(true);
+                new QuanLyCSVCView(user).setVisible(true);
             }
         });
     }

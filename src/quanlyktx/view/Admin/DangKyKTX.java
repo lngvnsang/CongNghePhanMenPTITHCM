@@ -6,6 +6,8 @@
 package quanlyktx.view.Admin;
 
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -37,7 +39,7 @@ public class DangKyKTX extends javax.swing.JFrame {
 
     private DAO controller;
 
-    static String user = "admin";
+    static String user = "SV";
     private int giaTien = 0;
     List<Phong> rooms;
     List<Day> ranges;
@@ -48,7 +50,7 @@ public class DangKyKTX extends javax.swing.JFrame {
      * Creates new form DangKyKTX
      */
     public DangKyKTX(String id) {
-        user = id;
+        user = id.trim();
         setIcon();
         initComponents();
         setting_view.setVisible(false);
@@ -58,6 +60,29 @@ public class DangKyKTX extends javax.swing.JFrame {
         jRadioButtonNam.setSelected(true);
         cb_phong.setEnabled(false);
         cb_loai_phong.setEnabled(true);
+        
+        txtSoDienThoai.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!((c >= '0') && (c <= '9')
+                        || (c == KeyEvent.VK_BACK_SPACE)
+                        || (c == KeyEvent.VK_DELETE))) {
+                    getToolkit().beep();
+                    e.consume();
+                }
+            }
+        });
+        txtSoDienThoaiNguoiThan.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!((c >= '0') && (c <= '9')
+                        || (c == KeyEvent.VK_BACK_SPACE)
+                        || (c == KeyEvent.VK_DELETE))) {
+                    getToolkit().beep();
+                    e.consume();
+                }
+            }
+        });
 
         //rooms = controller.getListRoom();
         //ranges = controller.getListRange();
@@ -533,7 +558,7 @@ public class DangKyKTX extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DangKyKTX().setVisible(true);
+                new DangKyKTX(user).setVisible(true);
             }
         });
     }
@@ -578,7 +603,7 @@ public class DangKyKTX extends javax.swing.JFrame {
                 HopDong hd = controller.getHopDongWithId(ms);
                 if(checkThoiHan(hd.getNgayDangKy(), hd.getNgayKetThuc())){
                     JOptionPane.showMessageDialog(rootPane, "Sinh viên còn thời hạn đăng kí\n hợp đồng");
-            return false;
+                    return false;
                 }
             }
         }

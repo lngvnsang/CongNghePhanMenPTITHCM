@@ -1,1 +1,7 @@
+<<<<<<< HEAD
 /dist/
+=======
+/build/
+/nbproject/private/
+/dist/
+>>>>>>> 5f0ff9ff387a965095caf454e79d0d0e0c68c264

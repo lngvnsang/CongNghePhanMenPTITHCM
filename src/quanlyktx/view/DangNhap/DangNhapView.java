@@ -74,7 +74,7 @@ public class DangNhapView extends javax.swing.JFrame {
         });
         getContentPane().add(show_hide_pass, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 360, 20, 20));
 
-        txtTaiKhoan.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txtTaiKhoan.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         txtTaiKhoan.setBorder(null);
         txtTaiKhoan.setOpaque(false);
         txtTaiKhoan.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -84,7 +84,7 @@ public class DangNhapView extends javax.swing.JFrame {
         });
         getContentPane().add(txtTaiKhoan, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 300, 310, 30));
 
-        password.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        password.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         password.setBorder(null);
         password.setOpaque(false);
         password.addKeyListener(new java.awt.event.KeyAdapter() {

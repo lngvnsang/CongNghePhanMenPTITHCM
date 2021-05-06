@@ -23,12 +23,12 @@ import quanlyktx.model.SinhVien;
  * @author luong
  */
 public class QuanLySVView extends javax.swing.JFrame {
-
+    
     private List<SinhVien> items;
     private DefaultTableModel modelSinhVien;
     private DAO controller;
     int selectedSinhVien = -1;
-    String user;
+    String user = "SV";
 
     /**
      * Creates new form QuanLySVView
@@ -41,11 +41,11 @@ public class QuanLySVView extends javax.swing.JFrame {
         items = new ArrayList<>();
         modelSinhVien = (DefaultTableModel) tbl_sinh_vien.getModel();
         controller = new DAO();
-
+        
         showSinhVien();
-
+        
     }
-
+    
     public QuanLySVView(String idQuanLy) {
         setIcon();
         user = idQuanLy;
@@ -55,9 +55,9 @@ public class QuanLySVView extends javax.swing.JFrame {
         items = new ArrayList<>();
         modelSinhVien = (DefaultTableModel) tbl_sinh_vien.getModel();
         controller = new DAO();
-
+        
         showSinhVien();
-
+        
     }
 
     /**
@@ -212,6 +212,9 @@ public class QuanLySVView extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txt_searchKeyPressed(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_searchKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txt_searchKeyTyped(evt);
             }
@@ -260,7 +263,7 @@ public class QuanLySVView extends javax.swing.JFrame {
             try {
                 Thread.sleep(50);
             } catch (Exception e) {
-
+                
             }
         }
     }//GEN-LAST:event_formWindowOpened
@@ -271,7 +274,11 @@ public class QuanLySVView extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_closeMouseClicked
 
     private void btn_add_svMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_add_svMouseClicked
-        new DangKyKTX(user).setVisible(true);
+        if (user.equals("SV")) {
+            new DangKyKTX().setVisible(true);
+        }else {
+            new DangKyKTX(user).setVisible(true);
+        }
         this.dispose();
     }//GEN-LAST:event_btn_add_svMouseClicked
 
@@ -346,11 +353,21 @@ public class QuanLySVView extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_searchKeyPressed
 
     private void txt_searchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_searchKeyTyped
+//        String keySearch = txt_search.getText().trim();
+//        if (!keySearch.isEmpty()) {
+//            searchSinhVien(keySearch);
+//        }
+    }//GEN-LAST:event_txt_searchKeyTyped
+
+    private void txt_searchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_searchKeyReleased
         String keySearch = txt_search.getText().trim();
         if (!keySearch.isEmpty()) {
             searchSinhVien(keySearch);
+        } else {
+            txt_search.setText("");
+            showSinhVien();
         }
-    }//GEN-LAST:event_txt_searchKeyTyped
+    }//GEN-LAST:event_txt_searchKeyReleased
     private boolean flag = true;
 
     /**
@@ -387,21 +404,26 @@ public class QuanLySVView extends javax.swing.JFrame {
             }
         });
     }
-
+    
     private void setIcon() {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("logo.png")));
     }
-
+    
     public void showData(List<SinhVien> data, DefaultTableModel model) {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         int i = 1;
         model.setRowCount(0);
         for (SinhVien t : data) {
-
+            
             String ngaySinh = format.format(t.getNgaySinh());
-
+            
             HopDong hd = controller.getHopDongWithId(t.getMSSV().trim());
-            System.out.println(t.getMSSV().trim() + "____" + hd.getNgayDangKy());
+            //System.out.println(t.getMSSV().trim() + "____" + hd.getNgayDangKy());
+            if (checkThoiHan(hd.getNgayDangKy(), hd.getNgayKetThuc())) {
+                controller.updateThoiHan(hd.getMSSV(), 1);
+            } else {
+                controller.updateThoiHan(hd.getMSSV(), 0);
+            }
             model.addRow(new Object[]{
                 i++,
                 t.getMSSV().trim(),
@@ -415,37 +437,38 @@ public class QuanLySVView extends javax.swing.JFrame {
                 checkThoiHan(hd.getNgayDangKy(), hd.getNgayKetThuc()) ? "Còn hạn" : "Hết hạn"
             });
         }
+        
     }
-
+    
     boolean checkThoiHan(Date ngayDangKy, Date ngayKetThuc) {
-
+        
         Date todayDate = java.util.Calendar.getInstance().getTime();
         if (!ngayDangKy.after(todayDate) && !ngayKetThuc.before(todayDate)) {
             return true;
         }
         return false;
     }
-
+    
     void searchSinhVien(String key) {
         items.clear();
         items.addAll(controller.getListStudentSearch(key));
         modelSinhVien.setRowCount(0);
         showData(items, modelSinhVien);
     }
-
+    
     void showSinhVien() {
         items.clear();
         items.addAll(controller.getListStudent());
         showData(items, modelSinhVien);
     }
-
+    
     void addSinhVien(SinhVien sinhVien) {
         items.clear();
         items.addAll(controller.getListStudent());
         items.add(sinhVien);
         showData(items, modelSinhVien);
     }
-
+    
     void editSinhVien() {
         selectedSinhVien = tbl_sinh_vien.getSelectedRow();
         if (items.size() == 0) {
@@ -457,16 +480,16 @@ public class QuanLySVView extends javax.swing.JFrame {
             edit.setEditData(items.get(selectedSinhVien));
             edit.setVisible(true);
         }
-
+        
     }
-
+    
     void updateSinhVien(SinhVien sinhVien) {
         if (controller.updateStudent(sinhVien)) {
             JOptionPane.showMessageDialog(rootPane, "Sửa thông tin thành công!");
             showSinhVien();
         }
     }
-
+    
     void deleteSinhVien(String mssv) {
         if (controller.deleteStudent(mssv)) {
             JOptionPane.showMessageDialog(rootPane, "Xóa thông tin thành công!");

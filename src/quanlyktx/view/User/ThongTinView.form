@@ -139,28 +139,6 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JScrollPane" name="sp_PhatSinh">
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Ph&#xe1;t sinh">
-                <Property name="tabTitle" type="java.lang.String" value="Ph&#xe1;t sinh"/>
-              </JTabbedPaneConstraints>
-            </Constraint>
-          </Constraints>
-
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-          <SubComponents>
-            <Component class="javax.swing.JTextPane" name="txt_PhatSinh">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="16" style="3"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="M&#xe3; h&#x1ee3;p &#x111;&#x1ed3;ng:&#xa;&#xa;M&#xe3; Ph&#xf2;ng:&#xa;&#xa;M&#xe3; Ph&#xe1;t sinh:&#xa;&#xa;Ng&#xe0;y ph&#xe1;t sinh:&#xa;&#xa;S&#x1ed1; l&#x1b0;&#x1ee3;ng:&#xa;&#xa;T&#x1ed5;ng ti&#x1ec1;n:"/>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JLabel" name="bg_ThongTinKTX">

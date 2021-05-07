@@ -41,9 +41,12 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
         btn_User.setVisible(false);
         btn_Help.setVisible(false);
         btn_LogOut.setVisible(false);
+        txt_Lop.setEnabled(false);
+        
         setLocationRelativeTo(null);
         
         controller = new DAO();
+        showThongTinSV();
     }
     
     public SVNhapThongTinView(String id)
@@ -57,10 +60,11 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
         btn_LogOut.setVisible(false);
         setLocationRelativeTo(null);  
         
-        ImageIcon A = new ImageIcon(getClass().getResource("NhapThongTinSV.jpg"));
-        bg_NhapThongTinSV.setIcon(A);
+//        ImageIcon A = new ImageIcon(getClass().getResource("NhapThongTinSV.jpg"));
+//        bg_NhapThongTinSV.setIcon(A);
         
         controller = new DAO();
+        showThongTinSV();
     }
     
     private void setIcon() {
@@ -149,7 +153,7 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
                     && checkEmpty(gioiTinh, "Vui lòng chọn giới tính!")
                     && checkEmpty(txt_MSSV.getText(), "Vui lòng nhập mã số sinh viên!") && checkMSSV(txt_MSSV.getText())
                     && checkEmpty(ngayThangNamSinh, "Vui lòng nhập ngày tháng năm sinh!") && checkBirthday(ngayThangNamSinh, "Không đúng đinh dạng ngày! \n Ví dụ đúng: 01/02/2000")
-                    && checkEmpty(txt_Lop.getText(), "Vui lòng nhập lớp!") && checkLop(txt_Lop.getText())
+                    /*&& checkEmpty(txt_Lop.getText(), "Vui lòng nhập lớp!") && checkLop(txt_Lop.getText())*/
                     && checkEmpty(txt_QueQuan.getText(), "Vui lòng nhập quê quán!")
                     && checkEmpty(txt_SoDT.getText(), "Vui lòng nhập số điện thoại liên lạc!") && checkSoDienThoai(txt_SoDT.getText())
                     && checkEmpty(txt_DiaChi.getText(), "Vui lòng nhập địa chỉ!")
@@ -215,6 +219,56 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
         }
     }
     
+    public void showThongTinSV()
+    {
+        try {
+            if(controller.getStudent(user) != null)
+            {
+                sinhVien = controller.getStudent(user);
+                txt_HoTen.setText(sinhVien.getTen());
+                txt_MSSV.setText(sinhVien.getMSSV());
+                txt_NgThNmSinh.setText(sinhVien.getNgaySinh().toString());
+                txt_QueQuan.setText(sinhVien.getQueQuan());
+                txt_SoDT.setText(sinhVien.getSDT());
+                txt_DiaChi.setText(sinhVien.getDiaChi());
+                
+                if(sinhVien.getGioiTinh().trim().equals("Nam"))
+                {
+                    rb_Nam.setSelected(true);
+                }
+                else
+                {
+                    rb_Nu.setSelected(false);
+                }
+                
+                thanNhan = controller.getFamily(sinhVien.getMSSV());
+                txt_NgThanTen.setText(thanNhan.getTenNgThan().trim());
+                txt_NgThanDiaChi.setText(thanNhan.getDiaChiNgThan().trim());
+                txt_NgThanSDT.setText(thanNhan.getSDTNgThan().trim());
+                
+                txt_HoTen.setEditable(false);
+                txt_MSSV.setEditable(false);
+                txt_Lop.setEditable(false);
+                txt_NgThNmSinh.setEditable(false);
+                txt_QueQuan.setEditable(false);
+                txt_SoDT.setEditable(false);
+                txt_DiaChi.setEditable(false);
+                rb_Nam.setEnabled(false);
+                rb_Nu.setEnabled(false);
+                txt_NgThanTen.setEditable(false);
+                txt_NgThanDiaChi.setEditable(true);
+                txt_NgThanSDT.setEditable(false);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(rootPane, "Bạn chưa nhập thông tin \n Vui lòng nhập thông tin tại Đăng ký ngay");
+                this.dispose();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(SVNhapThongTinView.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+    
 //    END OF FUNCTIONS
 
     /**
@@ -227,18 +281,8 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        txt_HoTen = new javax.swing.JTextField();
-        txt_MSSV = new javax.swing.JTextField();
-        txt_Lop = new javax.swing.JTextField();
-        txt_SoDT = new javax.swing.JTextField();
-        txt_NgThNmSinh = new javax.swing.JTextField();
-        txt_QueQuan = new javax.swing.JTextField();
-        txt_DiaChi = new javax.swing.JTextField();
         rb_Nam = new javax.swing.JRadioButton();
         rb_Nu = new javax.swing.JRadioButton();
-        txt_NgThanTen = new javax.swing.JTextField();
-        txt_NgThanDiaChi = new javax.swing.JTextField();
-        txt_NgThanSDT = new javax.swing.JTextField();
         btn_XacNhan = new javax.swing.JLabel();
         btn_User = new javax.swing.JLabel();
         btn_Setting = new javax.swing.JLabel();
@@ -246,6 +290,16 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
         btn_Help = new javax.swing.JLabel();
         settingView = new javax.swing.JLabel();
         btn_Close = new javax.swing.JLabel();
+        txt_HoTen = new javax.swing.JTextField();
+        txt_MSSV = new javax.swing.JTextField();
+        txt_Lop = new javax.swing.JTextField();
+        txt_SoDT = new javax.swing.JTextField();
+        txt_NgThNmSinh = new javax.swing.JTextField();
+        txt_QueQuan = new javax.swing.JTextField();
+        txt_DiaChi = new javax.swing.JTextField();
+        txt_NgThanTen = new javax.swing.JTextField();
+        txt_NgThanDiaChi = new javax.swing.JTextField();
+        txt_NgThanSDT = new javax.swing.JTextField();
         bg_NhapThongTinSV = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -257,34 +311,6 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
             }
         });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        txt_HoTen.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        txt_HoTen.setUI(null);
-        getContentPane().add(txt_HoTen, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 240, 30));
-
-        txt_MSSV.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        txt_MSSV.setUI(null);
-        getContentPane().add(txt_MSSV, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 220, 30));
-
-        txt_Lop.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        txt_Lop.setUI(null);
-        getContentPane().add(txt_Lop, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 210, 280, 30));
-
-        txt_SoDT.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        txt_SoDT.setUI(null);
-        getContentPane().add(txt_SoDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 270, 220, 30));
-
-        txt_NgThNmSinh.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        txt_NgThNmSinh.setUI(null);
-        getContentPane().add(txt_NgThNmSinh, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 150, 150, 30));
-
-        txt_QueQuan.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        txt_QueQuan.setUI(null);
-        getContentPane().add(txt_QueQuan, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 210, 240, 30));
-
-        txt_DiaChi.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        txt_DiaChi.setUI(null);
-        getContentPane().add(txt_DiaChi, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 270, 260, 30));
 
         rb_Nam.setBackground(new java.awt.Color(255, 255, 255));
         rb_Nam.setText("Nam");
@@ -303,18 +329,6 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
             }
         });
         getContentPane().add(rb_Nu, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 90, -1, -1));
-
-        txt_NgThanTen.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        txt_NgThanTen.setUI(null);
-        getContentPane().add(txt_NgThanTen, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 340, 250, 30));
-
-        txt_NgThanDiaChi.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        txt_NgThanDiaChi.setUI(null);
-        getContentPane().add(txt_NgThanDiaChi, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 400, 230, 30));
-
-        txt_NgThanSDT.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        txt_NgThanSDT.setUI(null);
-        getContentPane().add(txt_NgThanSDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 460, 270, 30));
 
         btn_XacNhan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -362,6 +376,36 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
         });
         getContentPane().add(btn_Close, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 20, -1, -1));
 
+        txt_HoTen.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        getContentPane().add(txt_HoTen, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 240, 30));
+
+        txt_MSSV.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        getContentPane().add(txt_MSSV, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 220, 30));
+
+        txt_Lop.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        getContentPane().add(txt_Lop, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 210, 280, 30));
+
+        txt_SoDT.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        getContentPane().add(txt_SoDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 270, 220, 30));
+
+        txt_NgThNmSinh.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        getContentPane().add(txt_NgThNmSinh, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 150, 140, 30));
+
+        txt_QueQuan.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        getContentPane().add(txt_QueQuan, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 210, 240, 30));
+
+        txt_DiaChi.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        getContentPane().add(txt_DiaChi, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 270, 260, 30));
+
+        txt_NgThanTen.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        getContentPane().add(txt_NgThanTen, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 340, 340, 30));
+
+        txt_NgThanDiaChi.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        getContentPane().add(txt_NgThanDiaChi, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 400, 320, 30));
+
+        txt_NgThanSDT.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        getContentPane().add(txt_NgThanSDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 460, 350, 30));
+
         bg_NhapThongTinSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/NhapThongTinSV.jpg"))); // NOI18N
         bg_NhapThongTinSV.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -372,12 +416,6 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btn_CloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CloseMouseClicked
-        // TODO add your handling code here:
-        this.dispose();
-        new SinhVienView(SinhVienView.taiKhoan).setVisible(true);
-    }//GEN-LAST:event_btn_CloseMouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
@@ -393,33 +431,17 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowOpened
 
-    private void btn_SettingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_SettingMouseClicked
-        // TODO add your handling code here:
-        if (flag) {
-            settingView.setVisible(true);
-            btn_User.setVisible(true);
-            btn_Help.setVisible(true);
-            btn_LogOut.setVisible(true);
-            flag = false;
-        } else {
-            settingView.setVisible(false);
-            btn_User.setVisible(false);
-            btn_Help.setVisible(false);
-            btn_LogOut.setVisible(false);
-            flag = true;
-        }
-    }//GEN-LAST:event_btn_SettingMouseClicked
-
     private void bg_NhapThongTinSVMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bg_NhapThongTinSVMouseClicked
         // TODO add your handling code here:
         settingView.setVisible(false);
         flag = true;
     }//GEN-LAST:event_bg_NhapThongTinSVMouseClicked
 
-    private void btn_UserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_UserMouseClicked
+    private void btn_CloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CloseMouseClicked
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(rootPane, "Bạn chưa nhập xong thông tin!");
-    }//GEN-LAST:event_btn_UserMouseClicked
+        this.dispose();
+        new SinhVienView(SinhVienView.taiKhoan).setVisible(true);
+    }//GEN-LAST:event_btn_CloseMouseClicked
 
     private void btn_HelpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_HelpMouseClicked
         // TODO add your handling code here:
@@ -445,13 +467,32 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
         new DangNhapView().setVisible(true);
     }//GEN-LAST:event_btn_LogOutMouseClicked
 
-    private void rb_NamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rb_NamMouseClicked
+    private void btn_SettingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_SettingMouseClicked
         // TODO add your handling code here:
-        if(rb_Nam.isSelected())
-        {
-            rb_Nu.setSelected(false);
+        if (flag) {
+            settingView.setVisible(true);
+            btn_User.setVisible(true);
+            btn_Help.setVisible(true);
+            btn_LogOut.setVisible(true);
+            flag = false;
+        } else {
+            settingView.setVisible(false);
+            btn_User.setVisible(false);
+            btn_Help.setVisible(false);
+            btn_LogOut.setVisible(false);
+            flag = true;
         }
-    }//GEN-LAST:event_rb_NamMouseClicked
+    }//GEN-LAST:event_btn_SettingMouseClicked
+
+    private void btn_UserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_UserMouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(rootPane, "Bạn đang ở form hiện hành");
+    }//GEN-LAST:event_btn_UserMouseClicked
+
+    private void btn_XacNhanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XacNhanMouseClicked
+        // TODO add your handling code here:
+        kiemTraNhap();
+    }//GEN-LAST:event_btn_XacNhanMouseClicked
 
     private void rb_NuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rb_NuMouseClicked
         // TODO add your handling code here:
@@ -461,10 +502,13 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_rb_NuMouseClicked
 
-    private void btn_XacNhanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XacNhanMouseClicked
+    private void rb_NamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rb_NamMouseClicked
         // TODO add your handling code here:
-        kiemTraNhap();
-    }//GEN-LAST:event_btn_XacNhanMouseClicked
+        if(rb_Nam.isSelected())
+        {
+            rb_Nu.setSelected(false);
+        }
+    }//GEN-LAST:event_rb_NamMouseClicked
 
     
     /**
@@ -507,6 +551,7 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
     private DAO controller;
     private boolean flag = true;
     SinhVien sinhVien;
+    ThanNhan thanNhan;
     List<SinhVien> students;
     static String user = "";
 //    END OF VARIABLES DECLARATION

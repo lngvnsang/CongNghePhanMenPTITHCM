@@ -92,6 +92,7 @@ public class ThongTinView extends javax.swing.JFrame {
                                 + "Ngày rời đi: " + ngayRoiDi + "\n");
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     
@@ -118,8 +119,6 @@ public class ThongTinView extends javax.swing.JFrame {
         TabbedPane = new javax.swing.JTabbedPane();
         sp_HopDong = new javax.swing.JScrollPane();
         txt_HopDong = new javax.swing.JTextPane();
-        sp_PhatSinh = new javax.swing.JScrollPane();
-        txt_PhatSinh = new javax.swing.JTextPane();
         bg_ThongTinKTX = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -175,13 +174,6 @@ public class ThongTinView extends javax.swing.JFrame {
         sp_HopDong.setViewportView(txt_HopDong);
 
         TabbedPane.addTab("Hợp đồng", sp_HopDong);
-
-        txt_PhatSinh.setEditable(false);
-        txt_PhatSinh.setFont(new java.awt.Font("Times New Roman", 3, 16)); // NOI18N
-        txt_PhatSinh.setText("Mã hợp đồng:\n\nMã Phòng:\n\nMã Phát sinh:\n\nNgày phát sinh:\n\nSố lượng:\n\nTổng tiền:");
-        sp_PhatSinh.setViewportView(txt_PhatSinh);
-
-        TabbedPane.addTab("Phát sinh", sp_PhatSinh);
 
         getContentPane().add(TabbedPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 80, 630, 440));
 
@@ -300,8 +292,6 @@ public class ThongTinView extends javax.swing.JFrame {
     private javax.swing.JLabel btn_user;
     private javax.swing.JLabel setting_view;
     private javax.swing.JScrollPane sp_HopDong;
-    private javax.swing.JScrollPane sp_PhatSinh;
     private javax.swing.JTextPane txt_HopDong;
-    private javax.swing.JTextPane txt_PhatSinh;
     // End of variables declaration//GEN-END:variables
 }

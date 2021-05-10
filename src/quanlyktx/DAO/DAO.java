@@ -27,6 +27,7 @@ import quanlyktx.model.PS_Phong;
 import quanlyktx.model.PhatSinh;
 import quanlyktx.model.Phong;
 import quanlyktx.model.SinhVien;
+import quanlyktx.model.TableThuPhi;
 import quanlyktx.model.TaiKhoan;
 import quanlyktx.model.ThanNhan;
 
@@ -575,11 +576,11 @@ public class DAO {
         }
         return datas;
     }
-    
+
     public ArrayList<Day> getDayByGioiTinh(String gioiTinh) {
         ArrayList<Day> list = new ArrayList<>();
         String sql = "SELECT * FROM Day WHERE GioiTinh = N'" + gioiTinh + "'";
-        
+
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -591,15 +592,13 @@ public class DAO {
                 d.setTinhTrang(rs.getString("TinhTrang"));
                 list.add(d);
             }
-            
-        }
-        catch(Exception e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
     }
-    
-    
+
     public List<Integer> getYear() {
         String sql = "SELECT DISTINCT  YEAR(NgayDangKy) AS Nam FROM HopDong ORDER BY YEAR(NgayDangKy) DESC";
         List<Integer> years = new ArrayList<>();
@@ -609,15 +608,12 @@ public class DAO {
             while (rs.next()) {
                 years.add(rs.getInt("Nam"));
             }
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return years;
     }
-    
-    
+
     public DefaultCategoryDataset getListRoomwithNumberStudentByIDRange(int nam, String maDay, DefaultTableModel model) {
 
         DefaultCategoryDataset datas = new DefaultCategoryDataset();
@@ -649,17 +645,56 @@ public class DAO {
         return datas;
     }
 
-    public DefaultCategoryDataset getTotalCostStudentWithEveryYear() {
+    public DefaultCategoryDataset getTotalCostStudentWithEveryYear(DefaultTableModel modelTPKTX) {
         DefaultCategoryDataset datas = new DefaultCategoryDataset();
         //System.out.println("." + phong + ".");
-        String sql = "SELECT YEAR(NgayDangKy) AS Nam, SUM(SoTienTra) AS TongTien FROM HopDong GROUP BY YEAR(NgayDangKy)";
+        String sql = "SELECT YEAR(NgayDangKy) AS Nam, SUM(SoTienTra) AS TongTien FROM HopDong GROUP BY YEAR(NgayDangKy) ORDER BY YEAR(NgayDangKy) DESC";
+        int i = 1;
+        DecimalFormat formatter = new DecimalFormat("###,###,###");
 
         try {
-            int i = 1;
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
+                datas.setValue(rs.getInt("TongTien"), rs.getString("Nam"), rs.getString("Nam"));
 
+                modelTPKTX.addRow(new Object[]{
+                    i++,
+                    rs.getInt("Nam"),
+                    formatter.format(rs.getInt("TongTien")) + " vnđ",});
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return datas;
+    }
+
+    public DefaultCategoryDataset getTotalCostServicesWithEveryYear(DefaultTableModel modelTPPS) {
+        DefaultCategoryDataset datas = new DefaultCategoryDataset();
+        String sql = "WITH T AS ( "
+                + "	SELECT HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, PS_Phong.MaPS_Phong, SUM(GiaTienPS* SL) AS TongTien "
+                + "	FROM HoaDon, PhatSinh, PS_Phong "
+                + "	WHERE HoaDon.MaHD = PS_Phong.MaHD "
+                + "	AND PS_Phong.MaPS = PhatSinh.MaPS "
+                + "	GROUP BY HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, PS_Phong.MaPS_Phong "
+                + ") "
+                + "SELECT YEAR(NgayTaoHD) AS Nam, SUM(T.TongTien) AS TongTien "
+                + "FROM HoaDon, T "
+                + "GROUP BY YEAR(NgayTaoHD) "
+                + "ORDER BY  YEAR(NgayTaoHD) DESC";
+        int i = 1;
+        DecimalFormat formatter = new DecimalFormat("###,###,###");
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                datas.setValue(rs.getInt("TongTien"), rs.getString("Nam"), rs.getString("Nam"));
+
+                modelTPPS.addRow(new Object[]{
+                    i++,
+                    rs.getInt("Nam"),
+                    formatter.format(rs.getInt("TongTien")) + " vnđ",});
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -713,14 +748,15 @@ public class DAO {
         return list;
     }
 
-    public void getListBills(DefaultTableModel modelBills) {
+    public List<TableThuPhi> getListBills(DefaultTableModel modelBills) {
 
-        String sql = "SELECT HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, SUM(GiaTienPS* SL) AS TongTien "
+        List<TableThuPhi> list = new ArrayList<>();
+        String sql = "SELECT HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, PS_Phong.MaPS_Phong, SUM(GiaTienPS* SL) AS TongTien "
                 + "FROM HoaDon, PhatSinh, PS_Phong "
                 + "WHERE "
                 + "HoaDon.MaHD = PS_Phong.MaHD "
                 + "AND PS_Phong.MaPS = PhatSinh.MaPS "
-                + "GROUP BY HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS "
+                + "GROUP BY HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, PS_Phong.MaPS_Phong "
                 + "ORDER BY  PS_Phong.NgayPS DESC";
         int i = 1;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
@@ -730,11 +766,20 @@ public class DAO {
             ResultSet rs = ps.executeQuery();
             modelBills.setRowCount(0);
             while (rs.next()) {
+                TableThuPhi tableThuPhi = new TableThuPhi();
                 //updateTongTienToBill(rs.getString("MaHD").trim(), Integer.parseInt(rs.getString("TongTien")));
+                tableThuPhi.setMaHD(rs.getString("MaHD").trim());
+                tableThuPhi.setMaPhong(rs.getString("MaPhong").trim());
+                tableThuPhi.setNgayPS(rs.getDate("NgayPS"));
+                tableThuPhi.setTenPS(rs.getString("TenPS").trim());
+                tableThuPhi.setTongTien(rs.getString("TongTien").trim());
+                tableThuPhi.setMaPS_Phong(rs.getString("MaPS_Phong").trim());
+
+                list.add(tableThuPhi);
 
                 modelBills.addRow(new Object[]{
                     i++,
-                    rs.getString("MaHD").trim(),
+                    //                    rs.getString("MaHD").trim(),
                     rs.getString("MaPhong").trim(),
                     rs.getString("TenPS").trim(),
                     format.format(rs.getDate("NgayPS")),
@@ -744,7 +789,7 @@ public class DAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        return list;
     }
 
     public void getListBillsByIdRoom(DefaultTableModel modelBills, String phong) {
@@ -768,7 +813,7 @@ public class DAO {
 
                 modelBills.addRow(new Object[]{
                     i++,
-                    rs.getString("MaHD").trim(),
+                    //rs.getString("MaHD").trim(),
                     rs.getString("MaPhong").trim(),
                     rs.getString("TenPS").trim(),
                     format.format(rs.getDate("NgayPS")),
@@ -780,11 +825,12 @@ public class DAO {
         }
     }
 
-    public void getListBillsByIdRoomWithMouth(DefaultTableModel modelBills, String phong, String thang, JLabel txtTongTien) {
+    public void getListBillsByIdRoomWithMouth(DefaultTableModel modelBills, String phong, String nam, String thang, JLabel txtTongTien) {
         String sql = "SELECT HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, SUM(GiaTienPS* SL) AS TongTien "
                 + "FROM HoaDon, PhatSinh, PS_Phong "
                 + "WHERE "
                 + "MONTH(PS_Phong.NgayPS) ='" + thang.trim() + "' "
+                + "AND YEAR(PS_Phong.NgayPS) ='" + nam.trim() + "' "
                 + "AND HoaDon.MaPhong ='" + phong.trim() + "' "
                 + "AND HoaDon.MaHD = PS_Phong.MaHD "
                 + "AND PS_Phong.MaPS = PhatSinh.MaPS "
@@ -803,14 +849,13 @@ public class DAO {
                 tongTien += Integer.parseInt(rs.getString("TongTien"));
                 modelBills.addRow(new Object[]{
                     i++,
-                    rs.getString("MaHD").trim(),
+                    //rs.getString("MaHD").trim(),
                     rs.getString("MaPhong").trim(),
                     rs.getString("TenPS").trim(),
                     format.format(rs.getDate("NgayPS")),
                     formatter.format(Integer.parseInt(rs.getString("TongTien"))),});
             }
             txtTongTien.setText(formatter.format(tongTien) + " vnđ");
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -912,6 +957,58 @@ public class DAO {
         return false;
     }
 
+    public List<Integer> getYearPS() {
+        String sql = "SELECT DISTINCT  YEAR(NgayPS) AS Nam FROM PS_Phong ORDER BY YEAR(NgayPS) DESC";
+        List<Integer> years = new ArrayList<>();
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                years.add(rs.getInt("Nam"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return years;
+    }
+
+    public PS_Phong getPSPhongByID(String maPSP) {
+        String sql = "SELECT * FROM PS_Phong WHERE MaPS_Phong = '" + maPSP.trim() + "'";
+        PS_Phong psp = new PS_Phong();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                psp.setMaPS_Phong(rs.getString("MaPS_Phong"));
+                psp.setMaHD(rs.getString("MaHD"));
+                psp.setMaPS("MaPS");
+                psp.setNgayPS(rs.getDate("NgayPS"));
+                psp.setSL(rs.getInt("SL"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return psp;
+    }
+
+    public boolean updatePS_Phong(PS_Phong pS_Phong, String maHD) {
+//        PS_Phong psp = getPSPhongByID(pS_Phong.getMaPS_Phong().trim());
+//        int SL = psp.getSL() + pS_Phong.getSL();
+        String sql = "UPDATE PS_Phong SET "
+                + "SL = '" + pS_Phong.getSL() + "'"
+                // + "MaPS = '" + pS_Phong.getMaPS()+"'"
+                + " WHERE MaPS = '" + pS_Phong.getMaPS().trim() + "' AND MaHD = '" + pS_Phong.getMaHD().trim() + "'";
+        try {
+            PreparedStatement p = conn.prepareStatement(sql);
+            return p.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public List<PS_Phong> getListRoomServices() {
         ArrayList<PS_Phong> list = new ArrayList<>();
         String sql = "SELECT * FROM PS_Phong ";
@@ -934,6 +1031,19 @@ public class DAO {
         }
 
         return list;
+    }
+
+    public boolean deletePhatSinhPhong(TableThuPhi get) {
+        String sql = "DELETE FROM PS_Phong "
+                + "WHERE MaPS_Phong = '" + get.getMaPS_Phong().trim() + "' "
+                + "AND MaHD = '" + get.getMaHD().trim() + "'";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 //>>>>>>> 5f0ff9ff387a965095caf454e79d0d0e0c68c264

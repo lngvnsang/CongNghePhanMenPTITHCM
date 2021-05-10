@@ -19,6 +19,7 @@ import quanlyktx.model.PS_Phong;
 import quanlyktx.model.PhatSinh;
 import quanlyktx.model.Phong;
 import quanlyktx.model.SinhVien;
+import quanlyktx.model.TableThuPhi;
 import quanlyktx.view.DangNhap.DangNhapView;
 
 /**
@@ -33,6 +34,7 @@ public class ThuPhiView extends javax.swing.JFrame {
     List<HoaDon> bills;
     List<PS_Phong> roomServices;
     List<Phong> rooms;
+    List<TableThuPhi> tableThuPhiList;
     private DefaultTableModel modelServices;
     private DefaultTableModel modelBills;
 
@@ -50,9 +52,10 @@ public class ThuPhiView extends javax.swing.JFrame {
         modelServices = (DefaultTableModel) table_phat_sinh.getModel();
         modelBills = (DefaultTableModel) table_phi_phat_sinh.getModel();
 
-        controller.getListBills(modelBills);
+        tableThuPhiList = controller.getListBills(modelBills);
         rooms = controller.getListRoom();
-
+        cb_hoa_don_phong.setEnabled(false);
+        cb_hoa_don_thang.setEnabled(false);
         showServices();
         //showBills();
     }
@@ -84,11 +87,13 @@ public class ThuPhiView extends javax.swing.JFrame {
         btn_edit_ps = new javax.swing.JLabel();
         btn_remove_ps = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        cb_hoa_don_nam = new javax.swing.JComboBox<>();
         cb_day = new javax.swing.JComboBox<>();
         cb_hoa_don_thang = new javax.swing.JComboBox<>();
         cb_hoa_don_phong = new javax.swing.JComboBox<>();
         txtTongTien = new javax.swing.JLabel();
         lb_TongTien = new javax.swing.JLabel();
+        btn_refesh = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -149,7 +154,7 @@ public class ThuPhiView extends javax.swing.JFrame {
 
             },
             new String [] {
-                "STT", "Mã hóa đơn", "Mã phòng", "Ngày tạo", "Ngày phát sinh", "Tổng tiền"
+                "STT", "Mã phòng", "Ngày tạo", "Ngày phát sinh", "Tổng tiền"
             }
         ));
         jScrollPane2.setViewportView(table_phi_phat_sinh);
@@ -226,18 +231,38 @@ public class ThuPhiView extends javax.swing.JFrame {
         btn_edit_ps.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/edit.png"))); // NOI18N
         btn_edit_ps.setText("Sửa");
         btn_edit_ps.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_edit_ps.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_edit_psMouseClicked(evt);
+            }
+        });
         getContentPane().add(btn_edit_ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 510, 60, 20));
 
         btn_remove_ps.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btn_remove_ps.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/remove.png"))); // NOI18N
         btn_remove_ps.setText("Xóa");
         btn_remove_ps.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_remove_ps.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_remove_psMouseClicked(evt);
+            }
+        });
         getContentPane().add(btn_remove_ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 510, 60, 20));
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(51, 51, 255));
         jLabel3.setText("Phí dịch vụ: ");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 200, -1, -1));
+
+        cb_hoa_don_nam.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        cb_hoa_don_nam.setBorder(null);
+        cb_hoa_don_nam.setOpaque(false);
+        cb_hoa_don_nam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_hoa_don_namActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cb_hoa_don_nam, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 460, 80, 30));
 
         cb_day.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         cb_day.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default", "I", "J", "H", "Q", "M", "N", "K", "P" }));
@@ -259,7 +284,7 @@ public class ThuPhiView extends javax.swing.JFrame {
                 cb_hoa_don_thangActionPerformed(evt);
             }
         });
-        getContentPane().add(cb_hoa_don_thang, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 460, 80, 30));
+        getContentPane().add(cb_hoa_don_thang, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 460, 80, 30));
 
         cb_hoa_don_phong.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         cb_hoa_don_phong.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default" }));
@@ -274,11 +299,22 @@ public class ThuPhiView extends javax.swing.JFrame {
 
         txtTongTien.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         txtTongTien.setForeground(new java.awt.Color(255, 0, 0));
-        getContentPane().add(txtTongTien, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 460, 170, 30));
+        txtTongTien.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(txtTongTien, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 460, 180, 30));
 
         lb_TongTien.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         lb_TongTien.setForeground(new java.awt.Color(255, 0, 0));
-        getContentPane().add(lb_TongTien, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 460, 130, 30));
+        getContentPane().add(lb_TongTien, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 460, 100, 30));
+
+        btn_refesh.setBackground(new java.awt.Color(255, 255, 255));
+        btn_refesh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/refresh.png"))); // NOI18N
+        btn_refesh.setBorder(null);
+        btn_refesh.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_refeshMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btn_refesh, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 220, 50, 30));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/ThuPhi.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
@@ -364,14 +400,14 @@ public class ThuPhiView extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_editMouseClicked
 
     private void btn_removeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_removeMouseClicked
-         int selectedPhatSinh = table_phat_sinh.getSelectedRow();
+        int selectedPhatSinh = table_phat_sinh.getSelectedRow();
         services = controller.getListServices();
         if (services.size() == 0) {
             JOptionPane.showMessageDialog(rootPane, "Danh sách trống!");
         } else if (selectedPhatSinh == -1) {
             JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần sửa!");
         } else {
-             if (controller.deletePhatSinh(services.get(selectedPhatSinh).getMaPS())) {
+            if (controller.deletePhatSinh(services.get(selectedPhatSinh).getMaPS())) {
                 JOptionPane.showMessageDialog(rootPane, "Xóa thông tin thành công!");
                 showServices();
             } else {
@@ -381,7 +417,7 @@ public class ThuPhiView extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_removeMouseClicked
 
     private void btn_add_psMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_add_psMouseClicked
-         ThemPhatSinhPhong themPhatSinhPhong = new ThemPhatSinhPhong(this, rootPaneCheckingEnabled);
+        ThemPhatSinhPhong themPhatSinhPhong = new ThemPhatSinhPhong(this, rootPaneCheckingEnabled);
         themPhatSinhPhong.setVisible(true);
     }//GEN-LAST:event_btn_add_psMouseClicked
 
@@ -404,27 +440,85 @@ public class ThuPhiView extends javax.swing.JFrame {
 
     private void cb_hoa_don_phongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_hoa_don_phongActionPerformed
 
-        if (cb_hoa_don_phong.getSelectedItem() != null) {
+        List<Integer> years = controller.getYear();
+
+        cb_hoa_don_nam.removeAllItems();
+
+        for (int year : years) {
+            cb_hoa_don_nam.addItem(year + "");
+        }
+        cb_hoa_don_thang.setEnabled(true);
+        cb_hoa_don_phong.setEnabled(true);
+        if (cb_hoa_don_thang.getSelectedItem() != null && cb_hoa_don_nam.getSelectedItem() != null && !cb_hoa_don_thang.getSelectedItem().toString().trim().equals("Default")) {
             String phong = cb_hoa_don_phong.getSelectedItem().toString().trim();
-            controller.getListBillsByIdRoom(modelBills, phong);
+            String nam = cb_hoa_don_nam.getSelectedItem().toString().trim();
+            String thang = cb_hoa_don_thang.getSelectedItem().toString().trim();
+            lb_TongTien.setText("Tổng tiền T" + thang + ":");
+            controller.getListBillsByIdRoomWithMouth(modelBills, phong, nam, thang, txtTongTien);
         }
     }//GEN-LAST:event_cb_hoa_don_phongActionPerformed
 
     private void cb_hoa_don_thangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_hoa_don_thangActionPerformed
-        if (cb_hoa_don_thang.getSelectedItem() != null && !cb_hoa_don_thang.getSelectedItem().toString().trim().equals("Default") ) {
+        cb_hoa_don_phong.setEnabled(true);
+        if (cb_hoa_don_thang.getSelectedItem() != null && cb_hoa_don_nam.getSelectedItem() != null && !cb_hoa_don_thang.getSelectedItem().toString().trim().equals("Default")) {
             String phong = cb_hoa_don_phong.getSelectedItem().toString().trim();
+            String nam = cb_hoa_don_nam.getSelectedItem().toString().trim();
             String thang = cb_hoa_don_thang.getSelectedItem().toString().trim();
-            lb_TongTien.setText("Tông tiền tháng "+thang + ": ");
-            controller.getListBillsByIdRoomWithMouth(modelBills, phong, thang, txtTongTien);
-        } else if (cb_hoa_don_thang.getSelectedItem().toString().trim().equals("Default")){
+            lb_TongTien.setText("Tổng tiền T" + thang + ":");
+            controller.getListBillsByIdRoomWithMouth(modelBills, phong, nam, thang, txtTongTien);
+        } else if (cb_hoa_don_thang.getSelectedItem().toString().trim().equals("Default")) {
             String phong = cb_hoa_don_phong.getSelectedItem().toString().trim();
             controller.getListBillsByIdRoom(modelBills, phong);
             txtTongTien.setText("");
             lb_TongTien.setText("");
         }
-        
-        
     }//GEN-LAST:event_cb_hoa_don_thangActionPerformed
+
+    private void btn_edit_psMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_edit_psMouseClicked
+
+        int selectedPhatSinhP = table_phi_phat_sinh.getSelectedRow();
+        System.out.println(tableThuPhiList.size() + "llllll");
+        if (selectedPhatSinhP == -1) {
+            JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần sửa!");
+        } else {
+            SuaPhatSinhPhong suaPhatSinhPhong = new SuaPhatSinhPhong(this, rootPaneCheckingEnabled);
+            suaPhatSinhPhong.setEditData(tableThuPhiList.get(selectedPhatSinhP));
+            suaPhatSinhPhong.setVisible(true);
+        }
+    }//GEN-LAST:event_btn_edit_psMouseClicked
+
+    private void cb_hoa_don_namActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_hoa_don_namActionPerformed
+        cb_hoa_don_phong.setEnabled(true);
+        if (cb_hoa_don_thang.getSelectedItem() != null && cb_hoa_don_nam.getSelectedItem() != null && !cb_hoa_don_thang.getSelectedItem().toString().trim().equals("Default")) {
+            String phong = cb_hoa_don_phong.getSelectedItem().toString().trim();
+            String nam = cb_hoa_don_nam.getSelectedItem().toString().trim();
+            String thang = cb_hoa_don_thang.getSelectedItem().toString().trim();
+            lb_TongTien.setText("Tổng tiền T" + thang + ":");
+            controller.getListBillsByIdRoomWithMouth(modelBills, phong, nam, thang, txtTongTien);
+        }
+
+    }//GEN-LAST:event_cb_hoa_don_namActionPerformed
+
+    private void btn_remove_psMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_remove_psMouseClicked
+        int selectedPhatSinh = table_phi_phat_sinh.getSelectedRow();
+        tableThuPhiList = controller.getListBills(modelBills);
+        if (tableThuPhiList.size() == 0) {
+            JOptionPane.showMessageDialog(rootPane, "Danh sách trống!");
+        } else if (selectedPhatSinh == -1) {
+            JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần xóa!");
+        } else {
+            if (controller.deletePhatSinhPhong(tableThuPhiList.get(selectedPhatSinh))) {
+                JOptionPane.showMessageDialog(rootPane, "Xóa thông tin thành công!");
+                updatePhatSinhPhong();
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Không thể xóa phát sinh này\n vì có liên kết nhiều dữ liệu!");
+            }
+        }
+    }//GEN-LAST:event_btn_remove_psMouseClicked
+
+    private void btn_refeshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_refeshMouseClicked
+        updatePhatSinhPhong();
+    }//GEN-LAST:event_btn_refeshMouseClicked
 
     /**
      * @param args the command line arguments
@@ -473,11 +567,13 @@ public class ThuPhiView extends javax.swing.JFrame {
     private javax.swing.JLabel btn_edit_ps;
     private javax.swing.JLabel btn_help;
     private javax.swing.JLabel btn_logout;
+    private javax.swing.JButton btn_refesh;
     private javax.swing.JLabel btn_remove;
     private javax.swing.JLabel btn_remove_ps;
     private javax.swing.JLabel btn_setting;
     private javax.swing.JLabel btn_user;
     private javax.swing.JComboBox<String> cb_day;
+    private javax.swing.JComboBox<String> cb_hoa_don_nam;
     private javax.swing.JComboBox<String> cb_hoa_don_phong;
     private javax.swing.JComboBox<String> cb_hoa_don_thang;
     private javax.swing.JLabel jLabel1;
@@ -510,14 +606,18 @@ public class ThuPhiView extends javax.swing.JFrame {
     }
 
     void updatePhatSinh(PhatSinh ps) {
-       if (controller.updatePhatSinh(ps)) {
+        if (controller.updatePhatSinh(ps)) {
             JOptionPane.showMessageDialog(rootPane, "Sửa thông tin thành công!");
-            
+
             showServices();
         }
     }
 
     void updateTableBills() {
         controller.getListBills(modelBills);
+    }
+
+    void updatePhatSinhPhong() {
+        tableThuPhiList = controller.getListBills(modelBills);
     }
 }

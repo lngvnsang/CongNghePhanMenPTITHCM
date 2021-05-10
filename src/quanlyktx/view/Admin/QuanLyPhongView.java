@@ -505,16 +505,19 @@ public class QuanLyPhongView extends javax.swing.JFrame {
 
     private void btn_xoaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_xoaMouseClicked
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeRoom.getLastSelectedPathComponent();
-        String d = (String) selectedNode.getUserObject();
-        if (d.trim().length() > 3) {
-        } else if (d.trim().length() == 3) {
-            if (controller.deletePhong(d)) {
-                JOptionPane.showMessageDialog(rootPane, "Xóa phòng thành công!");
+
+        if (selectedNode.getUserObject() == null) {
+            String d = (String) selectedNode.getUserObject();
+            if (d.trim().length() > 3) {
+            } else if (d.trim().length() == 3) {
+                if (controller.deletePhong(d)) {
+                    JOptionPane.showMessageDialog(rootPane, "Xóa phòng thành công!");
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Xóa phòng thất bại!\n Phòng có liên kết với nhiều dữ liệu khác");
+                }
             } else {
-                JOptionPane.showMessageDialog(rootPane, "Xóa phòng thất bại!\n Phòng có liên kết với nhiều dữ liệu khác");
+                JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần xóa!");
             }
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần xóa!");
         }
     }//GEN-LAST:event_btn_xoaMouseClicked
 

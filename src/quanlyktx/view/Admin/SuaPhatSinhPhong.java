@@ -22,12 +22,13 @@ import quanlyktx.model.HoaDon;
 import quanlyktx.model.PS_Phong;
 import quanlyktx.model.PhatSinh;
 import quanlyktx.model.Phong;
+import quanlyktx.model.TableThuPhi;
 
 /**
  *
  * @author luong
  */
-public class ThemPhatSinhPhong extends javax.swing.JDialog {
+public class SuaPhatSinhPhong extends javax.swing.JDialog {
 
     /**
      * Creates new form ThemPhatSinhPhong
@@ -38,29 +39,30 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
     List<PhatSinh> services;
     List<HoaDon> bills;
     List<PS_Phong> roomServices;
-
-    public ThemPhatSinhPhong(java.awt.Frame parent, boolean modal) {
+    TableThuPhi tableThuPhi;
+    
+    public SuaPhatSinhPhong(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         home = (ThuPhiView) parent;
         services = controller.getListServices();
         bills = controller.getListBill();
         roomServices = controller.getListRoomServices();
-
+        
         txt_so_luong.setEnabled(false);
-
+        
         cb_phat_sinh.removeAllItems();
-
+        
         for (PhatSinh service : services) {
             cb_phat_sinh.addItem(service.getTenPS().trim());
         }
-
+        
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-
+        
         Date currentDate = java.util.Calendar.getInstance().getTime();
-
+        
         txt_ngay_phat_sinh.setText(format.format(currentDate));
-
+        
         txt_so_luong.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
@@ -72,7 +74,7 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
                 }
             }
         });
-
+        
     }
 
     /**
@@ -85,14 +87,10 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
     private void initComponents() {
 
         lb_phat_sinh = new javax.swing.JLabel();
-        lb_phong = new javax.swing.JLabel();
         lb_ngay = new javax.swing.JLabel();
         lb_tong_tien = new javax.swing.JLabel();
         lb_so_luong = new javax.swing.JLabel();
-        lb_day = new javax.swing.JLabel();
         cb_phat_sinh = new javax.swing.JComboBox<>();
-        cb_phong = new javax.swing.JComboBox<>();
-        cb_day = new javax.swing.JComboBox<>();
         txt_ngay_phat_sinh = new javax.swing.JTextField();
         txt_so_luong = new javax.swing.JTextField();
         lb_don_vi_tinh = new javax.swing.JLabel();
@@ -109,10 +107,6 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
         lb_phat_sinh.setText("Phát sinh:");
         getContentPane().add(lb_phat_sinh, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 220, -1, -1));
 
-        lb_phong.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        lb_phong.setText("Phòng:");
-        getContentPane().add(lb_phong, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 120, -1, -1));
-
         lb_ngay.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         lb_ngay.setText("Ngày phát sinh:");
         getContentPane().add(lb_ngay, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 170, -1, -1));
@@ -124,10 +118,6 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
         lb_so_luong.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         lb_so_luong.setText("Số lượng:");
         getContentPane().add(lb_so_luong, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 280, -1, -1));
-
-        lb_day.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        lb_day.setText("Dãy:");
-        getContentPane().add(lb_day, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, -1, -1));
 
         cb_phat_sinh.setBackground(new java.awt.Color(255, 204, 51));
         cb_phat_sinh.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -141,27 +131,6 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
             }
         });
         getContentPane().add(cb_phat_sinh, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 220, 220, -1));
-
-        cb_phong.setBackground(new java.awt.Color(255, 204, 51));
-        cb_phong.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        cb_phong.setForeground(new java.awt.Color(0, 51, 255));
-        cb_phong.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default" }));
-        cb_phong.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        cb_phong.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(cb_phong, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 120, -1, -1));
-
-        cb_day.setBackground(new java.awt.Color(255, 204, 51));
-        cb_day.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        cb_day.setForeground(new java.awt.Color(0, 51, 255));
-        cb_day.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default", "I", "J", "H", "Q", "M", "N", "K", "P" }));
-        cb_day.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        cb_day.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cb_day.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_dayActionPerformed(evt);
-            }
-        });
-        getContentPane().add(cb_day, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 120, -1, -1));
 
         txt_ngay_phat_sinh.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_ngay_phat_sinh.setOpaque(false);
@@ -209,7 +178,7 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
         getContentPane().add(lb_tong, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 480, 170, 20));
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/Them_thong_tin_ps_phong.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/Sua_thong_tin_PSP.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         setSize(new java.awt.Dimension(500, 600));
@@ -221,172 +190,22 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
     }//GEN-LAST:event_btn_cancelMouseClicked
 
     private void btn_saveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_saveMouseClicked
-        System.out.println("0");
-        if (checkEmpty(cb_day.getSelectedItem().toString(), "Tên phat sinh?")
-                && !cb_day.getSelectedItem().toString().trim().equals("Default")
-                && checkEmpty(cb_phong.getSelectedItem().toString(), "Phòng?")
-                && checkEmpty(cb_phat_sinh.getSelectedItem().toString(), "Phát sinh?")
-                && !cb_phat_sinh.getSelectedItem().toString().trim().equals("Default")) {
-            System.out.println("1");
-            try {
-                String maPhong = cb_phong.getSelectedItem().toString().trim();
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                String kt = checkHoaDonExit(cb_phong.getSelectedItem().toString().trim(), txt_ngay_phat_sinh.getText().toString().trim(), cb_phat_sinh.getSelectedItem().toString().trim());
-                System.out.println(kt + " 123");
-                bills = controller.getListBill();
-                System.out.println(bills.size() + " lenght");
-                String maPS = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().toString().trim();
-                if (bills.size() != 0) {
-                    for (HoaDon bill : bills) {
-                        System.out.println(maPhong + "&" + bill.getMaPhong().trim() + "++++++" + maPhong.equals(bill.getMaPhong().trim()) + "+++++++++" + kt);
-                        if (maPhong.trim().equals(bill.getMaPhong().trim()) && kt != null) {
-                            if (kt != null) {
-                                String maHD = checkHoaDonExit(cb_phong.getSelectedItem().toString().trim(), txt_ngay_phat_sinh.getText().toString().trim(), cb_phat_sinh.getSelectedItem().toString().trim());
-                                //roomServices = controller.getListRoomServices();
-                                System.out.println("2");
-                                //int t = roomServices.size() + 1;
-                                //String maPSPhong = (roomServices.size() < 10 ? "PSP0" : "PSP") + t;
-                                String maps = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().trim();
-                                PS_Phong pS_Phong = new PS_Phong(
-                                        maPS,
-                                        maHD,
-                                        maps,
-                                        format.parse(txt_ngay_phat_sinh.getText().toString().trim()),
-                                        Integer.parseInt(txt_so_luong.getText().trim())
-                                );
-
-                                if (controller.updatePS_Phong(pS_Phong, maHD)) {
-                                    System.out.println("3");
-                                    JOptionPane.showMessageDialog(rootPane, "Thêm phát sinh thành công.");
-                                    home.updateTableBills();
-                                    this.dispose();
-                                    return;
-                                }
-
-                            } else {
-                                HoaDon hd = new HoaDon();
-                                int k = bills.size() + 1;
-                                System.out.println("1.2");
-
-                                String maHD = (bills.size() < 10 ? "HD0" : "HD") + k;
-                                System.out.println(maHD + "            " + bills.size());
-                                hd.setMaHD(maHD);
-                                hd.setMaPhong(cb_phong.getSelectedItem().toString().trim());
-                                //hd.setTongTien(0);
-                                hd.setNgayTaoHD(format.parse(txt_ngay_phat_sinh.getText().toString().trim()));
-                                if (controller.addBill(hd)) {
-                                    System.out.println("2hi");
-                                    int t = roomServices.size() + 1;
-                                    String maPSPhong = (roomServices.size() < 10 ? "PSP0" : "PSP") + t;
-                                    String maps = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().trim();
-                                    PS_Phong pS_Phong = new PS_Phong(
-                                            maPSPhong,
-                                            maHD,
-                                            maps,
-                                            format.parse(txt_ngay_phat_sinh.getText().toString().trim()),
-                                            Integer.parseInt(txt_so_luong.getText().trim())
-                                    );
-
-                                    if (controller.addPSPhong(pS_Phong)) {
-                                        System.out.println("3hi");
-                                        JOptionPane.showMessageDialog(rootPane, "Thêm phát sinh thành công.");
-                                        home.updateTableBills();
-                                        this.dispose();
-                                        return;
-                                    }
-                                }
-                            }
-
-                        } else {
-                            HoaDon hd = new HoaDon();
-                            int k = bills.size() + 1;
-                            System.out.println("1.2");
-
-                            String maHD = (bills.size() < 10 ? "HD0" : "HD") + k;
-                            System.out.println(maHD + "            " + bills.size());
-                            hd.setMaHD(maHD);
-                            hd.setMaPhong(cb_phong.getSelectedItem().toString().trim());
-                            //hd.setTongTien(0);
-                            hd.setNgayTaoHD(format.parse(txt_ngay_phat_sinh.getText().toString().trim()));
-                            if (controller.addBill(hd)) {
-                                System.out.println("2hi");
-                                int t = roomServices.size() + 1;
-                                String maPSPhong = (roomServices.size() < 10 ? "PSP0" : "PSP") + t;
-                                String maps = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().trim();
-                                PS_Phong pS_Phong = new PS_Phong(
-                                        maPSPhong,
-                                        maHD,
-                                        maps,
-                                        format.parse(txt_ngay_phat_sinh.getText().toString().trim()),
-                                        Integer.parseInt(txt_so_luong.getText().trim())
-                                );
-
-                                if (controller.addPSPhong(pS_Phong)) {
-                                    System.out.println("3hi");
-                                    JOptionPane.showMessageDialog(rootPane, "Thêm phát sinh thành công.");
-                                    home.updateTableBills();
-                                    this.dispose();
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    HoaDon hd = new HoaDon();
-                    int k = bills.size() + 1;
-                    System.out.println("1.2");
-
-                    String maHD = (bills.size() < 10 ? "HD0" : "HD") + k;
-                    System.out.println(maHD + "            " + bills.size());
-                    hd.setMaHD(maHD);
-                    hd.setMaPhong(cb_phong.getSelectedItem().toString().trim());
-                    //hd.setTongTien(0);
-                    hd.setNgayTaoHD(format.parse(txt_ngay_phat_sinh.getText().toString().trim()));
-                    if (controller.addBill(hd)) {
-                        System.out.println("2hi");
-                        int t = roomServices.size() + 1;
-                        String maPSPhong = (roomServices.size() < 10 ? "PSP0" : "PSP") + t;
-                        String maps = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().trim();
-                        PS_Phong pS_Phong = new PS_Phong(
-                                maPSPhong,
-                                maHD,
-                                maps,
-                                format.parse(txt_ngay_phat_sinh.getText().toString().trim()),
-                                Integer.parseInt(txt_so_luong.getText().trim())
-                        );
-
-                        if (controller.addPSPhong(pS_Phong)) {
-                            System.out.println("3hi");
-                            JOptionPane.showMessageDialog(rootPane, "Thêm phát sinh thành công.");
-                            home.updateTableBills();
-                            this.dispose();
-                            return;
-                        }
-                    }
-                }
-
-            } catch (ParseException ex) {
-                Logger.getLogger(ThemPhatSinhPhong.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
+        PS_Phong psp = new PS_Phong();
+        psp.setMaHD(tableThuPhi.getMaHD().trim());
+        String maPS = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().trim();
+        psp.setMaPS(maPS);
+        psp.setMaPS_Phong(tableThuPhi.getMaPS_Phong().trim());
+        psp.setNgayPS(tableThuPhi.getNgayPS());
+        psp.setSL(Integer.parseInt(txt_so_luong.getText()));
+        
+        if (controller.updatePS_Phong(psp, tableThuPhi.getMaHD().trim())) {
+            JOptionPane.showMessageDialog(rootPane, "Sửa thông tin thành công!");
+            home.updatePhatSinhPhong();
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Sửa thông tin thất bại!");
         }
     }//GEN-LAST:event_btn_saveMouseClicked
-
-    private void cb_dayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_dayActionPerformed
-        String maDay = cb_day.getSelectedItem().toString().trim();
-
-        if (!maDay.equals("Default")) {
-            cb_phong.setEnabled(true);
-            rooms = controller.getListRoomByIDRange(maDay);
-            cb_phong.removeAllItems();
-
-            for (Phong room : rooms) {
-                cb_phong.addItem(room.getMaPhong());
-            }
-        } else {
-            cb_phong.setEnabled(false);
-        }
-    }//GEN-LAST:event_cb_dayActionPerformed
 
     private void cb_phat_sinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_phat_sinhActionPerformed
         txt_so_luong.setEnabled(true);
@@ -394,7 +213,7 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
         if (index != -1) {
             lb_don_vi_tinh.setText(services.get(index).getDonViTinh().trim());
         }
-
+        
         if (!txt_so_luong.getText().trim().isEmpty()) {
             DecimalFormat formatter = new DecimalFormat("###,###,###");
             int gia = services.get(cb_phat_sinh.getSelectedIndex()).getGiaTienPS() * Integer.parseInt(txt_so_luong.getText().trim());
@@ -449,20 +268,21 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ThemPhatSinhPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SuaPhatSinhPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ThemPhatSinhPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SuaPhatSinhPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ThemPhatSinhPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SuaPhatSinhPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ThemPhatSinhPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SuaPhatSinhPhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ThemPhatSinhPhong dialog = new ThemPhatSinhPhong(new javax.swing.JFrame(), true);
+                SuaPhatSinhPhong dialog = new SuaPhatSinhPhong(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -473,38 +293,37 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
             }
         });
     }
-
+    
     public String checkHoaDonExit(String maPhong, String ngayTao, String tenSP) {
         bills = controller.getListBill();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         String maPS = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().toString().trim();
         for (HoaDon bill : bills) {
-
-            //try {
+            
+            try {
                 //System.out.println(maPhong.equals(bill.getMaPhong().trim()) + "___" + checkThoiHan(bill.getNgayTaoHD(), addDays(bill.getNgayTaoHD(), 30), format.parse(ngayTao)));
                 if (maPhong.equals(bill.getMaPhong().trim())) {
                     System.out.println(checkMaPsPhong(maPS, bill.getMaHD()) + " fwfw   " + maPS);
-                    if (//checkThoiHan(format.parse(ngayTao)) && 
-                            checkMaPsPhong(maPS, bill.getMaHD())) {
+                    if (checkThoiHan(format.parse(ngayTao)) && checkMaPsPhong(maPS, bill.getMaHD())) {
                         System.out.println(checkMaPsPhong(maPS, bill.getMaHD()) + "  rrgt5");
                         if (checkMaPsPhong(maPS, bill.getMaHD())) {
                             return bill.getMaHD();
                         }
                     }
                     //else {
-                    //JOptionPane.showMessageDialog(rootPane, "Phát sinh đã được thêm trong tháng này!");
+                    JOptionPane.showMessageDialog(rootPane, "Phát sinh đã được thêm trong tháng này!");
 //                        break;
 //                    }
                 }
-//            } catch (ParseException ex) {
-//                Logger.getLogger(ThemPhatSinhPhong.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-
+            } catch (ParseException ex) {
+                Logger.getLogger(SuaPhatSinhPhong.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
-
+        
         return null;
     }
-
+    
     public boolean checkMaPsPhong(String maPs, String maHD) {
         roomServices = controller.getListRoomServices();
         for (PS_Phong roomService : roomServices) {
@@ -515,21 +334,21 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
                 }
             }
         }
-
+        
         return true;
     }
-
+    
     public static Date addDays(Date date, int days) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DATE, days); //minus number would decrement the days
         return cal.getTime();
     }
-
+    
     boolean checkThoiHan(Date dayCheck) {
         SimpleDateFormat formatM = new SimpleDateFormat("MM");
         int i = Integer.parseInt(formatM.format(dayCheck)) - 1;
-
+        
         Calendar gc = new GregorianCalendar();
         gc.set(Calendar.MONTH, i);// thang can check
         gc.set(Calendar.DAY_OF_MONTH, 1);
@@ -537,14 +356,14 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
         gc.add(Calendar.MONTH, 1);
         gc.add(Calendar.DAY_OF_MONTH, -1);
         Date monthEnd = gc.getTime();
-
+        
         Date todayDate = gc.getTime();
         if (!monthStart.after(todayDate) && !monthEnd.before(todayDate)) {
             return true;
         }
         return false;
     }
-
+    
     public boolean checkEmpty(String key, String notify) {
         if (key.trim().isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, notify);
@@ -557,19 +376,34 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btn_cancel;
     private javax.swing.JLabel btn_save;
-    private javax.swing.JComboBox<String> cb_day;
     private javax.swing.JComboBox<String> cb_phat_sinh;
-    private javax.swing.JComboBox<String> cb_phong;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel lb_day;
     private javax.swing.JLabel lb_don_vi_tinh;
     private javax.swing.JLabel lb_ngay;
     private javax.swing.JLabel lb_phat_sinh;
-    private javax.swing.JLabel lb_phong;
     private javax.swing.JLabel lb_so_luong;
     private javax.swing.JLabel lb_tong;
     private javax.swing.JLabel lb_tong_tien;
     private javax.swing.JTextField txt_ngay_phat_sinh;
     private javax.swing.JTextField txt_so_luong;
     // End of variables declaration//GEN-END:variables
+
+    void setEditData(TableThuPhi get) {
+        
+        tableThuPhi = get;
+        
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        
+        txt_ngay_phat_sinh.setText(format.format(get.getNgayPS()));
+        txt_ngay_phat_sinh.setEnabled(false);
+        
+        cb_phat_sinh.setSelectedItem(get.getTenPS());
+        cb_phat_sinh.setEnabled(false);
+        
+        PS_Phong pS_Phong = controller.getPSPhongByID(get.getMaPS_Phong().trim());
+        
+        txt_so_luong.setText(pS_Phong.getSL() + "");
+        
+    }
+    
 }

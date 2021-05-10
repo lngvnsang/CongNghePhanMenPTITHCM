@@ -17,7 +17,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import quanlyktx.DAO.DAO;
-import quanlyktx.model.LoaiPhong;
 import quanlyktx.model.Phong;
 import quanlyktx.view.DangNhap.DangNhapView;
 
@@ -31,6 +30,8 @@ public class ThongKeView extends javax.swing.JFrame {
     private DAO controller = new DAO();
     private List<Phong> rooms;
     private DefaultTableModel model;
+    private DefaultTableModel modelTPKTX;
+    private DefaultTableModel modelTPPS;
 
     /**
      * Creates new form ThongKeView
@@ -44,7 +45,11 @@ public class ThongKeView extends javax.swing.JFrame {
         btn_help.setVisible(false);
         btn_logout.setVisible(false);
         model = (DefaultTableModel) tb_thong_ke_day.getModel();
+        modelTPKTX = (DefaultTableModel) table_thu_phi_ktx.getModel();
+        modelTPPS = (DefaultTableModel) tb_thu_phi_ps.getModel();
+        //////////////////////////////////////////////////////////////////////
 
+        ///////////////////////////////////////////////////////////////////
     }
 
     /**
@@ -79,8 +84,13 @@ public class ThongKeView extends javax.swing.JFrame {
         cb_thong_ke_phong = new javax.swing.JComboBox<>();
         panel_phong = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        cb_thu_phi_theo_nam = new javax.swing.JComboBox<>();
         panel_thu_phi = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        table_thu_phi_ktx = new javax.swing.JTable();
+        jPanel4 = new javax.swing.JPanel();
+        panel_thu_phi_phat_sinh = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tb_thu_phi_ps = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
 
         jLabel3.setText("jLabel3");
@@ -145,6 +155,11 @@ public class ThongKeView extends javax.swing.JFrame {
                 panel_chart_svStateChanged(evt);
             }
         });
+        panel_chart_sv.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                panel_chart_svMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout panel_demoLayout = new javax.swing.GroupLayout(panel_demo);
         panel_demo.setLayout(panel_demoLayout);
@@ -170,7 +185,7 @@ public class ThongKeView extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(174, 174, 174)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(99, Short.MAX_VALUE))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,7 +243,7 @@ public class ThongKeView extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(cb_nam, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -295,7 +310,7 @@ public class ThongKeView extends javax.swing.JFrame {
                 .addGroup(panel_tkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cb_thong_ke_day, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cb_thong_ke_phong, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(497, Short.MAX_VALUE))
+                .addContainerGap(474, Short.MAX_VALUE))
         );
         panel_tkLayout.setVerticalGroup(
             panel_tkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -310,9 +325,9 @@ public class ThongKeView extends javax.swing.JFrame {
 
         panel_chart_sv.addTab("Phòng kí túc", panel_tk);
 
-        cb_thu_phi_theo_nam.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_thu_phi_theo_namActionPerformed(evt);
+        jPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel2MouseClicked(evt);
             }
         });
 
@@ -320,34 +335,83 @@ public class ThongKeView extends javax.swing.JFrame {
         panel_thu_phi.setLayout(panel_thu_phiLayout);
         panel_thu_phiLayout.setHorizontalGroup(
             panel_thu_phiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 590, Short.MAX_VALUE)
         );
         panel_thu_phiLayout.setVerticalGroup(
             panel_thu_phiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 389, Short.MAX_VALUE)
         );
 
+        table_thu_phi_ktx.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "STT", "Năm", "Tổng tiền"
+            }
+        ));
+        jScrollPane2.setViewportView(table_thu_phi_ktx);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel_thu_phi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(cb_thu_phi_theo_nam, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(467, Short.MAX_VALUE))
+            .addComponent(panel_thu_phi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(cb_thu_phi_theo_nam, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(62, 62, 62)
-                .addComponent(panel_thu_phi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel_thu_phi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         panel_chart_sv.addTab("Thu phí KTX", jPanel2);
+
+        jPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel4MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panel_thu_phi_phat_sinhLayout = new javax.swing.GroupLayout(panel_thu_phi_phat_sinh);
+        panel_thu_phi_phat_sinh.setLayout(panel_thu_phi_phat_sinhLayout);
+        panel_thu_phi_phat_sinhLayout.setHorizontalGroup(
+            panel_thu_phi_phat_sinhLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panel_thu_phi_phat_sinhLayout.setVerticalGroup(
+            panel_thu_phi_phat_sinhLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 356, Short.MAX_VALUE)
+        );
+
+        tb_thu_phi_ps.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "STT", "Năm", "Tổng tiền"
+            }
+        ));
+        jScrollPane3.setViewportView(tb_thu_phi_ps);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panel_thu_phi_phat_sinh, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel_thu_phi_phat_sinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        panel_chart_sv.addTab("Thu phí phát sinh", jPanel4);
 
         getContentPane().add(panel_chart_sv, new org.netbeans.lib.awtextra.AbsoluteConstraints(193, 50, 710, 500));
 
@@ -435,15 +499,9 @@ public class ThongKeView extends javax.swing.JFrame {
         panel.setPreferredSize(new Dimension(400, 400));
         panel_demo.setLayout(new BorderLayout());
         panel_demo.add(panel, BorderLayout.NORTH);
-        
-        List<Integer> years = controller.getYear();
 
-            cb_thu_phi_theo_nam.removeAllItems();
-
-            for (int year : years) {
-                cb_thu_phi_theo_nam.addItem(year + "");
-            }
-
+        //List<Integer> years = controller.getYear();
+        ///////////////////////////////////////////////////////////////////////
 
     }//GEN-LAST:event_panel_chart_svStateChanged
 
@@ -501,14 +559,14 @@ public class ThongKeView extends javax.swing.JFrame {
     }//GEN-LAST:event_cb_dayActionPerformed
 
     private void cb_namActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_namActionPerformed
-        
+
         if (cb_nam.getSelectedItem() != null && (String) cb_day.getSelectedItem() != null) {
             int nam = Integer.parseInt((String) cb_nam.getSelectedItem());
             String maDay = cb_day.getSelectedItem().toString().trim();
             model.setRowCount(0);
             DefaultCategoryDataset datas;
             datas = controller.getListRoomwithNumberStudentByIDRange(nam, maDay, model);
-            
+
             JFreeChart chart = ChartFactory.createBarChart3D("Thống kê số lượng sinh viên từng phòng " + ((String) cb_thong_ke_phong.getSelectedItem()).trim() + " theo năm", "Năm", "Số lượng sinh viên", datas, PlotOrientation.VERTICAL, true, false, false);
             ChartPanel panel = new ChartPanel(chart);
             panel_phong_theo_day.removeAll();
@@ -524,25 +582,49 @@ public class ThongKeView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cb_namActionPerformed
 
-    private void cb_thu_phi_theo_namActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_thu_phi_theo_namActionPerformed
-        if ((String) cb_thu_phi_theo_nam.getSelectedItem() != null) {
-            DefaultCategoryDataset datas;
-            int nam = Integer.parseInt((String) cb_thu_phi_theo_nam.getSelectedItem());
-            datas = controller.getTotalCostStudentWithEveryYear();
-            JFreeChart chart = ChartFactory.createBarChart3D("Thống kê số lượng sinh viên từng phòng " + ((String) cb_thong_ke_phong.getSelectedItem()).trim() + " theo năm", "Năm", "Số lượng sinh viên", datas, PlotOrientation.VERTICAL, true, false, false);
-            ChartPanel panel = new ChartPanel(chart);
-            panel_phong.removeAll();
-            panel.setMouseZoomable(true);
-            panel.setPreferredSize(new Dimension(400, 400));
+    private void jPanel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseClicked
 
-            panel_phong.setLayout(new BorderLayout());
-            panel_phong.add(panel, BorderLayout.NORTH);
-            panel_phong.revalidate();
-            panel_phong.repaint();
-        } else {
-            System.out.println("vadvad");
-        }
-    }//GEN-LAST:event_cb_thu_phi_theo_namActionPerformed
+    }//GEN-LAST:event_jPanel4MouseClicked
+
+    private void jPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseClicked
+
+
+    }//GEN-LAST:event_jPanel2MouseClicked
+
+    private void panel_chart_svMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panel_chart_svMouseClicked
+        System.out.println("11");
+        DefaultCategoryDataset datas1;
+        modelTPKTX.setRowCount(0);
+        datas1 = controller.getTotalCostStudentWithEveryYear(modelTPKTX);
+        JFreeChart chart1 = ChartFactory.createBarChart3D("Thống kê số lượng sinh viên từng phòng " + ((String) cb_thong_ke_phong.getSelectedItem()).trim() + " theo năm", "Năm", "Tổng tiền(vnđ)", datas1, PlotOrientation.VERTICAL, true, false, false);
+        ChartPanel panel1 = new ChartPanel(chart1);
+        panel_thu_phi.removeAll();
+        panel1.setMouseZoomable(true);
+        panel1.setPreferredSize(new Dimension(400, 400));
+
+        panel_thu_phi.setLayout(new BorderLayout());
+        panel_thu_phi.add(panel1, BorderLayout.NORTH);
+        panel_thu_phi.revalidate();
+        panel_thu_phi.repaint();
+
+        //////////////////////////////////
+        System.out.println("12");
+        DefaultCategoryDataset datas2;
+        modelTPPS.setRowCount(0);
+        datas2 = controller.getTotalCostServicesWithEveryYear(modelTPPS);
+        JFreeChart chart2 = ChartFactory.createBarChart3D("Thống kê số lượng sinh viên từng phòng " + ((String) cb_thong_ke_phong.getSelectedItem()).trim() + " theo năm", "Năm", "Tổng tiền(vnđ)", datas2, PlotOrientation.VERTICAL, true, false, false);
+        ChartPanel panel2 = new ChartPanel(chart2);
+        panel_thu_phi_phat_sinh.removeAll();
+        panel2.setMouseZoomable(true);
+        panel2.setPreferredSize(new Dimension(400, 400));
+
+        panel_thu_phi_phat_sinh.setLayout(new BorderLayout());
+        panel_thu_phi_phat_sinh.add(panel2, BorderLayout.NORTH);
+        panel_thu_phi_phat_sinh.revalidate();
+        panel_thu_phi_phat_sinh.repaint();
+
+
+    }//GEN-LAST:event_panel_chart_svMouseClicked
 
     /**
      * @param args the command line arguments
@@ -592,7 +674,6 @@ public class ThongKeView extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cb_nam;
     private javax.swing.JComboBox<String> cb_thong_ke_day;
     private javax.swing.JComboBox<String> cb_thong_ke_phong;
-    private javax.swing.JComboBox<String> cb_thu_phi_theo_nam;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -601,14 +682,20 @@ public class ThongKeView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane panel_chart_sv;
     private javax.swing.JPanel panel_demo;
     private javax.swing.JPanel panel_phong;
     private javax.swing.JPanel panel_phong_theo_day;
     private javax.swing.JPanel panel_thu_phi;
+    private javax.swing.JPanel panel_thu_phi_phat_sinh;
     private javax.swing.JPanel panel_tk;
     private javax.swing.JLabel setting_view;
+    private javax.swing.JTable table_thu_phi_ktx;
     private javax.swing.JTable tb_thong_ke_day;
+    private javax.swing.JTable tb_thu_phi_ps;
     // End of variables declaration//GEN-END:variables
 }

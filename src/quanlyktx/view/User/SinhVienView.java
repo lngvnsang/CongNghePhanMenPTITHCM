@@ -172,7 +172,7 @@ public class SinhVienView extends javax.swing.JFrame {
         flag = true;
         System.out.println("click user");
         this.dispose();
-        new UserView().setVisible(true);
+        new SVNhapThongTinView(taiKhoan).setVisible(true);
     }//GEN-LAST:event_btn_userMouseClicked
 
     private void btn_helpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_helpMouseClicked
@@ -207,7 +207,7 @@ public class SinhVienView extends javax.swing.JFrame {
         btn_logout.setVisible(false);
         flag = true;
         System.out.println("click btn_thong_tin");
-        new ThongTinView().setVisible(true);
+        new ThongTinView(taiKhoan).setVisible(true);
         //this.dispose();
     }//GEN-LAST:event_btn_thong_tinMouseClicked
 

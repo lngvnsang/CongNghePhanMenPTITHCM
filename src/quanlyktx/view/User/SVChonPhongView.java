@@ -197,11 +197,11 @@ public class SVChonPhongView extends javax.swing.JFrame {
 
         txt_GiaTien.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         txt_GiaTien.setForeground(new java.awt.Color(0, 0, 204));
-        getContentPane().add(txt_GiaTien, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 314, 190, 30));
+        getContentPane().add(txt_GiaTien, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 314, 380, 30));
 
         label_LuuY.setForeground(new java.awt.Color(255, 51, 51));
         label_LuuY.setText("*Lưu ý: Giá tiền chưa  bao gồm chi phí phát sinh trong quá trình ở");
-        getContentPane().add(label_LuuY, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 370, 370, 20));
+        getContentPane().add(label_LuuY, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 370, 370, 20));
 
         btn_DangKyPhong.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

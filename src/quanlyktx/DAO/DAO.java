@@ -1032,6 +1032,7 @@ public class DAO {
 
         return list;
     }
+<<<<<<< HEAD
 
     public boolean deletePhatSinhPhong(TableThuPhi get) {
         String sql = "DELETE FROM PS_Phong "
@@ -1046,6 +1047,32 @@ public class DAO {
         return false;
     }
 
+=======
+    
+    public PS_Phong getPSPhongWithID(String maHD, String maPhong)
+    {
+        PS_Phong psp = new PS_Phong();
+        String sql = "SELECT * FROM PS_Phong WHERE MaHD = '" + maHD + "' AND MaPhong = '" + maPhong + "'";
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next())
+            {
+                psp.setMaHD(rs.getString("MaHD"));
+                psp.setMaPS_Phong(rs.getString("MaPS_Phong"));
+                psp.setMaPS(rs.getString("MaPS"));
+                psp.setNgayPS(rs.getDate("NgayPS"));
+                psp.setSL(rs.getInt("SL"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return psp;
+    }
+    
+>>>>>>> 3bd25eb8636d9291230d40117ea6b22b0cc43864
 //>>>>>>> 5f0ff9ff387a965095caf454e79d0d0e0c68c264
     public static void main(String[] args) {
         new DAO();

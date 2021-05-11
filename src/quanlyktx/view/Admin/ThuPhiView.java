@@ -405,7 +405,7 @@ public class ThuPhiView extends javax.swing.JFrame {
         if (services.size() == 0) {
             JOptionPane.showMessageDialog(rootPane, "Danh sách trống!");
         } else if (selectedPhatSinh == -1) {
-            JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần sửa!");
+            JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần xóa!");
         } else {
             if (controller.deletePhatSinh(services.get(selectedPhatSinh).getMaPS())) {
                 JOptionPane.showMessageDialog(rootPane, "Xóa thông tin thành công!");

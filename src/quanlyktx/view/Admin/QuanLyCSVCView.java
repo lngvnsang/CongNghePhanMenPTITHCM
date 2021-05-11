@@ -6,6 +6,14 @@
 package quanlyktx.view.Admin;
 
 import java.awt.Toolkit;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import quanlyktx.DAO.DAO;
+import quanlyktx.model.CSVC;
+import quanlyktx.model.HopDong;
+import quanlyktx.model.SinhVien;
 
 /**
  *
@@ -13,6 +21,9 @@ import java.awt.Toolkit;
  */
 public class QuanLyCSVCView extends javax.swing.JFrame {
     public static String user;
+    private DAO controller = new DAO();
+    private DefaultTableModel model;
+    List<CSVC> materials;
     /**
      * Creates new form QuanLyCSVCView
      */
@@ -20,6 +31,12 @@ public class QuanLyCSVCView extends javax.swing.JFrame {
         this.user = id;
         setIcon();
         initComponents();
+        
+        model = (DefaultTableModel) table_csvc.getModel();
+        materials = controller.getListMaterials();
+        System.out.println(materials.size());
+        
+        showMaterials();
     }
 
     /**
@@ -37,6 +54,11 @@ public class QuanLyCSVCView extends javax.swing.JFrame {
         btn_setting = new javax.swing.JLabel();
         setting_view = new javax.swing.JLabel();
         btn_close = new javax.swing.JLabel();
+        tb_csvc = new javax.swing.JScrollPane();
+        table_csvc = new javax.swing.JTable();
+        btn_sửa = new javax.swing.JLabel();
+        btn_xoa = new javax.swing.JLabel();
+        btn_them = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -66,6 +88,48 @@ public class QuanLyCSVCView extends javax.swing.JFrame {
         });
         getContentPane().add(btn_close, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 10, 25, 20));
 
+        table_csvc.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "STT", "Mã Phòng", "Tên vật tư", "Ngày thêm", "Tình trạng", "Ghi chú"
+            }
+        ));
+        tb_csvc.setViewportView(table_csvc);
+
+        getContentPane().add(tb_csvc, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 700, 400));
+
+        btn_sửa.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btn_sửa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/edit.png"))); // NOI18N
+        btn_sửa.setText("Sửa");
+        btn_sửa.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_sửaMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btn_sửa, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 500, -1, -1));
+
+        btn_xoa.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btn_xoa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/remove.png"))); // NOI18N
+        btn_xoa.setText("Xóa");
+        btn_xoa.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_xoaMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btn_xoa, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 500, -1, -1));
+
+        btn_them.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btn_them.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/add.png"))); // NOI18N
+        btn_them.setText("Thêm");
+        btn_them.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_themMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btn_them, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 500, -1, -1));
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/QuanLyCSVC.jpg"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 550));
 
@@ -77,6 +141,42 @@ public class QuanLyCSVCView extends javax.swing.JFrame {
         this.dispose();
         new AdminView(user).setVisible(true);
     }//GEN-LAST:event_btn_closeMouseClicked
+
+    private void btn_themMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_themMouseClicked
+        ThemCSVC csvc = new ThemCSVC(this, rootPaneCheckingEnabled);
+        csvc.setVisible(true);
+    }//GEN-LAST:event_btn_themMouseClicked
+
+    private void btn_sửaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_sửaMouseClicked
+         int selectedPhatSinh = table_csvc.getSelectedRow();
+        materials = controller.getListMaterials();
+        if (materials.size() == 0) {
+            JOptionPane.showMessageDialog(rootPane, "Danh sách trống!");
+        } else if (selectedPhatSinh == -1) {
+            JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần sửa!");
+        } else {
+            SuaVatTu edit = new SuaVatTu(this, rootPaneCheckingEnabled);
+            edit.setEditData(materials.get(selectedPhatSinh));
+            edit.setVisible(true);
+        }
+    }//GEN-LAST:event_btn_sửaMouseClicked
+
+    private void btn_xoaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_xoaMouseClicked
+        int selectedPhatSinh = table_csvc.getSelectedRow();
+        materials = controller.getListMaterials();
+        if (materials.size() == 0) {
+            JOptionPane.showMessageDialog(rootPane, "Danh sách trống!");
+        } else if (selectedPhatSinh == -1) {
+            JOptionPane.showMessageDialog(rootPane, "Chọn dòng cần xóa!");
+        } else {
+            if (controller.deleteMaterial(materials.get(selectedPhatSinh).getId())) {
+                JOptionPane.showMessageDialog(rootPane, "Xóa thông tin thành công!");
+                showMaterials();
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Không thể xóa sinh viên này\n vì có liên kết nhiều dữ liệu!");
+            }
+        }
+    }//GEN-LAST:event_btn_xoaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -121,8 +221,32 @@ public class QuanLyCSVCView extends javax.swing.JFrame {
     private javax.swing.JLabel btn_help;
     private javax.swing.JLabel btn_logout;
     private javax.swing.JLabel btn_setting;
+    private javax.swing.JLabel btn_sửa;
+    private javax.swing.JLabel btn_them;
     private javax.swing.JLabel btn_user;
+    private javax.swing.JLabel btn_xoa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel setting_view;
+    private javax.swing.JTable table_csvc;
+    private javax.swing.JScrollPane tb_csvc;
     // End of variables declaration//GEN-END:variables
+
+    void showMaterials() {
+        materials = controller.getListMaterials();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        int i = 1;
+        model.setRowCount(0);
+        for (CSVC t : materials) {
+            String ngayThem = format.format(t.getNgayThem());
+            model.addRow(new Object[]{
+                i++,
+                t.getMaPhong().trim(),
+                t.getTenVatTu().trim(),
+                ngayThem,
+                t.getTinhTrang().trim(),
+                t.getGhiChu().trim(),
+            });
+        }
+    }
+    
 }

@@ -19,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.data.category.DefaultCategoryDataset;
+import quanlyktx.model.CSVC;
 import quanlyktx.model.Day;
 import quanlyktx.model.HoaDon;
 import quanlyktx.model.HopDong;
@@ -1032,7 +1033,7 @@ public class DAO {
 
         return list;
     }
-<<<<<<< HEAD
+//<<<<<<< HEAD
 
     public boolean deletePhatSinhPhong(TableThuPhi get) {
         String sql = "DELETE FROM PS_Phong "
@@ -1047,18 +1048,15 @@ public class DAO {
         return false;
     }
 
-=======
-    
-    public PS_Phong getPSPhongWithID(String maHD, String maPhong)
-    {
+//=======
+    public PS_Phong getPSPhongWithID(String maHD, String maPhong) {
         PS_Phong psp = new PS_Phong();
         String sql = "SELECT * FROM PS_Phong WHERE MaHD = '" + maHD + "' AND MaPhong = '" + maPhong + "'";
-        
+
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            while(rs.next())
-            {
+            while (rs.next()) {
                 psp.setMaHD(rs.getString("MaHD"));
                 psp.setMaPS_Phong(rs.getString("MaPS_Phong"));
                 psp.setMaPS(rs.getString("MaPS"));
@@ -1068,14 +1066,91 @@ public class DAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return psp;
     }
-    
->>>>>>> 3bd25eb8636d9291230d40117ea6b22b0cc43864
+    /////////////////////////////////////////////CSVC//////////////////////////////////
+
+    public List<CSVC> getListMaterials() {
+        ArrayList<CSVC> list = new ArrayList<>();
+        String sql = "SELECT * FROM CSVC ";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CSVC csvc = new CSVC();
+                csvc.setId(rs.getString("Id"));
+                csvc.setMaPhong(rs.getString("MaPhong"));
+                csvc.setNgayThem(rs.getDate("NgayThem"));
+                csvc.setTenVatTu(rs.getString("TenVatTu"));
+                csvc.setTinhTrang(rs.getString("TinhTrang"));
+                csvc.setGhiChu(rs.getString("GhiChu"));
+
+                list.add(csvc);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public boolean addMaterial(CSVC csvc) {
+        String sql = "INSERT INTO CSVC(Id,MaPhong,TenVatTu,NgayThem,GhiChu,TinhTrang) VALUES(?,?,?,?,?,?)";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setString(1, csvc.getId().trim());
+            ps.setString(2, csvc.getMaPhong().trim());
+
+            ps.setString(3, csvc.getTenVatTu().trim());
+            ps.setDate(4, (java.sql.Date) new java.sql.Date(csvc.getNgayThem().getTime()));
+            ps.setString(5, csvc.getGhiChu());
+            ps.setString(6, csvc.getTinhTrang());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
+
+    public boolean updaetMaterial(CSVC csvc) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String sql = "UPDATE CSVC SET "
+                + " TenVatTu = N'" + csvc.getTenVatTu() + "',"
+                + " NgayThem = '" + format.format(csvc.getNgayThem()) + "', "
+                + " GhiChu = N'" + csvc.getGhiChu() + "',"
+                + " TinhTrang = N'" + csvc.getTinhTrang() + "'"
+                + " WHERE Id = '" + csvc.getId().trim() + "'";
+        try {
+            PreparedStatement p = conn.prepareStatement(sql);
+            return p.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean deleteMaterial(String id) {
+        String sql = "DELETE FROM CSVC WHERE Id = '" + id + "'";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    ////////////////////////////////////////////////////////////////////////END//////////////////////////////////////////////////////////////
+//>>>>>>> 3bd25eb8636d9291230d40117ea6b22b0cc43864
 //>>>>>>> 5f0ff9ff387a965095caf454e79d0d0e0c68c264
     public static void main(String[] args) {
         new DAO();
     }
+
+    
 
 }

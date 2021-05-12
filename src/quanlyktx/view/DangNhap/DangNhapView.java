@@ -229,7 +229,7 @@ public class DangNhapView extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("logo.png")));
     }
     public void login() {
-        String taiKhoan = txtTaiKhoan.getText();
+        String taiKhoan = txtTaiKhoan.getText().toLowerCase();
         String matKhau = password.getText();
         if (!taiKhoan.isEmpty() && !matKhau.isEmpty()) {
             for (TaiKhoan tk : accounts) {

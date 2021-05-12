@@ -173,6 +173,7 @@ public class SinhVienView extends javax.swing.JFrame {
         System.out.println("click user");
         this.dispose();
         new SVNhapThongTinView(taiKhoan).setVisible(true);
+        // Mở form hiện thông tin user
     }//GEN-LAST:event_btn_userMouseClicked
 
     private void btn_helpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_helpMouseClicked

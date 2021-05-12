@@ -225,12 +225,12 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
             if(controller.getStudent(user) != null)
             {
                 sinhVien = controller.getStudent(user);
-                txt_HoTen.setText(sinhVien.getTen());
-                txt_MSSV.setText(sinhVien.getMSSV());
-                txt_NgThNmSinh.setText(sinhVien.getNgaySinh().toString());
-                txt_QueQuan.setText(sinhVien.getQueQuan());
-                txt_SoDT.setText(sinhVien.getSDT());
-                txt_DiaChi.setText(sinhVien.getDiaChi());
+                txt_HoTen.setText(sinhVien.getTen().trim());
+                txt_MSSV.setText(sinhVien.getMSSV().trim());
+                txt_NgThNmSinh.setText(sinhVien.getNgaySinh().toString().trim());
+                txt_QueQuan.setText(sinhVien.getQueQuan().trim());
+                txt_SoDT.setText(sinhVien.getSDT().trim());
+                txt_DiaChi.setText(sinhVien.getDiaChi().trim());
                 
                 if(sinhVien.getGioiTinh().trim().equals("Nam"))
                 {
@@ -256,7 +256,7 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
                 rb_Nam.setEnabled(false);
                 rb_Nu.setEnabled(false);
                 txt_NgThanTen.setEditable(false);
-                txt_NgThanDiaChi.setEditable(true);
+                txt_NgThanDiaChi.setEditable(false);
                 txt_NgThanSDT.setEditable(false);
             }
             else
@@ -303,6 +303,7 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
         bg_NhapThongTinSV = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(900, 550));
         setUndecorated(true);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -377,33 +378,43 @@ public class SVNhapThongTinView extends javax.swing.JFrame {
         getContentPane().add(btn_Close, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 20, -1, -1));
 
         txt_HoTen.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txt_HoTen.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         getContentPane().add(txt_HoTen, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 240, 30));
 
         txt_MSSV.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txt_MSSV.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         getContentPane().add(txt_MSSV, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 220, 30));
 
         txt_Lop.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txt_Lop.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         getContentPane().add(txt_Lop, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 210, 280, 30));
 
         txt_SoDT.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txt_SoDT.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         getContentPane().add(txt_SoDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 270, 220, 30));
 
         txt_NgThNmSinh.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txt_NgThNmSinh.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         getContentPane().add(txt_NgThNmSinh, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 150, 140, 30));
 
         txt_QueQuan.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txt_QueQuan.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         getContentPane().add(txt_QueQuan, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 210, 240, 30));
 
         txt_DiaChi.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txt_DiaChi.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         getContentPane().add(txt_DiaChi, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 270, 260, 30));
 
         txt_NgThanTen.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txt_NgThanTen.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         getContentPane().add(txt_NgThanTen, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 340, 340, 30));
 
         txt_NgThanDiaChi.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txt_NgThanDiaChi.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         getContentPane().add(txt_NgThanDiaChi, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 400, 320, 30));
 
         txt_NgThanSDT.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        txt_NgThanSDT.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         getContentPane().add(txt_NgThanSDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 460, 350, 30));
 
         bg_NhapThongTinSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quanlyktx/images/NhapThongTinSV.jpg"))); // NOI18N

@@ -319,6 +319,14 @@ public class SVChonPhongView extends javax.swing.JFrame {
 
     private void btn_UserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_UserMouseClicked
         // TODO add your handling code here:
+        settingView.setVisible(false);
+        btn_User.setVisible(false);
+        btn_Help.setVisible(false);
+        btn_LogOut.setVisible(false);
+        flag = true;
+        System.out.println("click user");
+        this.dispose();
+        new SVNhapThongTinView(user).setVisible(true);
         // Mở form hiện thông tin user
     }//GEN-LAST:event_btn_UserMouseClicked
 

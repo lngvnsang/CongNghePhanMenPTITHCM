@@ -16,6 +16,7 @@ public class HoaDon {
     String maHD;
     String maPhong;
     Date ngayTaoHD;
+    int tongTien;
 
     public HoaDon() {
     }
@@ -51,5 +52,14 @@ public class HoaDon {
         this.ngayTaoHD = ngayTaoHD;
     }
 
+    public void setTongTien(int tongTien)
+    {
+        this.tongTien = tongTien;
+    }
+    
+    public int getTongTien()
+    {
+        return tongTien;
+    }
     
 }

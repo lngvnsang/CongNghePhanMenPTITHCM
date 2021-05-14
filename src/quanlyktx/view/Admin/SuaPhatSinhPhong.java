@@ -194,7 +194,7 @@ public class SuaPhatSinhPhong extends javax.swing.JDialog {
         psp.setMaHD(tableThuPhi.getMaHD().trim());
         String maPS = services.get(cb_phat_sinh.getSelectedIndex()).getMaPS().trim();
         psp.setMaPS(maPS);
-        psp.setMaPS_Phong(tableThuPhi.getMaPS_Phong().trim());
+        //psp.setMaPS_Phong(tableThuPhi.getMaPS_Phong().trim());
         psp.setNgayPS(tableThuPhi.getNgayPS());
         psp.setSL(Integer.parseInt(txt_so_luong.getText()));
         
@@ -400,7 +400,7 @@ public class SuaPhatSinhPhong extends javax.swing.JDialog {
         cb_phat_sinh.setSelectedItem(get.getTenPS());
         cb_phat_sinh.setEnabled(false);
         
-        PS_Phong pS_Phong = controller.getPSPhongByID(get.getMaPS_Phong().trim());
+        PS_Phong pS_Phong = controller.getPSPhongByID(get.getMaHD().trim());
         
         txt_so_luong.setText(pS_Phong.getSL() + "");
         

@@ -252,7 +252,7 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
                                         maHD,
                                         maps,
                                         format.parse(txt_ngay_phat_sinh.getText().toString().trim()),
-                                        Integer.parseInt(txt_so_luong.getText().trim())
+                                        Integer.parseInt(txt_so_luong.getText().replaceAll("[A-Za-z]", "").trim())
                                 );
 
                                 if (controller.updatePS_Phong(pS_Phong, maHD)) {
@@ -340,7 +340,7 @@ public class ThemPhatSinhPhong extends javax.swing.JDialog {
                     System.out.println(maHD + "            " + bills.size());
                     hd.setMaHD(maHD);
                     hd.setMaPhong(cb_phong.getSelectedItem().toString().trim());
-                    //hd.setTongTien(0);
+//                    hd.setTongTien(Integer.parseInt(lb_tong.getText().replaceAll("vnđ", "").trim()));
                     hd.setNgayTaoHD(format.parse(txt_ngay_phat_sinh.getText().toString().trim()));
                     if (controller.addBill(hd)) {
                         System.out.println("2hi");

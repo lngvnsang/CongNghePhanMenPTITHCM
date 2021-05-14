@@ -673,11 +673,11 @@ public class DAO {
     public DefaultCategoryDataset getTotalCostServicesWithEveryYear(DefaultTableModel modelTPPS) {
         DefaultCategoryDataset datas = new DefaultCategoryDataset();
         String sql = "WITH T AS ( "
-                + "	SELECT HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, PS_Phong.MaPS_Phong, SUM(GiaTienPS* SL) AS TongTien "
+                + "	SELECT HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, SUM(GiaTienPS* SL) AS TongTien "
                 + "	FROM HoaDon, PhatSinh, PS_Phong "
                 + "	WHERE HoaDon.MaHD = PS_Phong.MaHD "
                 + "	AND PS_Phong.MaPS = PhatSinh.MaPS "
-                + "	GROUP BY HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, PS_Phong.MaPS_Phong "
+                + "	GROUP BY HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS "
                 + ") "
                 + "SELECT YEAR(NgayTaoHD) AS Nam, SUM(T.TongTien) AS TongTien "
                 + "FROM HoaDon, T "
@@ -752,12 +752,12 @@ public class DAO {
     public List<TableThuPhi> getListBills(DefaultTableModel modelBills) {
 
         List<TableThuPhi> list = new ArrayList<>();
-        String sql = "SELECT HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, PS_Phong.MaPS_Phong, SUM(GiaTienPS* SL) AS TongTien "
+        String sql = "SELECT HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, SUM(GiaTienPS* SL) AS TongTien "
                 + "FROM HoaDon, PhatSinh, PS_Phong "
                 + "WHERE "
                 + "HoaDon.MaHD = PS_Phong.MaHD "
                 + "AND PS_Phong.MaPS = PhatSinh.MaPS "
-                + "GROUP BY HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS, PS_Phong.MaPS_Phong "
+                + "GROUP BY HoaDon.MaHD, PS_Phong.NgayPS, HoaDon.MaPhong, PhatSinh.TenPS "
                 + "ORDER BY  PS_Phong.NgayPS DESC";
         int i = 1;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
@@ -774,7 +774,6 @@ public class DAO {
                 tableThuPhi.setNgayPS(rs.getDate("NgayPS"));
                 tableThuPhi.setTenPS(rs.getString("TenPS").trim());
                 tableThuPhi.setTongTien(rs.getString("TongTien").trim());
-                tableThuPhi.setMaPS_Phong(rs.getString("MaPS_Phong").trim());
 
                 list.add(tableThuPhi);
 
@@ -921,14 +920,14 @@ public class DAO {
     }
 
     public boolean addBill(HoaDon hd) {
-        String sql = "INSERT INTO HoaDon(MaHD,MaPhong,NgayTaoHD) VALUES(?,?,?)";
+        String sql = "INSERT INTO HoaDon(MaHD,MaPhong,TongTien,NgayTaoHD) VALUES(?,?,?,?)";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
 
             ps.setString(1, hd.getMaHD());
             ps.setString(2, hd.getMaPhong());
-
-            ps.setDate(3, (java.sql.Date) new java.sql.Date(hd.getNgayTaoHD().getTime()));
+            ps.setInt(3, hd.getTongTien());
+            ps.setDate(4, (java.sql.Date) new java.sql.Date(hd.getNgayTaoHD().getTime()));
 
             return ps.executeUpdate() > 0;
 
@@ -939,16 +938,16 @@ public class DAO {
     }
 
     public boolean addPSPhong(PS_Phong pS_Phong) {
-        String sql = "INSERT INTO PS_Phong(MaPS_Phong,MaHD,MaPS,NgayPS,SL) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO PS_Phong(MaHD,MaPS,NgayPS,SL) VALUES(?,?,?,?)";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
 
-            ps.setString(1, pS_Phong.getMaPS_Phong().trim());
-            ps.setString(2, pS_Phong.getMaHD().trim());
 
-            ps.setString(3, pS_Phong.getMaPS().trim());
-            ps.setDate(4, (java.sql.Date) new java.sql.Date(pS_Phong.getNgayPS().getTime()));
-            ps.setInt(5, pS_Phong.getSL());
+            ps.setString(1, pS_Phong.getMaHD().trim());
+
+            ps.setString(2, pS_Phong.getMaPS().trim());
+            ps.setDate(3, (java.sql.Date) new java.sql.Date(pS_Phong.getNgayPS().getTime()));
+            ps.setInt(4, pS_Phong.getSL());
 
             return ps.executeUpdate() > 0;
 
@@ -973,15 +972,14 @@ public class DAO {
         return years;
     }
 
-    public PS_Phong getPSPhongByID(String maPSP) {
-        String sql = "SELECT * FROM PS_Phong WHERE MaPS_Phong = '" + maPSP.trim() + "'";
+    public PS_Phong getPSPhongByID(String maHD) {
+        String sql = "SELECT * FROM PS_Phong WHERE MaHD = '" + maHD.trim() + "'";
         PS_Phong psp = new PS_Phong();
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                psp.setMaPS_Phong(rs.getString("MaPS_Phong"));
                 psp.setMaHD(rs.getString("MaHD"));
                 psp.setMaPS("MaPS");
                 psp.setNgayPS(rs.getDate("NgayPS"));
@@ -1020,7 +1018,6 @@ public class DAO {
             while (rs.next()) {
                 PS_Phong pS_Phong = new PS_Phong();
                 pS_Phong.setMaHD(rs.getString("MaHD"));
-                pS_Phong.setMaPS_Phong(rs.getString("MaPS_Phong"));
                 pS_Phong.setMaPS(rs.getString("MaPS"));
                 pS_Phong.setNgayPS(rs.getDate("NgayPS"));
                 pS_Phong.setSL(rs.getInt("SL"));
@@ -1037,8 +1034,9 @@ public class DAO {
 
     public boolean deletePhatSinhPhong(TableThuPhi get) {
         String sql = "DELETE FROM PS_Phong "
-                + "WHERE MaPS_Phong = '" + get.getMaPS_Phong().trim() + "' "
-                + "AND MaHD = '" + get.getMaHD().trim() + "'";
+                + "WHERE MaHD = '" + get.getMaHD().trim() + "' "
+                + "DELETE FROM HoaDon "
+                + "WHERE MaHD = '" + get.getMaHD().trim() + "'";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             return ps.executeUpdate() > 0;
@@ -1058,7 +1056,6 @@ public class DAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 psp.setMaHD(rs.getString("MaHD"));
-                psp.setMaPS_Phong(rs.getString("MaPS_Phong"));
                 psp.setMaPS(rs.getString("MaPS"));
                 psp.setNgayPS(rs.getDate("NgayPS"));
                 psp.setSL(rs.getInt("SL"));
